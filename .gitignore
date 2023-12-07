@@ -35,3 +35,4 @@ pom.xml
 .replit
 replit.nix
 *.class
+.breakpoints
