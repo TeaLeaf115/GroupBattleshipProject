@@ -113,12 +113,16 @@ public class SpriteManager {
 	public BufferedImage getSubmarineSection(Section section) {
 		if (section == Section.FRONT)
 			return submarineTileSet[0];
+
 		else if (section == Section.MID_1)
 			return submarineTileSet[1];
+
 		else if (section == Section.BACK)
 			return submarineTileSet[2];
 		else
 			throw new ShipSectionOutOfBounds();
+
+		
 	}
 
 	// Will return an array of sections for the battleship.

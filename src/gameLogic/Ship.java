@@ -1,9 +1,13 @@
 package gameLogic;
 
-import java.util.ArrayList;
+import java.util.*;
+
+import java.awt.Point;
+
+import graphicsManager.SpriteManager.Section;
 
 public class Ship {
-    private int xPos, yPos;
+    private Point coords;
     private int shipLength;
 
     // rotation of the ship sprite direction
@@ -23,35 +27,31 @@ public class Ship {
     private ArrayList<ShipSection> shipSections;
 
     public Ship(ShipType shipType, Rotation rotation) {
+        this.coords = new Point();
+
         this.shipType = shipType;
         this.rotation = rotation;
 
         // determines ship length from the type of ship
         switch (this.shipType) {
-            case DESTROYER:
-                this.shipLength = 2;
-                break;
+            case DESTROYER -> this.shipLength = 2;
 
-            case CRUISER:
-                this.shipLength = 3;
-                break;
+            case CRUISER, SUBMARINE -> this.shipLength = 3;
 
-            case SUBMARINE:
-                this.shipLength = 3;
-                break;
+            case BATTLESHIP -> this.shipLength = 4;
 
-            case BATTLESHIP:
-                this.shipLength = 4;
-                break;
-
-            case CARRIER:
-                this.shipLength = 5;
-                break;
+            case CARRIER -> this.shipLength = 5;
         }
 
         // creates ship length number of ship sections
-        for (int i = 0; i < shipLength; i++) {
-            this.shipSections.add(new ShipSection(this.shipType, this.rotation, i));
+        Section[] sections = Section.values();
+        this.shipSections.add(new ShipSection(this.shipType, this.rotation, Section.FRONT));
+
+        // inserts mid sections
+        for (int i = 1; i < shipLength - 1; i++) {
+            this.shipSections.add(new ShipSection(this.shipType, this.rotation, sections[i]));
         }
+
+        this.shipSections.add(new ShipSection(this.shipType, this.rotation, Section.BACK));
     }
 }
