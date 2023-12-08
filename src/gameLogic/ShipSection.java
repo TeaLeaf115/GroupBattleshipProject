@@ -16,7 +16,6 @@ public class ShipSection {
     private Rotation rotation;
 
     private BufferedImage image;
-    
 
     public ShipSection(ShipType shipType, Rotation rotation, int shipSegment) {
         this.xPos = 0;
@@ -27,8 +26,6 @@ public class ShipSection {
 
         this.shipType = shipType;
         this.rotation = rotation;
-        
-        
 
         // todo: determine image from ship type
 
@@ -44,7 +41,8 @@ public class ShipSection {
 
     /**
      * Sets the topleft location of the ship to specified coordinate
-     * @param xPos the x location of the ship is set to
+     * 
+     * @param xPos    the x location of the ship is set to
      * @param yPosthe the y location of the ship is set to
      */
     public void setCoords(int xPos, int yPos) {
@@ -64,6 +62,5 @@ public class ShipSection {
                 TILE_SIZE,
                 null);
     }
-
 
 }
