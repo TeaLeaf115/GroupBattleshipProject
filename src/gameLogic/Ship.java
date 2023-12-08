@@ -1,10 +1,8 @@
 package gameLogic;
 
-import java.util.*;
-
-import java.awt.Point;
-
 import graphicsManager.SpriteManager.Section;
+import java.util.*;
+import java.awt.Point;
 
 public class Ship {
     private Point coords;
@@ -24,6 +22,7 @@ public class Ship {
         DESTROYER, CRUISER, SUBMARINE, BATTLESHIP, CARRIER
     }
 
+    // ship sections
     private ArrayList<ShipSection> shipSections;
 
     public Ship(ShipType shipType, Rotation rotation) {
@@ -45,13 +44,40 @@ public class Ship {
 
         // creates ship length number of ship sections
         Section[] sections = Section.values();
-        this.shipSections.add(new ShipSection(this.shipType, this.rotation, Section.FRONT));
+        this.shipSections = new ArrayList<>();
 
-        // inserts mid sections
-        for (int i = 1; i < shipLength - 1; i++) {
-            this.shipSections.add(new ShipSection(this.shipType, this.rotation, sections[i]));
+        for (int i = 0; i < shipLength - 1; i++) {
+            ShipSection section = new ShipSection(this.shipType, this.rotation, sections[i]);
+            section.setCoords(
+                    (int) this.coords.getX(),
+                    (int) this.coords.getY());
+
+            this.shipSections.add(section);
         }
 
-        this.shipSections.add(new ShipSection(this.shipType, this.rotation, Section.BACK));
+        ShipSection backSection = new ShipSection(this.shipType, this.rotation, Section.BACK);
+        backSection.setCoords(
+                (int) this.coords.getX(),
+                (int) this.coords.getY());
+
+        this.shipSections.add(backSection);
+    }
+
+    public Ship(ShipType shipType) {
+        this(shipType, Rotation.UP);
+    }
+
+    /**
+     * Sets the topleft location of the ship to specified coordinate
+     * 
+     * @param xPos the x location of the ship is set to
+     * @param yPos the y location of the ship is set to
+     */
+    public void setCoords(double xPos, double yPos) {
+        this.coords.setLocation(xPos, yPos);
+    }
+
+    public String toString() {
+        return shipSections.toString();
     }
 }

@@ -16,7 +16,6 @@ public class ShipSection {
 
     public ShipSection(ShipType shipType, Rotation rotation, Section section) {
         this.coords = new Point();
-
         this.isHit = false;
 
         this.shipType = shipType;
@@ -29,12 +28,16 @@ public class ShipSection {
     }
 
     /**
-     * Sets the topleft location of the ship to specified coordinate
+     * Sets the topleft location of the section to specified coordinate
      * 
-     * @param xPos    the x location of the ship is set to
-     * @param yPosthe the y location of the ship is set to
+     * @param xPos the x location of the section is set to
+     * @param yPos the y location of the section is set to
      */
-    public void setCoords(int xPos, int yPos) {
-        this.coords.move(xPos, yPos);
+    public void setCoords(double xPos, double yPos) {
+        this.coords.setLocation(xPos, yPos);
+    }
+
+    public String toString() {
+        return coords.toString();
     }
 }
