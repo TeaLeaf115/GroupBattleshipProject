@@ -15,7 +15,7 @@ public class SpriteManager {
 	// An array of every tile from the tileset.
     private BufferedImage[] tileset;
 	// An array of each sprite for the animated water background.
-    public final BufferedImage[] waterTileSet;
+    public final BufferedImage[] waterTileset;
 
 	// Enum for getting a section of the ship.
 	public enum Section {
@@ -27,14 +27,14 @@ public class SpriteManager {
 	}
 	
 	// Arrays for each ship.
-    private final BufferedImage[] destroyerTileSet;
-	private final BufferedImage[] cruiserTileSet;
-	private final BufferedImage[] submarineTileSet;
-	private final BufferedImage[] battleshipTileSet;
-	private final BufferedImage[] carrierTileSet;
+    private final BufferedImage[] destroyerTileset;
+	private final BufferedImage[] cruiserTileset;
+	private final BufferedImage[] submarineTileset;
+	private final BufferedImage[] battleshipTileset;
+	private final BufferedImage[] carrierTileset;
 
 	// Array for the indicators 
-    private final BufferedImage[] indicatorTileSet;
+    private final BufferedImage[] indicatorTileset;
 
     public final BufferedImage[] fullShipSprites;
 
@@ -45,21 +45,36 @@ public class SpriteManager {
         }
         catch (IOException e) {e.printStackTrace();}
 
-        waterTileSet = Arrays.copyOfRange(tileset, 0, 4);
+        waterTileset = Arrays.copyOfRange(tileset, 0, 4);
 
-        destroyerTileSet = Arrays.copyOfRange(tileset, 12, 14);
-        cruiserTileSet = Arrays.copyOfRange(tileset, 6, 9);
-        submarineTileSet = Arrays.copyOfRange(tileset, 9, 12);
-        battleshipTileSet = Arrays.copyOfRange(tileset, 14, 18);
-        carrierTileSet = Arrays.copyOfRange(tileset, 18, 24);
+        destroyerTileset = Arrays.copyOfRange(tileset, 12, 14);
+        cruiserTileset = Arrays.copyOfRange(tileset, 6, 9);
+        submarineTileset = Arrays.copyOfRange(tileset, 9, 12);
+        battleshipTileset = Arrays.copyOfRange(tileset, 14, 18);
+        carrierTileset = Arrays.copyOfRange(tileset, 18, 24);
 
-        indicatorTileSet = new BufferedImage[3];
-        indicatorTileSet[0] = tileset[5];
-        indicatorTileSet[1] = tileset[4];
-        indicatorTileSet[2] = tileset[23];
+        indicatorTileset = new BufferedImage[3];
+        indicatorTileset[0] = tileset[5];
+        indicatorTileset[1] = tileset[4];
+        indicatorTileset[2] = tileset[23];
 
         fullShipSprites = new BufferedImage[5];
     }
+	// Will return an array of every indicator.
+	public BufferedImage[] getIndicatorTileset() {
+		return indicatorTileset;
+	}
+
+	public BufferedImage getIndicator(Indicator indicator) {
+		if (indicator == Indicator.MISS)
+			return indicatorTileset[0];
+		if (indicator == Indicator.HIT)
+			return indicatorTileset[2];
+		if (indicator == Indicator.COMP_HIT)
+			return indicatorTileset[1];
+		else
+			throw new ShipSectionOutOfBounds("The Indicator you were trying to access does not exist.");
+	}
 
 	// Will return an array of the full ship sprites.
     public BufferedImage[] getFullShipSprites() {
@@ -73,90 +88,90 @@ public class SpriteManager {
     }
 
 	// Will return an array of sections for the destoryer.
-	public BufferedImage[] getDestroyerTileSet() {
-		return destroyerTileSet;
+	public BufferedImage[] getDestroyerTileset() {
+		return destroyerTileset;
 	}
 
 	// Will return a section from the destroyer.
 	public BufferedImage getDestroyerSection(Section section) {
 		if (section == Section.FRONT)
-			return destroyerTileSet[0];
+			return destroyerTileset[0];
 		else if (section == Section.BACK)
-			return destroyerTileSet[1];
+			return destroyerTileset[1];
 		else
 			throw new ShipSectionOutOfBounds();
 	}
 
 	// Will return an array of sections for the cruiser.
-	public BufferedImage[] getCruiserTileSet() {
-		return cruiserTileSet;
+	public BufferedImage[] getCruiserTileset() {
+		return cruiserTileset;
 	}
 
 	// Will return a section from the cruiser.
 	public BufferedImage getCruiserSection(Section section) {
 		if (section == Section.FRONT)
-			return cruiserTileSet[0];
+			return cruiserTileset[0];
 		else if (section == Section.MID_1)
-			return cruiserTileSet[1];
+			return cruiserTileset[1];
 		else if (section == Section.BACK)
-			return cruiserTileSet[2];
+			return cruiserTileset[2];
 		else
 			throw new ShipSectionOutOfBounds();
 	}
 
 	// Will return an array of sections for the submarine.
-	public BufferedImage[] getSubmarineTileSet() {
-		return submarineTileSet;
+	public BufferedImage[] getSubmarineTileset() {
+		return submarineTileset;
 	}
 
 	// Will return a section from the submarine.
 	public BufferedImage getSubmarineSection(Section section) {
 		if (section == Section.FRONT)
-			return submarineTileSet[0];
+			return submarineTileset[0];
 		else if (section == Section.MID_1)
-			return submarineTileSet[1];
+			return submarineTileset[1];
 		else if (section == Section.BACK)
-			return submarineTileSet[2];
+			return submarineTileset[2];
 		else
 			throw new ShipSectionOutOfBounds();
 	}
 
 	// Will return an array of sections for the battleship.
-	public BufferedImage[] getBattleshipTileSet() {
-		return battleshipTileSet;
+	public BufferedImage[] getBattleshipTileset() {
+		return battleshipTileset;
 	}
 
 	// Will return a section from the battleship.
 	public BufferedImage getBattleshipSection(Section section) {
 		if (section == Section.FRONT)
-			return battleshipTileSet[0];
+			return battleshipTileset[0];
 		else if (section == Section.MID_1)
-			return battleshipTileSet[1];
+			return battleshipTileset[1];
 		else if (section == Section.MID_2)
-			return battleshipTileSet[2];
+			return battleshipTileset[2];
 		else if (section == Section.BACK)
-			return battleshipTileSet[3];
+			return battleshipTileset[3];
 		else
 			throw new ShipSectionOutOfBounds();
 	}
 
 	// Will return an array of sections for the aircraft carrier.
-	public BufferedImage[] getCarrierTileSet() {
-		return carrierTileSet;
+	public BufferedImage[] getCarrierTileset() {
+		return carrierTileset;
 	}
 
 	// Will return a section from the aircraft carrier.
 	public BufferedImage getCarrierSection(Section section) {
 		if (section == Section.FRONT)
-			return carrierTileSet[0];
+			return carrierTileset[0];
 		else if (section == Section.MID_1)
-			return carrierTileSet[1];
+			return carrierTileset[1];
 		else if (section == Section.MID_2)
-			return carrierTileSet[2];
+			return carrierTileset[2];
 		else if (section == Section.MID_3)
-			return carrierTileSet[3];
+			return carrierTileset[3];
 		else if (section == Section.BACK)
-			return carrierTileSet[4];
+			return carrierTileset[4];
 		else
 			throw new ShipSectionOutOfBounds();
 	}
