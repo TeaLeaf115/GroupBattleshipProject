@@ -1,15 +1,15 @@
-package tile;
+package graphicsManager;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
+// import java.awt.Graphics2D;
+// import java.awt.image.BufferedImage;
+// import java.util.HashMap;
 
-import gameLogic.Ship;
-import gameLogic.Ship.ShipType;
-import graphicsManager.GamePanel;
+// import gameLogic.Ship;
+// import gameLogic.Ship.ShipType;
+// import graphicsManager.GamePanel;
 
  public class TileManager {
-	private final GamePanel gp;
+	/*private final GamePanel gp;
 
 	private final SpriteManager sm;
 
@@ -138,5 +138,5 @@ import graphicsManager.GamePanel;
 
 		// Return rotated buffer image
 		return newImage;
-	}
+	}*/
 }
