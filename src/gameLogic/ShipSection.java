@@ -37,6 +37,14 @@ public class ShipSection {
         this.coords.setLocation(xPos, yPos);
     }
 
+    public boolean isHit() {
+        return this.isHit;
+    }
+
+    public void setHit(boolean isHit) {
+        this.isHit = isHit;
+    }
+
     public String toString() {
         return coords.toString();
     }
