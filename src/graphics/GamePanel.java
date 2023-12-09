@@ -43,10 +43,6 @@ public class GamePanel extends JPanel implements Runnable {
 //    TileManager tileM = new TileManager(this);
     private GUI gui = new GUI(this);
 
-    // Creates mouseHandler to track mouse movement and input
-    private MouseHandler mouseHandler = new MouseHandler();
-
-
     // The different game states for the game.
     public GameStates gameState;
 
