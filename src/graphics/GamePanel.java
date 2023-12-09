@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import gameLogic.MouseHandler;
 import gameLogic.Ship;
 import gameLogic.Ship.Rotation;
 import gameLogic.Ship.ShipType;
@@ -17,7 +18,7 @@ public class GamePanel extends JPanel implements Runnable {
     // -----------------
 
     // Each tile on the map has a default texture resolution of 16x16 pixels.
-    final int defaultTileSize = 16;
+    private final int defaultTileSize = 16;
     // How many times we scale the sprite to match modern screen graphics.
     private final double spriteScaleMultiplier = 1.8;
 
@@ -29,18 +30,22 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxBoardRow = 10;
 
     // The pixel amount for the board size.
-    final int boardWidth = scaledTileSize * maxBoardCol;
-    final int boardHeight = scaledTileSize * maxBoardRow;
+    private final int boardWidth = scaledTileSize * maxBoardCol;
+    private final int boardHeight = scaledTileSize * maxBoardRow;
 
     // The thread that the game will be run on.
-    Thread gameThread;
+    private Thread gameThread;
 
     // How many Frames Per Second (FPS) the game screen will be updates.
-    final int FPS = 60;
+    private final int FPS = 60;
 
     // Sets the sprites for the GUI aspects of the game.
 //    TileManager tileM = new TileManager(this);
-    GUI gui = new GUI(this);
+    private GUI gui = new GUI(this);
+
+    // Creates mouseHandler to track mouse movement and input
+    private MouseHandler mouseHandler = new MouseHandler();
+
 
     // The different game states for the game.
     public GameStates gameState;

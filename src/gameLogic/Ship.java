@@ -7,6 +7,7 @@ import java.util.*;
 import java.awt.Point;
 
 public class Ship {
+
     private Point coords;
     private int shipLength;
 
@@ -64,6 +65,10 @@ public class Ship {
         this(shipType, Rotation.UP);
     }
 
+    public Point getCoords() {
+        return coords;
+    }
+
     /**
      * Sets the topleft location of the ship to specified coordinate
      * 
@@ -82,8 +87,6 @@ public class Ship {
                     || this.rotation == Rotation.UP) {
                 // vertical rotation
                 yPos++;
-                
-
 
             } else if (this.rotation == Rotation.LEFT
                     || this.rotation == Rotation.RIGHT) {
@@ -92,6 +95,7 @@ public class Ship {
             }
         }
     }
+    
 
     public String toString() {
         return shipSections.toString();

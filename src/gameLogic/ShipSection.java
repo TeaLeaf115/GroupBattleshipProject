@@ -10,6 +10,7 @@ public class ShipSection {
 
     private boolean isHit;
 
+    // used to map graphics to ship section
     private ShipType shipType;
     private Rotation rotation;
     private Section section;
