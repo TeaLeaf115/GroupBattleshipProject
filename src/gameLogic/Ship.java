@@ -1,10 +1,13 @@
 package gameLogic;
 
 import graphicsManager.SpriteManager.Section;
+import graphics.GamePanel;
+
 import java.util.*;
 import java.awt.Point;
 
 public class Ship {
+
     private Point coords;
     private int shipLength;
 
@@ -48,23 +51,22 @@ public class Ship {
 
         for (int i = 0; i < shipLength - 1; i++) {
             ShipSection section = new ShipSection(this.shipType, this.rotation, sections[i]);
-            section.setCoords(
-                    (int) this.coords.getX(),
-                    (int) this.coords.getY());
-
             this.shipSections.add(section);
         }
 
         ShipSection backSection = new ShipSection(this.shipType, this.rotation, Section.BACK);
-        backSection.setCoords(
-                (int) this.coords.getX(),
-                (int) this.coords.getY());
-
         this.shipSections.add(backSection);
+
+        // sets the coords for all the ship sections
+        this.setCoords(this.coords.getX(), this.coords.getY());
     }
 
     public Ship(ShipType shipType) {
         this(shipType, Rotation.UP);
+    }
+
+    public Point getCoords() {
+        return coords;
     }
 
     /**
@@ -74,8 +76,26 @@ public class Ship {
      * @param yPos the y location of the ship is set to
      */
     public void setCoords(double xPos, double yPos) {
+        // automatically moves point to integer coords
         this.coords.setLocation(xPos, yPos);
+
+        for (ShipSection section : this.shipSections) {
+            section.setCoords(xPos, yPos);
+
+            
+            if (this.rotation == Rotation.DOWN
+                    || this.rotation == Rotation.UP) {
+                // vertical rotation
+                yPos++;
+
+            } else if (this.rotation == Rotation.LEFT
+                    || this.rotation == Rotation.RIGHT) {
+                // horizontal rotation
+                xPos++;
+            }
+        }
     }
+    
 
     public String toString() {
         return shipSections.toString();

@@ -10,6 +10,7 @@ public class ShipSection {
 
     private boolean isHit;
 
+    // used to map graphics to ship section
     private ShipType shipType;
     private Rotation rotation;
     private Section section;
@@ -35,6 +36,14 @@ public class ShipSection {
      */
     public void setCoords(double xPos, double yPos) {
         this.coords.setLocation(xPos, yPos);
+    }
+
+    public boolean isHit() {
+        return this.isHit;
+    }
+
+    public void setHit(boolean isHit) {
+        this.isHit = isHit;
     }
 
     public String toString() {
