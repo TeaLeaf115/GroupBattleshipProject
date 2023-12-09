@@ -65,7 +65,7 @@ public class SpriteManager {
 		return indicatorTileset;
 	}
 
-	public BufferedImage getIndicator(Indicator indicator) {
+	public BufferedImage getIndicator(Indicator indicator) throws ShipSectionOutOfBounds {
 		if (indicator == Indicator.MISS)
 			return indicatorTileset[0];
 		if (indicator == Indicator.HIT)
@@ -93,7 +93,7 @@ public class SpriteManager {
 	}
 
 	// Will return a section from the destroyer.
-	public BufferedImage getDestroyerSection(Section section) {
+	public BufferedImage getDestroyerSection(Section section) throws ShipSectionOutOfBounds {
 		if (section == Section.FRONT)
 			return destroyerTileset[0];
 		else if (section == Section.BACK)
@@ -108,7 +108,7 @@ public class SpriteManager {
 	}
 
 	// Will return a section from the cruiser.
-	public BufferedImage getCruiserSection(Section section) {
+	public BufferedImage getCruiserSection(Section section) throws ShipSectionOutOfBounds {
 		if (section == Section.FRONT)
 			return cruiserTileset[0];
 		else if (section == Section.MID_1)
@@ -125,7 +125,7 @@ public class SpriteManager {
 	}
 
 	// Will return a section from the submarine.
-	public BufferedImage getSubmarineSection(Section section) {
+	public BufferedImage getSubmarineSection(Section section) throws ShipSectionOutOfBounds {
 		if (section == Section.FRONT)
 			return submarineTileset[0];
 		else if (section == Section.MID_1)
@@ -142,7 +142,7 @@ public class SpriteManager {
 	}
 
 	// Will return a section from the battleship.
-	public BufferedImage getBattleshipSection(Section section) {
+	public BufferedImage getBattleshipSection(Section section) throws ShipSectionOutOfBounds {
 		if (section == Section.FRONT)
 			return battleshipTileset[0];
 		else if (section == Section.MID_1)
@@ -161,7 +161,7 @@ public class SpriteManager {
 	}
 
 	// Will return a section from the aircraft carrier.
-	public BufferedImage getCarrierSection(Section section) {
+	public BufferedImage getCarrierSection(Section section) throws ShipSectionOutOfBounds {
 		if (section == Section.FRONT)
 			return carrierTileset[0];
 		else if (section == Section.MID_1)
@@ -179,7 +179,7 @@ public class SpriteManager {
 	
 
 	// Custom exception class to deal with a person trying to access a sesctio of a ship that does not exist.
-	private class ShipSectionOutOfBounds extends Exception {
+	private static class ShipSectionOutOfBounds extends Exception {
 		ShipSectionOutOfBounds() {super("The Ship Section you were trying to access does not exist.");}
 		ShipSectionOutOfBounds(String str) {super(str);}
 	}
