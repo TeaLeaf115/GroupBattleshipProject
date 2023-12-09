@@ -6,11 +6,6 @@ import java.awt.event.MouseEvent;
 
 public class MouseHandler implements MouseListener {
     public boolean leftClickPressed;
-    public Point mouseCoords;
-
-    public MouseHandler() {
-
-    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
