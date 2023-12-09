@@ -19,13 +19,19 @@ public class MouseHandler implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         this.leftClickPressed = true;
-        System.out.println("Clicked");
+        System.out.println(String.format(
+            "Clicked at x: %s, %s", 
+            e.getX(),
+            e.getY()));
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         this.leftClickPressed = false;
-        System.out.println("Unclicked");
+        System.out.println(String.format(
+            "Unclicked at x: %s, %s", 
+            e.getX(),
+            e.getY()));
     }
 
     @Override
