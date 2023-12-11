@@ -47,6 +47,6 @@ public class ShipSection {
     }
 
     public String toString() {
-        return coords.toString();
+        return super.toString(); // this.coords.toString();
     }
 }
