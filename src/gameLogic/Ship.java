@@ -96,8 +96,11 @@ public class Ship {
         }
     }
     
+    public ArrayList<ShipSection> getShipSections() {
+        return this.shipSections;
+    }
 
     public String toString() {
-        return shipSections.toString();
+        return super.toString();//shipSections.toString();
     }
 }
