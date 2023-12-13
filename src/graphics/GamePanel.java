@@ -35,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // The thread that the game will be run on.
     private Thread gameThread;
+    private MouseHandler mouseHandler;
 
     // How many Frames Per Second (FPS) the game screen will be updates.
     private final int FPS = 60;
@@ -50,6 +51,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension((int) ((gui.screenCoverWidth() + 6*16) * spriteScaleMultiplier), (int) ((gui.screenCoverHeight() + 7*16) * spriteScaleMultiplier)));
         this.setBackground(new Color(0x808080));
         this.setDoubleBuffered(true);
+
+        // Creates mouseHandler to track mouse movement and input
+        this.mouseHandler = new MouseHandler();
+        this.addMouseListener(mouseHandler);
     }
 
     public void setupGame() {
