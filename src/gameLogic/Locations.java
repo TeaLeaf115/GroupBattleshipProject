@@ -62,11 +62,13 @@ public class Locations {
             hitSections.put(coords, this.unguessedSections.remove(coords));
             return ShotStatus.HIT;
 
-        } else if (this.hitSections.containsKey(coords) || misses.contains(coords)){
+        } else if (this.hitSections.containsKey(coords) || this.misses.contains(coords)){
             // shoots at an already guessed location
             return ShotStatus.GUESSED;
         }
 
+        // shot is a miss
+        this.misses.add(coords);
         return ShotStatus.MISS;
     }
     
