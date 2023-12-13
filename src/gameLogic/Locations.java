@@ -5,7 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Locations {
+    public enum ShotStatus {
+        GUESSED,
+        HIT,
+        MISS
+    }
 
+    // ship locations that are unguessed
     private HashMap<Point, ShipSection> unguessedSections;
     private HashMap<Point, ShipSection> hitSections;
 
@@ -46,9 +52,22 @@ public class Locations {
                 this.unguessedSections.put(section.getCoords(), section);
             }
         }
+    }
 
-        // cursed, unreadable way
-        // ships.stream().forEach((ship) -> ship.getShipSections().stream().forEach((section) -> this.unguessedSections.put(section.getCoords(), section)));
+    public ShotStatus shootLocation(Point coords) {
+        if (this.unguessedSections.containsKey(coords)) {
+            // shoots at an unguessed location of a ship
+
+            // removes ship from unguessedSections and places it in hitSections
+            hitSections.put(coords, this.unguessedSections.remove(coords));
+            return ShotStatus.HIT;
+
+        } else if (this.hitSections.containsKey(coords) || misses.contains(coords)){
+            // shoots at an already guessed location
+            return ShotStatus.GUESSED;
+        }
+
+        return ShotStatus.MISS;
     }
     
     /**
