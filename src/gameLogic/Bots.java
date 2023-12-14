@@ -15,7 +15,7 @@ public class Bots {
 
 	private BotLevel botLevel;
 	private ArrayList<Point> possibleGuesses;
-	private Locations 
+	private Locations shipLocations;
 
 	private final Random random = new Random();
 
