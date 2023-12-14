@@ -59,7 +59,12 @@ public class Locations {
             // shoots at an unguessed location of a ship
 
             // removes ship from unguessedSections and places it in hitSections
-            hitSections.put(coords, this.unguessedSections.remove(coords));
+            ShipSection hitSection = this.unguessedSections.remove(coords);
+            hitSection.setHit(true);
+
+            hitSections.put(coords, hitSection);
+
+
             return ShotStatus.HIT;
 
         } else if (this.hitSections.containsKey(coords) || this.misses.contains(coords)){
