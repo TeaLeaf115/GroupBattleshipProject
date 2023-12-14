@@ -14,14 +14,19 @@ public class Bots {
 	}
 
 	private BotLevel botLevel;
-	private Point possibleGuesses;
+	private ArrayList<Point> possibleGuesses;
+	private Locations 
+
+	private final Random random = new Random();
 
 	public Bots(BotLevel botLevel) {
 		this.botLevel = botLevel;
+		possibleGuesses = new ArrayList<>();
 
+		// fills possibleGuesses with all potential guesses
 		for (int x = 0; x < GamePanel.maxBoardCol; x++) {
 			for (int y = 0; y < GamePanel.maxBoardRow; y++) {
-				
+				possibleGuesses.add(new Point(x, y));
 			}
 		}
 	}
@@ -42,17 +47,12 @@ public class Bots {
 		}
 	}
 	
-	public boolean easyBot() {
+	public void easyBot(Locations opponentLocations) {
+		// picks a random unguessed location
+		Point guessLocation = this.possibleGuesses.remove(
+			this.random.nextInt(this.possibleGuesses.size()));
 
-		while (col < 1 || col > 9) {
-			col = Randomizer.nextInt(0, 9);
-		}
-
-		while (row < 1 || row > 9) {
-			row = Randomizer.nextInt(0, 9);
-		}
-
-		return checkHit(new Point(row, col));
+		opponentLocations.shootLocation(guessLocation);
 	}
 	public boolean normalBot() {
 		return false;
@@ -94,5 +94,9 @@ public class Bots {
 				shipSection.setHit(true);
 			}
 		}
+	}
+
+	public void makeGuess(Locations opponentLocations) {
+
 	}
 }
