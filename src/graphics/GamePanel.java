@@ -26,8 +26,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int scaledTileSize = (int)Math.ceil(defaultTileSize * spriteScaleMultiplier);
 
     // The amount of columns and rows for the board.
-    public final int maxBoardCol = 10;
-    public final int maxBoardRow = 10;
+    public static final int maxBoardCol = 10;
+    public static final int maxBoardRow = 10;
 
     // The pixel amount for the board size.
     private final int boardWidth = scaledTileSize * maxBoardCol;

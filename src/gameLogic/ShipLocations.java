@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Locations {
+public class ShipLocations {
     public enum ShotStatus {
         GUESSED,
         HIT,
@@ -17,7 +17,7 @@ public class Locations {
 
     private ArrayList<Point> misses;
 
-    public Locations() {
+    public ShipLocations() {
         this.unguessedSections = new HashMap<>();
         this.hitSections = new HashMap<>();
 
@@ -27,7 +27,7 @@ public class Locations {
     public HashMap<Point, ShipSection> getUnguessedSections() {
         return this.unguessedSections;
     }
-    
+
     /**
      * Adds all sections of a ship into unguessedSections
      * 
@@ -47,11 +47,19 @@ public class Locations {
      *              unguessedSections
      */
     public void addUnguessedShips(ArrayList<Ship> ships) {
-        for (Ship ship: ships) {
-            for (ShipSection section: ship.getShipSections()) {
+        for (Ship ship : ships) {
+            for (ShipSection section : ship.getShipSections()) {
                 this.unguessedSections.put(section.getCoords(), section);
             }
         }
+    }
+
+    public HashMap<Point, ShipSection> getHitSections() {
+        return this.hitSections;
+    }
+
+    public ArrayList<Point> getMisses() {
+        return this.misses;
     }
 
     public ShotStatus shootLocation(Point coords) {
@@ -59,10 +67,14 @@ public class Locations {
             // shoots at an unguessed location of a ship
 
             // removes ship from unguessedSections and places it in hitSections
-            hitSections.put(coords, this.unguessedSections.remove(coords));
+            ShipSection hitSection = this.unguessedSections.remove(coords);
+            hitSection.setHit(true);
+
+            hitSections.put(coords, hitSection);
+
             return ShotStatus.HIT;
 
-        } else if (this.hitSections.containsKey(coords) || this.misses.contains(coords)){
+        } else if (this.hitSections.containsKey(coords) || this.misses.contains(coords)) {
             // shoots at an already guessed location
             return ShotStatus.GUESSED;
         }
@@ -71,7 +83,7 @@ public class Locations {
         this.misses.add(coords);
         return ShotStatus.MISS;
     }
-    
+
     /**
      * Clears all unguessedSections, hitSections, and misses
      */
