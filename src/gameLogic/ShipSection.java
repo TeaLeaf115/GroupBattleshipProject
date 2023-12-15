@@ -15,6 +15,8 @@ public class ShipSection {
     private Rotation rotation;
     private Section section;
 
+    
+
     public ShipSection(ShipType shipType, Rotation rotation, Section section) {
         this.coords = new Point();
         this.isHit = false;
@@ -44,6 +46,18 @@ public class ShipSection {
 
     public void setHit(boolean isHit) {
         this.isHit = isHit;
+    }
+
+    public ShipType getShipType() {
+        return this.shipType;
+    }
+
+    public Rotation getRotation() {
+        return this.rotation;
+    }
+
+    public Section getSection() {
+        return this.section;
     }
 
     public String toString() {

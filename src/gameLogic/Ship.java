@@ -1,7 +1,6 @@
 package gameLogic;
 
 import graphicsManager.SpriteManager.Section;
-import graphics.GamePanel;
 
 import java.util.*;
 import java.awt.Point;
