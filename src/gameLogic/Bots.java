@@ -60,7 +60,7 @@ public class Bots {
 		return false;
 	}
 
-	public boolean hardBot(ShipLocations opponentLocations) {
+	public void hardBot(ShipLocations opponentLocations) {
 		int[][] heatMap = new int[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
 
 		// sets each missed location to lowest priority
@@ -68,7 +68,15 @@ public class Bots {
 			heatMap[(int) missedLocations.getX()][(int) missedLocations.getY()] = Integer.MIN_VALUE;
 		}
 
-		return true;
+		// checks rows for adjacent points
+		for (int row = 0; row < GamePanel.maxBoardCol; row++) {
+
+		}
+
+		// checks columns for adjacent points
+		for (int col = 0; col < GamePanel.maxBoardRow; col++) {
+			
+		}
 	}
 
 	public void impossibleBot(ShipLocations opponentLocations) {
@@ -84,7 +92,7 @@ public class Bots {
 
 		Point guessLocation = opponentPoints[random.nextInt(opponentPoints.length)];
 		this.possibleGuesses.remove(guessLocation);
-		opponentLocations.shootLocation(guessLocation);
+		opponentLocations.shootLocation(guessLocation); // guaranteed hit
 	}
 
 	// public void impossibleBot(Location l) {
