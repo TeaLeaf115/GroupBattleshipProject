@@ -11,6 +11,7 @@ import gameLogic.MouseHandler;
 import gameLogic.Ship;
 import gameLogic.Ship.Rotation;
 import gameLogic.Ship.ShipType;
+import graphicsManager.SpriteManager;
 
 public class GamePanel extends JPanel implements Runnable {
     // -----------------
@@ -18,12 +19,12 @@ public class GamePanel extends JPanel implements Runnable {
     // -----------------
 
     // Each tile on the map has a default texture resolution of 16x16 pixels.
-    private final int defaultTileSize = 16;
+    private static final int defaultTileSize = 16;
     // How many times we scale the sprite to match modern screen graphics.
-    private final double spriteScaleMultiplier = 1.8;
+    private static final double spriteScaleMultiplier = 1.8;
 
     // The upscale multiplier of the sprite tiles.
-    public final int scaledTileSize = (int)Math.ceil(defaultTileSize * spriteScaleMultiplier);
+    public static final int scaledTileSize = (int)Math.ceil(defaultTileSize * spriteScaleMultiplier);
 
     // The amount of columns and rows for the board.
     public static final int maxBoardCol = 10;
@@ -35,14 +36,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     // The thread that the game will be run on.
     private Thread gameThread;
-    private MouseHandler mouseHandler;
 
     // How many Frames Per Second (FPS) the game screen will be updates.
     private final int FPS = 60;
 
     // Sets the sprites for the GUI aspects of the game.
-//    TileManager tileM = new TileManager(this);
     private GUI gui = new GUI(this);
+
+    public static SpriteManager sm = new SpriteManager();
 
     // The different game states for the game.
     public GameStates gameState;
@@ -51,10 +52,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension((int) ((gui.screenCoverWidth() + 6*16) * spriteScaleMultiplier), (int) ((gui.screenCoverHeight() + 7*16) * spriteScaleMultiplier)));
         this.setBackground(new Color(0x808080));
         this.setDoubleBuffered(true);
-
-        // Creates mouseHandler to track mouse movement and input
-        this.mouseHandler = new MouseHandler();
-        this.addMouseListener(mouseHandler);
     }
 
     public void setupGame() {
