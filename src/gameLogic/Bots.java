@@ -17,7 +17,6 @@ public class Bots {
 	private ShipLocations shipLocations;
 
 	private final Random random = new Random();
-
 	private final double impossibleProb = 0.85;
 
 	public Bots(BotLevel botLevel) {
@@ -56,24 +55,54 @@ public class Bots {
 		opponentLocations.shootLocation(guessLocation);
 	}
 
-	public boolean normalBot(ShipLocations opponentLocations) {
-		return false;
-	}
-
-	public boolean hardBot(ShipLocations opponentLocations) {
-		int[][] heatMap = new int[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
+	public void normalBot(ShipLocations opponentLocations) {
+		Integer[][] heatMap = new Integer[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
 
 		// sets each missed location to lowest priority
 		for (Point missedLocations : opponentLocations.getMisses()) {
-			heatMap[(int) missedLocations.getX()][(int) missedLocations.getY()] = Integer.MIN_VALUE;
+			int x = (int) missedLocations.getX();
+			int y = (int) missedLocations.getY();
+			heatMap[x][y] = Integer.MIN_VALUE;
 		}
 
-		return true;
+		for (Point hitLocations : opponentLocations.getHitSections().keySet()) {
+			// sets each hit location to lowest priority
+			int x = (int) hitLocations.getX();
+			int y = (int) hitLocations.getY();
+			heatMap[x][y] = Integer.MIN_VALUE;
+
+			// marks all positions adjacent to hit location
+			if (x - 1 >= 0)
+				heatMap[x - 1][y]++;
+
+			if (x + 1 < heatMap.length)
+				heatMap[x + 1][y]++;
+
+			if (y - 1 >= 0)
+				heatMap[x][y - 1]++;
+
+			if (y + 1 < heatMap[0].length)
+				heatMap[x][y + 1]++;
+		}
+
+		Point guessLocation = readHeatMap(heatMap);
+		this.possibleGuesses.remove(guessLocation);
+		opponentLocations.shootLocation(guessLocation);
+	}
+
+	public void hardBot(ShipLocations opponentLocations) {
+		Integer[][] heatMap = new Integer[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
+		int[] shipLengths = {2, 3, 3, 4, 5};
+
+
+		// markHeatMap(heatMap, opponentLocations);
+		// Point guessLocation = readHeatMap(heatMap);
+
 	}
 
 	public void impossibleBot(ShipLocations opponentLocations) {
 		// only shoot opponent locations when impossibleProb is true
-		if (random.nextDouble() > this.impossibleProb)  {
+		if (random.nextDouble() > this.impossibleProb) {
 			return;
 		}
 
@@ -84,40 +113,30 @@ public class Bots {
 
 		Point guessLocation = opponentPoints[random.nextInt(opponentPoints.length)];
 		this.possibleGuesses.remove(guessLocation);
-		opponentLocations.shootLocation(guessLocation);
+		opponentLocations.shootLocation(guessLocation); // guaranteed hit
 	}
 
-	// public void impossibleBot(Location l) {
-	// int numberOfFate = Randomizer.nextInt(0, 99);
-	// if (numberOfFate <= 84) {
-	// int randIdx = Randomizer.nextInt(0, l.unguessedSections.size());
-	// int count = 0;
-	// for (Map.Entry<Point, shipSection> entry : l.unguessedSections.entrySet()) {
-	// if (count == randIdx) {
-	// // Found a match! Declare hit and potentially update the ship section state.
-	// shipSection = entry.getValue();
-	// shipSection.setHit(true);
-	// // Update ship section if needed
-	// break; // No need to keep searching after a hit
-	// count++;
-	// }
-	// }
+	public static Point readHeatMap(Integer[][] heatMap) throws IndexOutOfBoundsException {
+		if (heatMap.length == 0 || heatMap[0].length == 0) {
+			throw new IndexOutOfBoundsException();
+		}
 
-	// } else {
-	// Point p = easyBot();
-	// checkHit(p, l);
-	// }
-	// }
+		// determines which point has the highest weight
+		int shootX = 0;
+		int shootY = 0;
+		int maxWeight = heatMap[0][0];
 
-	// public boolean checkHit(Point p, Location l) {
-	// for (Map.Entry<Point, shipSection> entry : l.unguessedSections.entrySet()) {
-	// if (entry.getKey().equals(p)) {
-	// // Found a match! Declare hit and potentially update the ship section state.
-	// hit = true;
-	// shipSection = entry.getValue(); // Update ship section if needed
-	// break; // No need to keep searching after a hit
-	// shipSection.setHit(true);
-	// }
-	// }
-	// }
+		for (int x = 0; x < heatMap.length; x++) {
+			int weight = Collections.max(Arrays.asList(heatMap[x]));
+
+			if (weight > maxWeight) {
+				shootX = x;
+				shootY = Arrays.asList(heatMap[x]).indexOf(weight);
+				maxWeight = weight;
+			}
+		}
+
+		return new Point(shootX, shootY);
+	}
+
 }
