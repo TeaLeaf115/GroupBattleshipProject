@@ -1,7 +1,6 @@
 package graphics.screens;
 
 import graphics.GamePanel;
-import graphicsManager.SpriteManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,7 +18,6 @@ public class ShipPlacementScreen  extends JPanel {
 
     public ShipPlacementScreen(GamePanel gp) {
         this.gp = gp;
-        SpriteManager sm = new SpriteManager();
 
         try {
             shipPlacementScreen = ImageIO.read(new File("res/images/ShipPlacementScreen.png"));
@@ -27,7 +25,7 @@ public class ShipPlacementScreen  extends JPanel {
         catch (IOException e) {
             e.printStackTrace();
         }
-        fullShipSprites = sm.getFullShipSprites();
+        fullShipSprites = GamePanel.sm.getFullShipSprites();
 
     }
 
