@@ -37,4 +37,6 @@ pom.xml
 .replit
 replit.nix
 *.class
-.breakpoints
+.breakpoints# Default ignored files
+/shelf/
+/workspace.xml

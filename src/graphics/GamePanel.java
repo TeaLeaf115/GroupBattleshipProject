@@ -27,8 +27,8 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int maxBoardRow = 10;
 
     // The pixel amount for the board size.
-    private final int boardWidth = scaledTileSize * maxBoardCol;
-    private final int boardHeight = scaledTileSize * maxBoardRow;
+    public static final int boardWidth = scaledTileSize * maxBoardCol;
+    public static final int boardHeight = scaledTileSize * maxBoardRow;
 
     // The thread that the game will be run on.
     private Thread gameThread;
