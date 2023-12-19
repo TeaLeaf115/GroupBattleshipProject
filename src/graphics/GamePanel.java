@@ -7,10 +7,6 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import gameLogic.MouseHandler;
-import gameLogic.Ship;
-import gameLogic.Ship.Rotation;
-import gameLogic.Ship.ShipType;
 import graphicsManager.SpriteManager;
 
 public class GamePanel extends JPanel implements Runnable {

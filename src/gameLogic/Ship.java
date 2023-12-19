@@ -1,9 +1,9 @@
 package gameLogic;
 
-import graphicsManager.SpriteManager.Section;
-
-import java.util.*;
 import java.awt.Point;
+import java.util.ArrayList;
+
+import graphicsManager.SpriteManager.Section;
 
 /**
  * The {@code Ship} class represents a ship in the game, with attributes such as its type,

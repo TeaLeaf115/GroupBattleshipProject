@@ -1,8 +1,8 @@
 package graphicsManager;
 
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * The SpriteManager class handles the management and retrieval of sprites from a spritesheet.

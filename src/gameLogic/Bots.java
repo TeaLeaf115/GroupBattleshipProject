@@ -1,8 +1,12 @@
 package gameLogic;
 
-import graphics.GamePanel;
-import java.util.*;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
+
+import graphics.GamePanel;
 
 public class Bots {
 	public enum BotLevel {
@@ -91,12 +95,7 @@ public class Bots {
 	}
 
 	public void hardBot(ShipLocations opponentLocations) {
-		Integer[][] heatMap = new Integer[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
-		int[] shipLengths = {2, 3, 3, 4, 5};
-
-
-		// markHeatMap(heatMap, opponentLocations);
-		// Point guessLocation = readHeatMap(heatMap);
+		
 
 	}
 
