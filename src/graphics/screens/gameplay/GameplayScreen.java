@@ -30,7 +30,7 @@ public class GameplayScreen extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> new GameplayScreen());
+			SwingUtilities.invokeLater(() -> new GameplayScreen());
 	}
 }
 
