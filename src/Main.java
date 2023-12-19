@@ -1,8 +1,8 @@
-import javax.swing.*;
+import java.awt.BorderLayout;
+
+import javax.swing.JFrame;
 
 import graphics.GamePanel;
-
-import java.awt.*;
 
 public class Main {
 

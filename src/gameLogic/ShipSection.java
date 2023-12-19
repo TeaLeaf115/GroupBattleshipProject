@@ -1,9 +1,10 @@
 package gameLogic;
 
-import gameLogic.Ship.*;
-import graphicsManager.SpriteManager.Section;
-
 import java.awt.Point;
+
+import gameLogic.Ship.Rotation;
+import gameLogic.Ship.ShipType;
+import graphicsManager.SpriteManager.Section;
 
 /**
  * The {@code ShipSection} class represents a section of a ship on the game board.
