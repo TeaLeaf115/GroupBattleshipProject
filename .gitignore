@@ -2,8 +2,8 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-*.xml
-*.iml
+#*.xml
+#*.iml
 
 ### Eclipse ###
 .apt_generated
