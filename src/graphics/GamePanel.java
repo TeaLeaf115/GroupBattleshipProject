@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import graphicsManager.SpriteManager;
+import graphics.screens.*;
+import graphics.screens.gameplay.GameplayScreen;
 
 public class GamePanel extends JPanel implements Runnable {
     // -----------------
@@ -29,6 +31,8 @@ public class GamePanel extends JPanel implements Runnable {
     // The pixel amount for the board size.
     public static final int boardWidth = scaledTileSize * maxBoardCol;
     public static final int boardHeight = scaledTileSize * maxBoardRow;
+    
+    public static Dimension windowSize;
 
     // The thread that the game will be run on.
     private Thread gameThread;
@@ -36,22 +40,29 @@ public class GamePanel extends JPanel implements Runnable {
     // How many Frames Per Second (FPS) the game screen will be updates.
     private final int FPS = 60;
 
-    // Sets the sprites for the GUI aspects of the game.
-    private GUI gui = new GUI(this);
-
     public static SpriteManager sm = new SpriteManager();
 
     // The different game states for the game.
-    public GameStates gameState;
+    public static GameStates gameState;
+    
+    // Screen Initialises
+    public TitleScreen titleScreen;
+    public ShipPlacementScreen shipPlacementScreen;
+    public GameplayScreen gameplayScreen;
 
     public GamePanel() {
-        this.setPreferredSize(new Dimension((int) ((gui.screenCoverWidth() + 6*16) * spriteScaleMultiplier), (int) ((gui.screenCoverHeight() + 7*16) * spriteScaleMultiplier)));
+        titleScreen = new TitleScreen();
+//        shipPlacementScreen = new ShipPlacementScreen(this);
+        gameplayScreen = new GameplayScreen();
+        
+        this.setPreferredSize(new Dimension((int) ((6*16) * spriteScaleMultiplier), (int) ((7*16) * spriteScaleMultiplier)));
         this.setBackground(new Color(0x808080));
         this.setDoubleBuffered(true);
     }
 
     public void setupGame() {
-        gameState = GameStates.SHIP_PLACEMENT;
+        gameState = GameStates.TITLE;
+        System.out.println("Game successfully loaded and ready to play!");
     }
 
     public void startGameThread() {
@@ -90,27 +101,68 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (gameState == GameStates.GAMEPLAY) {
-//            playerBoard.addShip(new Ship(2, 2, ShipType.CARRIER, 0, Rotation.RIGHT));
-//            playerBoard.addShip(new Ship(2, 5, ShipType.DESTROYER, 0, Rotation.DOWN));
-//            compBoard.hit(2, 5);
-//            playerBoard.miss(0, 0);
-//            tileM.update();
-        }
-        if (gameState == GameStates.PAUSED) {
-            System.out.println("Game is Paused.");
+        switch (gameState) {
+            case TITLE -> {
+//                System.out.println("Title Screen");
+                titleScreen.update();
+            }
+            case SHIP_PLACEMENT -> {
+                System.out.println("Ship Placement Screen");
+                shipPlacementScreen.update();
+            }
+            case GAMEPLAY -> {
+                System.out.println("Gameplay Screen");
+            }
+            case GAMEOVER -> {
+                System.out.println("Gameover Screen");
+            }
+            case PAUSED -> {
+                System.out.println("Pause Screen");
+            }
+            case SETTINGS -> {
+                System.out.println("Settings Screen");
+            }
         }
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        gui.drawShipPlacementScreen(g2d);
+        Graphics2D g2 = (Graphics2D) g;
+        switch (gameState) {
+            case TITLE -> {
+//                System.out.println("Title Screen");
+                titleScreen.draw(g2);
+            }
+            case SHIP_PLACEMENT -> {
+                System.out.println("Ship Placement Screen");
+                shipPlacementScreen.draw(g2);
+            }
+            case GAMEPLAY -> {
+                System.out.println("Gameplay Screen");
+            }
+            case GAMEOVER -> {
+                System.out.println("Game-over Screen");
+            }
+            case PAUSED -> {
+                System.out.println("Pause Screen");
+            }
+            case SETTINGS -> {
+                System.out.println("Settings Screen");
+            }
+        }
 
-        g2d.dispose();
+        g2.dispose();
     }
 
-    public double getSpriteScaleMultiplier() {
+    public static double getSpriteScaleMultiplier() {
         return spriteScaleMultiplier;
+    }
+    
+    public void updateScreenSize(Dimension d) {
+        this.windowSize = d;
+    }
+    
+    public static Dimension getScreenSize() {
+        return windowSize;
     }
 }

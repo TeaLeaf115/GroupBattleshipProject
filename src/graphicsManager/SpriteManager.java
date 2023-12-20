@@ -1,6 +1,8 @@
 package graphicsManager;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -8,72 +10,86 @@ import java.util.Arrays;
  * The SpriteManager class handles the management and retrieval of sprites from a spritesheet.
  * It organizes different tile sets for water, ship indicators, and various ship types.
  *
- * @see SpriteSheetReader
  * @see Section
  * @see Indicator
- * @see ShipSectionOutOfBounds
+ * @see ImageSectionOutOfBounds
  */
 public class SpriteManager {
-
+	
 	// The object responsible for reading the spritesheet.
-	private final SpriteSheetReader ssr;
-
+	private SpriteSheetReader ssr;
+	
 	// An array containing every tile from the spritesheet.
 	private BufferedImage[] tileset;
-
+	
 	// Enum for specifying a section of a ship.
 	public enum Section {
 		FRONT, MID_1, MID_2, MID_3, BACK
 	}
-
+	
 	// Enum for ship indicators.
 	public enum Indicator {
 		EMPTY, HIT, COMP_HIT, MISS
 	}
-
+	
 	// Arrays for animated water background sprites.
 	private final BufferedImage[] waterTileset;
-
+	
 	// Arrays for ship indicators.
 	private final BufferedImage[] indicatorTileset;
-
+	
 	// Arrays for each ship type.
 	private final BufferedImage[] destroyerTileset;
 	private final BufferedImage[] cruiserTileset;
 	private final BufferedImage[] submarineTileset;
 	private final BufferedImage[] battleshipTileset;
 	private final BufferedImage[] carrierTileset;
-
+	
 	// Array for storing full ship sprites.
 	public final BufferedImage[] fullShipSprites;
-
+	
+	private BufferedImage[] startButtonSprites;
+	
+	private BufferedImage guessingOverlay;
+	private BufferedImage placementOverlay;
+	private BufferedImage logo;
+	private BufferedImage titleScreen;
+	
+	
 	/**
-	 * Constructs a SpriteManager instance and initializes various tile sets based on a spritesheet.
+	 * Constructs a SpriteManager instance and initializes various tile sets based on a sprite sheet.
 	 */
 	public SpriteManager() {
-		ssr = new SpriteSheetReader("res/images/BattleshipSpritesheet.png", 16, 16);
 		try {
+			ssr = new SpriteSheetReader("res/images/StartButtonSpriteSheet.png", 32, 16);
+			startButtonSprites = ssr.spriteSheetToArray();
+			ssr = new SpriteSheetReader("res/images/BattleshipSpritesheet.png", 16, 16);
 			tileset = ssr.spriteSheetToArray();
+			
+			guessingOverlay = ImageIO.read(new File("res/images/GuessingOverlay.png"));
+			placementOverlay = ImageIO.read(new File("res/images/PlacementOverlay.png"));
+			logo = ImageIO.read(new File("res/images/Battleship_Logo.png"));
+			titleScreen = ImageIO.read(new File("res/images/TitleScreen.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		waterTileset = Arrays.copyOfRange(tileset, 0, 4);
-
+		
 		destroyerTileset = Arrays.copyOfRange(tileset, 12, 14);
 		cruiserTileset = Arrays.copyOfRange(tileset, 6, 9);
 		submarineTileset = Arrays.copyOfRange(tileset, 9, 12);
 		battleshipTileset = Arrays.copyOfRange(tileset, 14, 18);
 		carrierTileset = Arrays.copyOfRange(tileset, 18, 24);
-
+		
 		indicatorTileset = new BufferedImage[3];
 		indicatorTileset[0] = tileset[5];
 		indicatorTileset[1] = tileset[4];
 		indicatorTileset[2] = tileset[23];
-
+		
 		fullShipSprites = new BufferedImage[5];
 	}
-
+	
 	/**
 	 * Retrieves an array of water sprite frames for the animated water background.
 	 *
@@ -82,7 +98,7 @@ public class SpriteManager {
 	public BufferedImage[] getWaterTileset() {
 		return waterTileset;
 	}
-
+	
 	/**
 	 * Retrieves an array of ship indicators.
 	 *
@@ -91,23 +107,21 @@ public class SpriteManager {
 	public BufferedImage[] getIndicatorTileset() {
 		return indicatorTileset;
 	}
-
+	
 	/**
 	 * Retrieves a specific ship indicator sprite based on the provided indicator type.
 	 *
 	 * @param indicator The type of ship indicator.
 	 * @return The BufferedImage representing the specified ship indicator.
-	 * @throws ShipSectionOutOfBounds If the specified indicator type is invalid.
+	 * @throws ImageSectionOutOfBounds If the specified indicator type is invalid.
 	 */
-	public BufferedImage getIndicator(Indicator indicator) throws ShipSectionOutOfBounds {
-		if (indicator == Indicator.MISS)
-			return indicatorTileset[0];
-		if (indicator == Indicator.HIT)
-			return indicatorTileset[2];
-		if (indicator == Indicator.COMP_HIT)
-			return indicatorTileset[1];
-		else
-			throw new ShipSectionOutOfBounds("The Indicator you were trying to access does not exist.");
+	public BufferedImage getIndicator(Indicator indicator) throws ImageSectionOutOfBounds {
+		return switch (indicator) {
+			case MISS ->  indicatorTileset[0];
+			case HIT ->  indicatorTileset[2];
+			case COMP_HIT ->  indicatorTileset[1];
+			default -> throw new ImageSectionOutOfBounds("The Indicator you were trying to access does not exist.");
+		};
 	}
 
 	/**
@@ -139,15 +153,14 @@ public class SpriteManager {
 	 *
 	 * @param section The type of ship section.
 	 * @return The BufferedImage representing the specified section of the destroyer.
-	 * @throws ShipSectionOutOfBounds If the specified section type is invalid.
+	 * @throws ImageSectionOutOfBounds If the specified section type is invalid.
 	 */
-	public BufferedImage getDestroyerSection(Section section) throws ShipSectionOutOfBounds {
-		if (section == Section.FRONT)
-			return destroyerTileset[0];
-		else if (section == Section.BACK)
-			return destroyerTileset[1];
-		else
-			throw new ShipSectionOutOfBounds();
+	public BufferedImage getDestroyerSection(Section section) throws ImageSectionOutOfBounds {
+		return switch (section) {
+			case FRONT -> destroyerTileset[0];
+			case BACK -> destroyerTileset[1];
+			default -> throw new ImageSectionOutOfBounds();
+		};
 	}
 
 	/**
@@ -164,17 +177,15 @@ public class SpriteManager {
 	 *
 	 * @param section The type of ship section.
 	 * @return The BufferedImage representing the specified section of the cruiser.
-	 * @throws ShipSectionOutOfBounds If the specified section type is invalid.
+	 * @throws ImageSectionOutOfBounds If the specified section type is invalid.
 	 */
-	public BufferedImage getCruiserSection(Section section) throws ShipSectionOutOfBounds {
-		if (section == Section.FRONT)
-			return cruiserTileset[0];
-		else if (section == Section.MID_1)
-			return cruiserTileset[1];
-		else if (section == Section.BACK)
-			return cruiserTileset[2];
-		else
-			throw new ShipSectionOutOfBounds();
+	public BufferedImage getCruiserSection(Section section) throws ImageSectionOutOfBounds {
+		return switch (section) {
+			case FRONT -> cruiserTileset[0];
+			case MID_1 -> cruiserTileset[1];
+			case BACK -> cruiserTileset[2];
+			default -> throw new ImageSectionOutOfBounds();
+		};
 	}
 
 	/**
@@ -191,17 +202,15 @@ public class SpriteManager {
 	 *
 	 * @param section The type of ship section.
 	 * @return The BufferedImage representing the specified section of the submarine.
-	 * @throws ShipSectionOutOfBounds If the specified section type is invalid.
+	 * @throws ImageSectionOutOfBounds If the specified section type is invalid.
 	 */
-	public BufferedImage getSubmarineSection(Section section) throws ShipSectionOutOfBounds {
-		if (section == Section.FRONT)
-			return submarineTileset[0];
-		else if (section == Section.MID_1)
-			return submarineTileset[1];
-		else if (section == Section.BACK)
-			return submarineTileset[2];
-		else
-			throw new ShipSectionOutOfBounds();
+	public BufferedImage getSubmarineSection(Section section) throws ImageSectionOutOfBounds {
+		return switch (section) {
+			case FRONT -> submarineTileset[0];
+			case MID_1 -> submarineTileset[1];
+			case BACK -> submarineTileset[2];
+			default -> throw new ImageSectionOutOfBounds();
+		};
 	}
 
 	/**
@@ -209,19 +218,16 @@ public class SpriteManager {
 	 *
 	 * @param section The type of ship section.
 	 * @return The BufferedImage representing the specified section of the battleship.
-	 * @throws ShipSectionOutOfBounds If the specified section type is invalid.
+	 * @throws ImageSectionOutOfBounds If the specified section type is invalid.
 	 */
-	public BufferedImage getBattleshipSection(Section section) throws ShipSectionOutOfBounds {
-		if (section == Section.FRONT)
-			return battleshipTileset[0];
-		else if (section == Section.MID_1)
-			return battleshipTileset[1];
-		else if (section == Section.MID_2)
-			return battleshipTileset[2];
-		else if (section == Section.BACK)
-			return battleshipTileset[3];
-		else
-			throw new ShipSectionOutOfBounds();
+	public BufferedImage getBattleshipSection(Section section) throws ImageSectionOutOfBounds {
+		return switch (section) {
+			case FRONT -> battleshipTileset[0];
+			case MID_1 -> battleshipTileset[1];
+			case MID_2 -> battleshipTileset[2];
+			case BACK -> battleshipTileset[3];
+			default -> throw new ImageSectionOutOfBounds();
+		};
 	}
 
 	/**
@@ -238,24 +244,43 @@ public class SpriteManager {
 	 *
 	 * @param section The type of ship section.
 	 * @return The BufferedImage representing the specified section of the aircraft carrier.
-	 * @throws ShipSectionOutOfBounds If the specified section type is invalid.
+	 * @throws ImageSectionOutOfBounds If the specified section type is invalid.
 	 */
-	public BufferedImage getCarrierSection(Section section) throws ShipSectionOutOfBounds {
-		if (section == Section.FRONT)
-			return carrierTileset[0];
-		else if (section == Section.MID_1)
-			return carrierTileset[1];
-		else if (section == Section.MID_2)
-			return carrierTileset[2];
-		else if (section == Section.MID_3)
-			return carrierTileset[3];
-		else if (section == Section.BACK)
-			return carrierTileset[4];
-		else
-			throw new ShipSectionOutOfBounds();
+	public BufferedImage getCarrierSection(Section section) throws ImageSectionOutOfBounds {
+		return switch (section) {
+			case FRONT -> carrierTileset[0];
+			case MID_1 -> carrierTileset[1];
+			case MID_2 -> carrierTileset[2];
+			case MID_3 -> carrierTileset[3];
+			case BACK -> carrierTileset[4];
+			default -> throw new ImageSectionOutOfBounds();
+		};
 	}
-
-
+	
+	public BufferedImage[] getStartButtonSprites() {
+		return startButtonSprites;
+	}
+	
+	public BufferedImage getStartButtonSprite(int spriteIndex) throws ImageSectionOutOfBounds{
+		if (spriteIndex > startButtonSprites.length)
+			throw new ImageSectionOutOfBounds();
+		return startButtonSprites[spriteIndex];
+	}
+	public BufferedImage getGuessingOverlay() {
+		return guessingOverlay;
+	}
+	
+	public BufferedImage getPlacementOverlay() {
+		return placementOverlay;
+	}
+	
+	public BufferedImage getLogo() {
+		return logo;
+	}
+	
+	public BufferedImage getTitleScreen() {
+		return titleScreen;
+	}
 
 	/**
 	 * The {@code ShipSectionOutOfBounds} class is a custom exception that should be thrown
@@ -279,13 +304,13 @@ public class SpriteManager {
 	 *
 	 * @see Exception
 	 */
-	private static class ShipSectionOutOfBounds extends Exception {
+	private static class ImageSectionOutOfBounds extends Exception {
 
 		/**
 		 * Constructs a new {@code ShipSectionOutOfBounds} instance with a default error message.
 		 * The default error message indicates that the ship section being accessed does not exist.
 		 */
-		ShipSectionOutOfBounds() {
+		ImageSectionOutOfBounds() {
 			super("The Ship Section you were trying to access does not exist.");
 		}
 
@@ -296,7 +321,7 @@ public class SpriteManager {
 		 *
 		 * @param str The custom error message describing the reason for the exception.
 		 */
-		ShipSectionOutOfBounds(String str) {
+		ImageSectionOutOfBounds(String str) {
 			super(str);
 		}
 	}

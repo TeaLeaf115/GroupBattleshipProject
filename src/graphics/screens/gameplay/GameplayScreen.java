@@ -7,31 +7,31 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameplayScreen extends JFrame {
-	public GameplayScreen() {
-		// Set up the main frame
-		setTitle("Gameplay Screen");
-		setSize(800, 600);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		// Create game panel
-		Game gamePanel = new Game();
-		add(gamePanel);
-		
-		// Create player and computer panels
-		Player playerPanel = new Player(new Point(50, 50));
-		Computer computerPanel = new Computer(new Point(0, 50));
-		
-		// Add player and computer panels to the game panel
-		gamePanel.add(playerPanel);
-		gamePanel.add(computerPanel);
-		
-		// Display the frame
-		setVisible(true);
-	}
-	
-	public static void main(String[] args) {
-			SwingUtilities.invokeLater(() -> new GameplayScreen());
-	}
+//	public GameplayScreen() {
+//		// Set up the main frame
+//		setTitle("Gameplay Screen");
+//		setSize(800, 600);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//
+//		// Create game panel
+//		Game gamePanel = new Game();
+//		add(gamePanel);
+//
+//		// Create player and computer panels
+//		Player playerPanel = new Player(new Point(50, 50));
+//		Computer computerPanel = new Computer(new Point(0, 50));
+//
+//		// Add player and computer panels to the game panel
+//		gamePanel.add(playerPanel);
+//		gamePanel.add(computerPanel);
+//
+//		// Display the frame
+//		setVisible(true);
+//	}
+//
+//	public static void main(String[] args) {
+//			SwingUtilities.invokeLater(() -> new GameplayScreen());
+//	}
 }
 
 class Game extends JPanel {
