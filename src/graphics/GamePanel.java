@@ -55,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
 //        shipPlacementScreen = new ShipPlacementScreen(this);
         gameplayScreen = new GameplayScreen();
         
-        this.setPreferredSize(new Dimension((int) ((6*16) * spriteScaleMultiplier), (int) ((7*16) * spriteScaleMultiplier)));
+        this.setPreferredSize(new Dimension((int)(sm.getTitleScreen().getWidth() * (spriteScaleMultiplier*2.5)), (int)(sm.getTitleScreen().getHeight() * (spriteScaleMultiplier*2.5))));
         this.setBackground(new Color(0x808080));
         this.setDoubleBuffered(true);
     }
@@ -101,6 +101,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        updateScreenSize(getSize());
         switch (gameState) {
             case TITLE -> {
 //                System.out.println("Title Screen");
@@ -114,7 +115,7 @@ public class GamePanel extends JPanel implements Runnable {
                 System.out.println("Gameplay Screen");
             }
             case GAMEOVER -> {
-                System.out.println("Gameover Screen");
+                System.out.println("Game-over Screen");
             }
             case PAUSED -> {
                 System.out.println("Pause Screen");

@@ -26,12 +26,12 @@ public class TitleScreen extends JPanel {
                 titleScreenImage,
                 0,
                 0,
-                (int) (this.titleScreenImage.getWidth() * GamePanel.getSpriteScaleMultiplier()*2),
-                (int) (this.titleScreenImage.getHeight() * GamePanel.getSpriteScaleMultiplier()*2),
+                (int) (this.titleScreenImage.getWidth() * (GamePanel.getSpriteScaleMultiplier()*2.5)),
+                (int) (this.titleScreenImage.getHeight() * (GamePanel.getSpriteScaleMultiplier()*2.5)),
                 null);
     }
     
     public void update() {
-        System.out.println();
+//        System.out.println();
     }
 }
