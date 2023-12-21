@@ -1,23 +1,32 @@
 package gameLogic;
 
+import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import graphics.GamePanel;
 import graphicsManager.SpriteManager.Section;
 
 /**
- * The {@code Ship} class represents a ship in the game, with attributes such as its type,
- * length, rotation, coordinates, and sections. It provides methods to initialize a ship,
+ * The {@code Ship} class represents a ship in the game, with attributes such as
+ * its type,
+ * length, rotation, coordinates, and sections. It provides methods to
+ * initialize a ship,
  * set its coordinates, and retrieve information about the ship.
  *
  * <p>
- * Ships can be of different types, including Destroyer, Cruiser, Submarine, Battleship, and Carrier.
- * Each ship has a specific length and can be oriented in different rotations (UP, DOWN, LEFT, RIGHT).
- * The ship is composed of ship sections, and each section has its own coordinates.
+ * Ships can be of different types, including Destroyer, Cruiser, Submarine,
+ * Battleship, and Carrier.
+ * Each ship has a specific length and can be oriented in different rotations
+ * (UP, DOWN, LEFT, RIGHT).
+ * The ship is composed of ship sections, and each section has its own
+ * coordinates.
  * </p>
  *
  * <p>
  * Example Usage:
+ * 
  * <pre>
  * {@code
  * // Create a new Destroyer ship with default rotation (UP)
@@ -63,6 +72,7 @@ public class Ship {
 
     // Ship sections
     private ArrayList<ShipSection> shipSections;
+    private Rectangle rect;
 
     /**
      * Constructs a ship with the specified type and rotation.
@@ -97,12 +107,24 @@ public class Ship {
 
         // Sets the coordinates for all the ship sections
         this.setCoords(this.coords.getX(), this.coords.getY());
+
+        // Creates ship rectangle
+        Dimension rectDimension = new Dimension();
+        if (this.rotation == Rotation.DOWN || this.rotation == Rotation.DOWN) {
+            rectDimension.setSize(GamePanel.scaledTileSize, this.shipLength * GamePanel.scaledTileSize);
+
+        } else {
+            rectDimension.setSize(this.shipLength * GamePanel.scaledTileSize, GamePanel.scaledTileSize);
+        }
+        
+        this.rect = new Rectangle(rectDimension);
     }
 
     /**
      * Constructs a ship with the specified type and default rotation (UP).
      *
-     * @param shipType  The type of ship (DESTROYER, CRUISER, SUBMARINE, BATTLESHIP, CARRIER).
+     * @param shipType The type of ship (DESTROYER, CRUISER, SUBMARINE, BATTLESHIP,
+     *                 CARRIER).
      */
     public Ship(ShipType shipType) {
         this(shipType, Rotation.UP);
@@ -126,6 +148,7 @@ public class Ship {
     public void setCoords(double xPos, double yPos) {
         // Automatically moves point to integer coordinates
         this.coords.setLocation(xPos, yPos);
+        this.rect.setLocation((int) xPos, (int) yPos);
 
         for (ShipSection section : this.shipSections) {
             section.setCoords(xPos, yPos);
@@ -143,7 +166,8 @@ public class Ship {
     /**
      * Retrieves the ship sections that constitute the ship.
      *
-     * @return ArrayList of ShipSection objects representing each section of the ship.
+     * @return ArrayList of ShipSection objects representing each section of the
+     *         ship.
      */
     public ArrayList<ShipSection> getShipSections() {
         return this.shipSections;
