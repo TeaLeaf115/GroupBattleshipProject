@@ -51,13 +51,14 @@ public class GamePanel extends JPanel implements Runnable {
     public GameplayScreen gameplayScreen;
 
     public GamePanel() {
-        titleScreen = new TitleScreen();
-//        shipPlacementScreen = new ShipPlacementScreen(this);
-        gameplayScreen = new GameplayScreen();
-        
-        this.setPreferredSize(new Dimension((int)(sm.getTitleScreen().getWidth() * (spriteScaleMultiplier*2.5)), (int)(sm.getTitleScreen().getHeight() * (spriteScaleMultiplier*2.5))));
+        this.setPreferredSize(new Dimension(1152, 577));
         this.setBackground(new Color(0x808080));
         this.setDoubleBuffered(true);
+        updateScreenSize(getSize());
+        titleScreen = new TitleScreen();
+//        shipPlacementScreen = new ShipPlacementScreen(this);
+//        gameplayScreen = new GameplayScreen();
+        add(titleScreen);
     }
 
     public void setupGame() {
@@ -102,6 +103,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         updateScreenSize(getSize());
+//        System.out.println(getScreenSize());
         switch (gameState) {
             case TITLE -> {
 //                System.out.println("Title Screen");
@@ -160,7 +162,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void updateScreenSize(Dimension d) {
-        this.windowSize = d;
+        windowSize = d;
     }
     
     public static Dimension getScreenSize() {

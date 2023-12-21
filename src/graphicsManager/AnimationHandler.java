@@ -1,4 +1,6 @@
-package graphics;
+package graphicsManager;
+
+import graphics.GamePanel;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -99,5 +101,9 @@ public class AnimationHandler {
      */
     public BufferedImage getFrame(int f) {
         return frames[f];
+    }
+    
+    public int getMaxFrames() {
+        return frames.length;
     }
 }

@@ -1,9 +1,9 @@
 package graphics;
 
+import graphicsManager.AnimationHandler;
 import graphicsManager.SpriteManager.Indicator;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

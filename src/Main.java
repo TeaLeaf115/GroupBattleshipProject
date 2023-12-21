@@ -15,14 +15,12 @@ public class Main {
         GamePanel gamePanel = new GamePanel();
         gamePanel.setupGame();
         gameWindow.setPreferredSize(gamePanel.getPreferredSize());
-        gameWindow.add(gamePanel);
+        gameWindow.getContentPane().add(gamePanel);
         gameWindow.pack();
 
         gameWindow.setLocationRelativeTo(null);
         gameWindow.setVisible(true);
         
         gamePanel.startGameThread();
-        
-        gamePanel.updateScreenSize(gamePanel.getSize());
     }
 }
