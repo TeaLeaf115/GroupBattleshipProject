@@ -53,7 +53,7 @@ import graphicsManager.SpriteManager.Section;
 public class ShipSection {
 
     /** The coordinates of the ship section on the game board. */
-    private final Point coords;
+    private Point coords;
 
     /** The hit status of the ship section. */
     private boolean isHit;
@@ -62,7 +62,7 @@ public class ShipSection {
     private final ShipType shipType;
 
     /** The rotation of the ship section. */
-    private final Rotation rotation;
+    private Rotation rotation;
 
     /** The specific section of the ship (front, mid, or back). */
     private final Section section;
@@ -128,6 +128,8 @@ public class ShipSection {
         return this.shipType;
     }
 
+    
+
     /**
      * Retrieves the rotation of the ship section.
      *
@@ -135,6 +137,15 @@ public class ShipSection {
      */
     public Rotation getRotation() {
         return this.rotation;
+    }
+
+    /**
+     * Retrieves the rotation of the ship section.
+     *
+     * @return Rotation representing the rotation of the ship section.
+     */
+    public void setRotation(Rotation rotation) {
+        this.rotation = rotation;
     }
 
     /**
@@ -152,6 +163,6 @@ public class ShipSection {
      * @return A string representation of the ShipSection.
      */
     public String toString() {
-        return super.toString(); // this.coords.toString();
+        return this.coords.toString();
     }
 }
