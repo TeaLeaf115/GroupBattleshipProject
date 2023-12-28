@@ -1,17 +1,14 @@
 package graphics;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import graphicsManager.SpriteManager;
 import graphics.screens.*;
 import graphics.screens.gameplay.GameplayScreen;
 
-public class GamePanel extends JPanel implements Runnable {
+public class GamePanel extends JFrame implements Runnable {
     // -----------------
     // SCREEN SETTINGS
     // -----------------
@@ -51,14 +48,25 @@ public class GamePanel extends JPanel implements Runnable {
     public GameplayScreen gameplayScreen;
 
     public GamePanel() {
+        this.setTitle("Battleship");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(1152, 577));
-        this.setBackground(new Color(0x808080));
-        this.setDoubleBuffered(true);
+    
         updateScreenSize(getSize());
+    
         titleScreen = new TitleScreen();
-//        shipPlacementScreen = new ShipPlacementScreen(this);
-//        gameplayScreen = new GameplayScreen();
-        add(titleScreen);
+        // shipPlacementScreen = new ShipPlacementScreen(this);
+        // gameplayScreen = new GameplayScreen();
+        add(titleScreen, BorderLayout.CENTER);
+    
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    
+        setupGame();
+        startGameThread();
     }
 
     public void setupGame() {
@@ -94,7 +102,7 @@ public class GamePanel extends JPanel implements Runnable {
             // If 'delta' is greater than or equal to 1, then update the display and subtract one from 'delta'.
             if (delta >= 1) {
                 update();
-                repaint();
+                paint();
                 // System.out.println(delta);
                 delta--;
             }
@@ -102,6 +110,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        SwingUtilities.invokeLater(() -> {
         updateScreenSize(getSize());
 //        System.out.println(getScreenSize());
         switch (gameState) {
@@ -111,6 +120,8 @@ public class GamePanel extends JPanel implements Runnable {
             }
             case SHIP_PLACEMENT -> {
                 System.out.println("Ship Placement Screen");
+                remove(titleScreen);
+                add(shipPlacementScreen);
                 shipPlacementScreen.update();
             }
             case GAMEPLAY -> {
@@ -126,22 +137,19 @@ public class GamePanel extends JPanel implements Runnable {
                 System.out.println("Settings Screen");
             }
         }
+        });
     }
-
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
+    public void paint() {
         switch (gameState) {
             case TITLE -> {
-//                System.out.println("Title Screen");
-                titleScreen.draw(g2);
+                titleScreen.draw();
             }
             case SHIP_PLACEMENT -> {
                 System.out.println("Ship Placement Screen");
-                shipPlacementScreen.draw(g2);
             }
             case GAMEPLAY -> {
                 System.out.println("Gameplay Screen");
+                gameplayScreen.draw();
             }
             case GAMEOVER -> {
                 System.out.println("Game-over Screen");
@@ -153,8 +161,6 @@ public class GamePanel extends JPanel implements Runnable {
                 System.out.println("Settings Screen");
             }
         }
-
-        g2.dispose();
     }
 
     public static double getSpriteScaleMultiplier() {
@@ -167,5 +173,9 @@ public class GamePanel extends JPanel implements Runnable {
     
     public static Dimension getScreenSize() {
         return windowSize;
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new GamePanel());
     }
 }

@@ -92,6 +92,15 @@ public class AnimationHandler {
             refreshCounter = 0; // Reset the refresh counter after updating the frame.
         }
     }
+    
+    public void updateReverse() {
+        refreshCounter++;
+        if (refreshCounter > refreshRate) {
+            // Check if the current frame is the last frame, if true, reset to the first frame.
+            currentFrame = (currentFrame == 0) ? frames.length - 1 : (currentFrame - 1);
+            refreshCounter = 0; // Reset the refresh counter after updating the frame.
+        }
+    }
 
     /**
      * Retrieves a specific frame from the animation based on the provided index.
@@ -101,6 +110,14 @@ public class AnimationHandler {
      */
     public BufferedImage getFrame(int f) {
         return frames[f];
+    }
+    
+    public BufferedImage getCurrentFrame() {
+        return frames[currentFrame];
+    }
+    
+    public int getCurrentFrame(int numberFrame) {
+        return currentFrame;
     }
     
     public int getMaxFrames() {

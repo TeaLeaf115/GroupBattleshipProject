@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         gameWindow = new JFrame("Battleship");
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameWindow.setResizable(true);
+        gameWindow.setResizable(false);
         gameWindow.setLayout(new BorderLayout());
         GamePanel gamePanel = new GamePanel();
         gamePanel.setupGame();

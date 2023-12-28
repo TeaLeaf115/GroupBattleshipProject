@@ -75,10 +75,10 @@ public class SpriteSheetReader {
         // Creates an array for the sprites from the sheet.
         BufferedImage[] spriteArray = new BufferedImage[numRows * numCols];
 
-        // For loop that goes through every column and row in the sprite sheet and adds a subimage square to an array.
+        // For loop that goes through every column and row in the sprite sheet and adds a sub-image square to an array.
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
-                spriteArray[(i * numCols) + j] = spriteSheet.getSubimage(j * tileHeight, i * tileWidth, tileWidth, tileHeight);
+                spriteArray[(i * numCols) + j] = spriteSheet.getSubimage(j * tileWidth, i * tileHeight, tileWidth, tileHeight);
             }
         }
 
