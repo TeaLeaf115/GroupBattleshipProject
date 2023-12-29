@@ -4,8 +4,11 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
+import gameLogic.Ship.Rotation;
+import gameLogic.Ship.ShipType;
 import graphics.GamePanel;
 
 public class Bots {
@@ -19,6 +22,7 @@ public class Bots {
 	private BotLevel botLevel;
 	private ArrayList<Point> possibleGuesses;
 	private ShipLocations shipLocations;
+	private ArrayList<Ship> ships;
 
 	private final Random random = new Random();
 	private final double impossibleProb = 0.85;
@@ -33,6 +37,50 @@ public class Bots {
 				possibleGuesses.add(new Point(x, y));
 			}
 		}
+
+		this.shipLocations = new ShipLocations();
+		this.ships = new ArrayList<>();
+
+		List<Rotation> rotations = Arrays.asList(Rotation.values());
+		for (ShipType shipType : ShipType.values()) {
+			// gets random rotation and ship length
+			Rotation rotation = rotations.get(this.random.nextInt(Rotation.values().length));
+			Ship ship = new Ship(shipType, rotation);
+		
+			// creates bounds for randomization
+			int maxX = GamePanel.maxBoardCol;
+			int maxY = GamePanel.maxBoardRow;
+
+			if (rotation == Rotation.LEFT || rotation == Rotation.RIGHT) {
+				maxX -= ship.getShipLength();
+				
+			} else {
+				maxY -= ship.getShipLength();
+			}
+
+			// keeps generating placement points until valid
+			boolean validPosition = false;
+			while (!validPosition) {
+				int shipX = this.random.nextInt(maxX);
+				int shipY = this.random.nextInt(maxY);
+				ship.setCoords(new Point(shipX, shipY));
+
+				validPosition = true;
+				for (Ship other : this.ships) {
+					if (ship.intersect(other)) {
+						validPosition = false;
+						break;
+					}
+				}
+			}
+
+			// adds ship
+			this.shipLocations.addUnguessedShip(ship);
+			this.ships.add(ship);
+		}
+
+		System.out.println();
+		System.out.println("Ship Locations: " + this.shipLocations.getUnguessedSections().size());
 	}
 
 	public BotLevel getLevel() {
@@ -41,7 +89,7 @@ public class Bots {
 
 	public void checkLevel(ShipLocations opponentLocations) {
 		switch (this.botLevel) {
-			case EASY -> easyBot(shipLocations);
+			case EASY -> easyBot(opponentLocations);
 
 			case NORMAL -> normalBot(opponentLocations);
 
@@ -49,6 +97,10 @@ public class Bots {
 
 			default -> impossibleBot(opponentLocations);
 		}
+	}
+
+	public ArrayList<Ship> getShips() {
+		return this.ships;
 	}
 
 	public void easyBot(ShipLocations opponentLocations) {
@@ -95,7 +147,6 @@ public class Bots {
 	}
 
 	public void hardBot(ShipLocations opponentLocations) {
-		
 
 	}
 
@@ -137,5 +188,4 @@ public class Bots {
 
 		return new Point(shootX, shootY);
 	}
-
 }

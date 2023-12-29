@@ -88,12 +88,12 @@ public class Ship {
         this.rotation = rotation;
 
         // determines ship length from the type of ship
-        switch (this.shipType) {
-            case DESTROYER -> this.shipLength = 2;
-            case CRUISER, SUBMARINE -> this.shipLength = 3;
-            case BATTLESHIP -> this.shipLength = 4;
-            case CARRIER -> this.shipLength = 5;
-        }
+        this.shipLength = switch (this.shipType) {
+            case DESTROYER -> 2;
+            case CRUISER, SUBMARINE -> 3;
+            case BATTLESHIP -> 4;
+            case CARRIER -> 5;
+        };
 
         // creates ship length number of ship sections
         Section[] sections = Section.values();
@@ -142,7 +142,9 @@ public class Ship {
     public void setCoords(double xPos, double yPos) {
         // Automatically moves point to integer coordinates
         this.coords.setLocation(xPos, yPos);
-        this.rect.setLocation((int) xPos, (int) yPos);
+        this.rect.setLocation(
+            (int) (xPos * GamePanel.scaledTileSize), 
+            (int) (yPos * GamePanel.scaledTileSize));
 
         for (ShipSection section : this.shipSections) {
             section.setCoords(xPos, yPos);
@@ -153,6 +155,14 @@ public class Ship {
 
             }
         }
+    }
+
+    public void setCoords(Point point) {
+        this.setCoords(point.getX(), point.getY());
+    }
+
+    public int getShipLength() {
+        return this.shipLength;
     }
 
     /**
@@ -202,11 +212,19 @@ public class Ship {
     }
 
     /**
+     * Determines whether the rectangle of another ship intersects
+     * @param other the other ship to be compared to
+     * @return whether this ship intersects with the rect of the other
+     */
+    public boolean intersect(Ship other) {
+        return this.rect.intersects(other.rect);
+    }
+    /**
      * Returns a string representation of the ship.
      *
      * @return A string representation of the ship.
      */
     public String toString() {
-        return this.rect.toString() + " : " + this.shipSections.toString();
+        return this.rotation.toString() + " : " + this.shipSections.toString();
     }
 }
