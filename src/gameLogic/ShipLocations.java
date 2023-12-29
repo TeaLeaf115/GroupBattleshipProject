@@ -86,7 +86,7 @@ public class ShipLocations {
      *
      * @param ship The ship whose sections will be added to unguessedSections.
      */
-    public void addUnguessedShips(Ship ship) {
+    public void addUnguessedShip(Ship ship) {
         ship.getShipSections()
                 .forEach((section) -> unguessedSections.put(section.getCoords(), section));
     }

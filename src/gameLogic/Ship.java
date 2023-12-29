@@ -88,12 +88,12 @@ public class Ship {
         this.rotation = rotation;
 
         // determines ship length from the type of ship
-        switch (this.shipType) {
-            case DESTROYER -> this.shipLength = 2;
-            case CRUISER, SUBMARINE -> this.shipLength = 3;
-            case BATTLESHIP -> this.shipLength = 4;
-            case CARRIER -> this.shipLength = 5;
-        }
+        this.shipLength = switch (this.shipType) {
+            case DESTROYER -> 2;
+            case CRUISER, SUBMARINE -> 3;
+            case BATTLESHIP -> 4;
+            case CARRIER -> 5;
+        };
 
         // creates ship length number of ship sections
         Section[] sections = Section.values();
@@ -153,6 +153,10 @@ public class Ship {
 
             }
         }
+    }
+
+    public void setCoords(Point point) {
+        this.setCoords(point.getX(), point.getY());
     }
 
     /**

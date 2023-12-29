@@ -149,7 +149,7 @@ public class GamePanel extends JFrame implements Runnable {
             }
             case GAMEPLAY -> {
                 System.out.println("Gameplay Screen");
-                gameplayScreen.draw();
+                // gameplayScreen.draw();
             }
             case GAMEOVER -> {
                 System.out.println("Game-over Screen");
