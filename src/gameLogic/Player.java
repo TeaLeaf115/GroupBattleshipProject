@@ -13,6 +13,8 @@ public class Player {
 		for (ShipType shipType : ShipType.values()) {
 			this.ships.add(new Ship(shipType));
 		}
+
+		this.shipLocations = new ShipLocations();
 	}
 
 	// public ShotStatus fireAt(Point coords) {
