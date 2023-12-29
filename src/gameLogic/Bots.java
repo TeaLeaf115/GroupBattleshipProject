@@ -45,42 +45,42 @@ public class Bots {
 		for (ShipType shipType : ShipType.values()) {
 			// gets random rotation and ship length
 			Rotation rotation = rotations.get(this.random.nextInt(Rotation.values().length));
-			int shipLength = switch (shipType) {
-				case DESTROYER -> 2;
-				case CRUISER, SUBMARINE -> 3;
-				case BATTLESHIP -> 4;
-				case CARRIER -> 5;
-			};
-
+			Ship ship = new Ship(shipType, rotation);
+		
 			// creates bounds for randomization
 			int maxX = GamePanel.maxBoardCol;
-			if (rotation == Rotation.LEFT || rotation == Rotation.RIGHT) {
-				maxX -= shipLength;
-			}
-
 			int maxY = GamePanel.maxBoardRow;
-			if (rotation == Rotation.DOWN || rotation == Rotation.UP) {
-				maxY -= shipLength;
+
+			if (rotation == Rotation.LEFT || rotation == Rotation.RIGHT) {
+				maxX -= ship.getShipLength();
+				
+			} else {
+				maxY -= ship.getShipLength();
 			}
 
 			// keeps generating placement points until valid
-			int shipX = this.random.nextInt(maxX);
-			int shipY = this.random.nextInt(maxY);
-			Point placementPoint = new Point(shipX, shipY);
+			boolean validPosition = false;
+			while (!validPosition) {
+				int shipX = this.random.nextInt(maxX);
+				int shipY = this.random.nextInt(maxY);
+				ship.setCoords(new Point(shipX, shipY));
 
-			while (this.shipLocations.getUnguessedSections().containsKey(placementPoint)) {
-				shipX = this.random.nextInt(maxX);
-				shipY = this.random.nextInt(maxY);
-				placementPoint = new Point(shipX, shipY);
+				validPosition = true;
+				for (Ship other : this.ships) {
+					if (ship.intersect(other)) {
+						validPosition = false;
+						break;
+					}
+				}
 			}
 
 			// adds ship
-			Ship ship = new Ship(shipType, rotation);
-			ship.setCoords(placementPoint);
-
 			this.shipLocations.addUnguessedShip(ship);
 			this.ships.add(ship);
 		}
+
+		System.out.println();
+		System.out.println("Ship Locations: " + this.shipLocations.getUnguessedSections().size());
 	}
 
 	public BotLevel getLevel() {
