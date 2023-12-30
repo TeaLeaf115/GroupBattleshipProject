@@ -58,8 +58,8 @@ public class Dnd2 extends JPanel {
     // Method to rotate the image
     private BufferedImage rotateImage(double angle) {
         // Calculate new dimensions after rotation
-        int w = img.getWidth();
-        int h = img.getHeight();
+        int w = this.img.getWidth();
+        int h = this.img.getHeight();
         double sin = Math.abs(Math.sin(angle));
         double cos = Math.abs(Math.cos(angle));
         int newW = (int) Math.floor(w * cos + h * sin);
