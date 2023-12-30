@@ -46,21 +46,22 @@ public class GamePanel extends JFrame implements Runnable {
     public TitleScreen titleScreen;
     public ShipPlacementScreen shipPlacementScreen;
     public GameplayScreen gameplayScreen;
+    public static boolean screenChange = false;
 
     public GamePanel() {
         this.setTitle("Battleship");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
+//        this.setResizable(false);
         this.setLayout(new BorderLayout());
-        this.setPreferredSize(new Dimension(1152, 577));
+        this.setPreferredSize(new Dimension(1210, 635));
     
         updateScreenSize(getSize());
     
         titleScreen = new TitleScreen();
         // shipPlacementScreen = new ShipPlacementScreen(this);
-        // gameplayScreen = new GameplayScreen();
-        add(titleScreen, BorderLayout.CENTER);
-    
+         gameplayScreen = new GameplayScreen();
+        add(gameplayScreen, BorderLayout.CENTER);
+        
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -70,7 +71,7 @@ public class GamePanel extends JFrame implements Runnable {
     }
 
     public void setupGame() {
-        gameState = GameStates.TITLE;
+        gameState = GameStates.GAMEPLAY;
         System.out.println("Game successfully loaded and ready to play!");
     }
 
@@ -111,54 +112,72 @@ public class GamePanel extends JFrame implements Runnable {
 
     public void update() {
         SwingUtilities.invokeLater(() -> {
-        updateScreenSize(getSize());
+            if (screenChange) {
+                removeAll();
+                switch (gameState) {
+                    case TITLE -> add(titleScreen);
+                    case SHIP_PLACEMENT -> add(shipPlacementScreen);
+                    case GAMEPLAY -> add(gameplayScreen);
+                    case GAMEOVER -> System.out.println("Game-over Screen");
+                    case PAUSED -> System.out.println("Pause Screen");
+                    case SETTINGS -> System.out.println("Settings Screen");
+                }
+                screenChange = false;
+            }
+            updateScreenSize(getSize());
 //        System.out.println(getScreenSize());
-        switch (gameState) {
-            case TITLE -> {
-//                System.out.println("Title Screen");
-                titleScreen.update();
+            switch (gameState) {
+                case TITLE -> {
+//                removeAll();
+//                add(titleScreen);
+                    titleScreen.update();
+                }
+                case SHIP_PLACEMENT -> {
+                    System.out.println("Ship Placement Screen");
+                    remove(titleScreen);
+                    add(shipPlacementScreen);
+                    shipPlacementScreen.update();
+                }
+                case GAMEPLAY -> {
+//                System.out.println("Gameplay Screen");
+                    gameplayScreen.update();
+                }
+                case GAMEOVER -> {
+                    System.out.println("Game-over Screen");
+                }
+                case PAUSED -> {
+                    System.out.println("Pause Screen");
+                }
+                case SETTINGS -> {
+                    System.out.println("Settings Screen");
+                }
             }
-            case SHIP_PLACEMENT -> {
-                System.out.println("Ship Placement Screen");
-                remove(titleScreen);
-                add(shipPlacementScreen);
-                shipPlacementScreen.update();
-            }
-            case GAMEPLAY -> {
-                System.out.println("Gameplay Screen");
-            }
-            case GAMEOVER -> {
-                System.out.println("Game-over Screen");
-            }
-            case PAUSED -> {
-                System.out.println("Pause Screen");
-            }
-            case SETTINGS -> {
-                System.out.println("Settings Screen");
-            }
-        }
         });
     }
     public void paint() {
-        switch (gameState) {
-            case TITLE -> {
-                titleScreen.draw();
-            }
-            case SHIP_PLACEMENT -> {
-                System.out.println("Ship Placement Screen");
-            }
-            case GAMEPLAY -> {
-                System.out.println("Gameplay Screen");
-                // gameplayScreen.draw();
-            }
-            case GAMEOVER -> {
-                System.out.println("Game-over Screen");
-            }
-            case PAUSED -> {
-                System.out.println("Pause Screen");
-            }
-            case SETTINGS -> {
-                System.out.println("Settings Screen");
+//        System.out.println(screenChange);
+        if (!screenChange) {
+            switch (gameState) {
+                case TITLE -> {
+                    titleScreen.draw();
+                }
+                case SHIP_PLACEMENT -> {
+                    System.out.println("Ship Placement Screen");
+                }
+                case GAMEPLAY -> {
+//                System.out.println("Gameplay Screen");
+                    gameplayScreen.draw();
+//                    System.out.println("here Now");
+                }
+                case GAMEOVER -> {
+                    System.out.println("Game-over Screen");
+                }
+                case PAUSED -> {
+                    System.out.println("Pause Screen");
+                }
+                case SETTINGS -> {
+                    System.out.println("Settings Screen");
+                }
             }
         }
     }
@@ -176,6 +195,6 @@ public class GamePanel extends JFrame implements Runnable {
     }
     
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GamePanel());
+        SwingUtilities.invokeLater(GamePanel::new);
     }
 }

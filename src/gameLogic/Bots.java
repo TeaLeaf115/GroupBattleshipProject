@@ -19,7 +19,7 @@ public class Bots {
 		IMPOSSIBLE
 	}
 
-	private BotLevel botLevel;
+	private final BotLevel botLevel;
 	private ArrayList<Point> possibleGuesses;
 	private ShipLocations shipLocations;
 	private ArrayList<Ship> ships;
