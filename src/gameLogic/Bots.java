@@ -46,14 +46,14 @@ public class Bots {
 			// gets random rotation and ship length
 			Rotation rotation = rotations.get(this.random.nextInt(Rotation.values().length));
 			Ship ship = new Ship(shipType, rotation);
-		
+
 			// creates bounds for randomization
 			int maxX = GamePanel.maxBoardCol;
 			int maxY = GamePanel.maxBoardRow;
 
 			if (rotation == Rotation.LEFT || rotation == Rotation.RIGHT) {
 				maxX -= ship.getShipLength();
-				
+
 			} else {
 				maxY -= ship.getShipLength();
 			}
@@ -78,9 +78,6 @@ public class Bots {
 			this.shipLocations.addUnguessedShip(ship);
 			this.ships.add(ship);
 		}
-
-		System.out.println();
-		System.out.println("Ship Locations: " + this.shipLocations.getUnguessedSections().size());
 	}
 
 	public BotLevel getLevel() {
@@ -101,6 +98,14 @@ public class Bots {
 
 	public ArrayList<Ship> getShips() {
 		return this.ships;
+	}
+
+	public ArrayList<ShipSection> getShipSections() {
+		ArrayList<ShipSection> shipSections = new ArrayList<>();
+		shipSections.addAll(this.shipLocations.getUnguessedSections().values());
+		shipSections.addAll(this.shipLocations.getHitSections().values());
+
+		return shipSections;
 	}
 
 	public void easyBot(ShipLocations opponentLocations) {
