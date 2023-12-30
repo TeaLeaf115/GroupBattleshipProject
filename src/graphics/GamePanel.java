@@ -51,18 +51,18 @@ public class GamePanel extends JFrame implements Runnable {
     public GamePanel() {
         this.setTitle("Battleship");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        this.setResizable(false);
+        // this.setResizable(false);
         this.setLayout(new BorderLayout());
-      
+
         this.setPreferredSize(new Dimension(1210, 635));
-      
+
         updateScreenSize(getSize());
 
         titleScreen = new TitleScreen();
-        // shipPlacementScreen = new ShipPlacementScreen(this);
+        shipPlacementScreen = new ShipPlacementScreen(this);
         gameplayScreen = new GameplayScreen();
-      
-        add(titleScreen, BorderLayout.CENTER);
+
+        add(shipPlacementScreen, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -72,7 +72,7 @@ public class GamePanel extends JFrame implements Runnable {
     }
 
     public void setupGame() {
-        gameState = GameStates.GAMEPLAY;
+        gameState = GameStates.SHIP_PLACEMENT;
         System.out.println("Game successfully loaded and ready to play!");
     }
 
@@ -131,22 +131,21 @@ public class GamePanel extends JFrame implements Runnable {
                 screenChange = false;
             }
             updateScreenSize(getSize());
-//        System.out.println(getScreenSize());
+            // System.out.println(getScreenSize());
             switch (gameState) {
                 case TITLE -> {
-//                removeAll();
-//                add(titleScreen);
+                    // removeAll();
+                    // add(titleScreen);
                     titleScreen.update();
                 }
                 case SHIP_PLACEMENT -> {
-                    System.out.println("Ship Placement Screen");
                     this.remove(titleScreen);
                     this.add(shipPlacementScreen);
                     this.shipPlacementScreen.update();
                 }
                 case GAMEPLAY -> {
-//                System.out.println("Gameplay Screen");
-                    gameplayScreen.update();
+                    // System.out.println("Gameplay Screen");
+                    //gameplayScreen.update();
 
                 }
                 case GAMEOVER -> {
@@ -163,19 +162,18 @@ public class GamePanel extends JFrame implements Runnable {
     }
 
     public void paint() {
-//        System.out.println(screenChange);
+        // System.out.println(screenChange);
         if (!screenChange) {
             switch (gameState) {
                 case TITLE -> {
                     titleScreen.draw();
                 }
                 case SHIP_PLACEMENT -> {
-                    System.out.println("Ship Placement Screen");
                 }
                 case GAMEPLAY -> {
-//                System.out.println("Gameplay Screen");
-                    gameplayScreen.draw();
-//                    System.out.println("here Now");
+                    // System.out.println("Gameplay Screen");
+                    // gameplayScreen.draw();
+                    // System.out.println("here Now");
                 }
                 case GAMEOVER -> {
                     System.out.println("Game-over Screen");

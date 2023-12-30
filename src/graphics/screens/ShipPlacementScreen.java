@@ -18,24 +18,27 @@ public class ShipPlacementScreen extends JPanel {
     public ShipPlacementScreen(GamePanel gp) {
         this.gp = gp;
 
-        try {
-            shipPlacementScreen = ImageIO.read(new File("res/images/PlacementOverlay.png"));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        fullShipSprites = GamePanel.sm.getFullShipSprites();
+        this.shipPlacementScreen = GamePanel.sm.getPlacementOverlay();
+        this.fullShipSprites = GamePanel.sm.getFullShipSprites();
 
     }
 
-    public void draw(Graphics2D g2) {
+    public void draw() {
+        repaint();
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+
+        int screenWidth = (int) (this.shipPlacementScreen.getWidth() * GamePanel.getSpriteScaleMultiplier());
+        int screenHeight = (int) (this.shipPlacementScreen.getHeight() * GamePanel.getSpriteScaleMultiplier());
         g2.drawImage(
-                shipPlacementScreen,
-                0,
-                0,
-                (int) (shipPlacementScreen.getWidth() * GamePanel.getSpriteScaleMultiplier()),
-                (int) (shipPlacementScreen.getHeight() * GamePanel.getSpriteScaleMultiplier()),
+                this.shipPlacementScreen,
+                this.getWidth() / 2 - screenWidth / 2,
+                this.getHeight() / 2 - screenHeight / 2,
+                screenWidth,
+                screenHeight,
                 null);
 
         g2.drawImage(

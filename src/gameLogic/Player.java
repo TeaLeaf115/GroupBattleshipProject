@@ -15,8 +15,6 @@ public class Player {
 		for (ShipType shipType : ShipType.values()) {
 			this.ships.add(new Ship(shipType));
 		}
-
-		
 	}
 
 	public ArrayList<Ship> getShips() {
