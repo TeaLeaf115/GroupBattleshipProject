@@ -106,8 +106,7 @@ public class Ship {
 
         ShipSection backSection = new ShipSection(this.shipType, this.rotation, Section.BACK);
         this.shipSections.add(backSection);
-
-        this.rotation = rotation;
+    
         this.rect = new Rectangle();
 
         // sets the coordinates for all the ship sections

@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
  * <p>
  * This class provides methods to construct an animation with a given set of frames,
  * draw the current frame at a specified position, update the animation to the next frame,
- * and retrieve a specific frame by its index.
+ * retrieve a specific frame by its index, and perform additional animation-related operations.
  * </p>
  *
  * <p>
@@ -42,19 +42,19 @@ import java.awt.image.BufferedImage;
  * @see GamePanel
  */
 public class AnimationHandler {
-
+    
     /** The array of frames that constitute the animation. */
     private final BufferedImage[] frames;
-
+    
     /** The rate at which the animation should be refreshed (updated). */
     private final int refreshRate;
-
+    
     /** Counter to keep track of the number of refreshes. */
     private int refreshCounter = 0;
-
+    
     /** Index of the current frame being displayed. */
     private int currentFrame = 0;
-
+    
     /**
      * Constructs an AnimationHandler with the specified frames and refresh rate.
      *
@@ -65,7 +65,7 @@ public class AnimationHandler {
         this.frames = frames;
         this.refreshRate = refreshRate;
     }
-
+    
     /**
      * Draws the current frame of the animation at the specified position using
      * the provided Graphics2D object.
@@ -79,7 +79,7 @@ public class AnimationHandler {
                 GamePanel.scaledTileSize, GamePanel.scaledTileSize,
                 null);
     }
-
+    
     /**
      * Updates the animation by advancing to the next frame based on the refresh rate.
      * The update method should be called regularly to ensure a smooth animation.
@@ -93,6 +93,10 @@ public class AnimationHandler {
         }
     }
     
+    /**
+     * Updates the animation by advancing to the previous frame based on the refresh rate.
+     * The updateReverse method should be called regularly to ensure a smooth animation.
+     */
     public void updateReverse() {
         refreshCounter++;
         if (refreshCounter > refreshRate) {
@@ -101,7 +105,7 @@ public class AnimationHandler {
             refreshCounter = 0; // Reset the refresh counter after updating the frame.
         }
     }
-
+    
     /**
      * Retrieves a specific frame from the animation based on the provided index.
      *
@@ -112,14 +116,30 @@ public class AnimationHandler {
         return frames[f];
     }
     
+    /**
+     * Retrieves the BufferedImage of the currently displayed frame.
+     *
+     * @return The BufferedImage representing the current frame of the animation.
+     */
     public BufferedImage getCurrentFrame() {
         return frames[currentFrame];
     }
     
+    /**
+     * Retrieves the index of the currently displayed frame in the animation sequence.
+     *
+     * @param numberFrame The number of the frame to be retrieved.
+     * @return The index of the current frame in the animation sequence.
+     */
     public int getCurrentFrame(int numberFrame) {
         return currentFrame;
     }
     
+    /**
+     * Retrieves the total number of frames in the animation sequence.
+     *
+     * @return The total number of frames in the animation.
+     */
     public int getMaxFrames() {
         return frames.length;
     }

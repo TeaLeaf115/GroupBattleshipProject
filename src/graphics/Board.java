@@ -29,10 +29,7 @@ public class Board extends JPanel {
 				gbc.gridy = row;
 				
 				Cell cellPane = new Cell();
-				// Cyan cus why the hell not.
 				cellPane.setBackground(Color.CYAN);
-				// This line right here caused me the most pain in my life ever!!!!! Fuck you!
-//				cellPane.setBorder(new MatteBorder(0, 0, 0, 0, Color.BLACK));
 				// Adds the cell to a HashMap of every board position.
 				board.put(new Point(row, col), cellPane);
 				// Adds a cell to the board.
@@ -46,19 +43,15 @@ public class Board extends JPanel {
 		public Cell() {
 			// Mouse functionality per cell.
 			addMouseListener(new MouseAdapter() {
-				// This function is somehow needed even though it does jackshit.
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					setBackground(Color.BLUE);
 				}
-				
-				// Same with this fucker here, DOES ABSOLUTLY NOTHING USEFUL!!!
 				@Override
 				public void mouseExited(MouseEvent e) {
 					setBackground(Color.CYAN);
 				}
 				
-				// The favorite child of mouse functionality for this class that detects what the player is setting the cell to.
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// Makes sure the user is clicking with a left click.
@@ -75,7 +68,7 @@ public class Board extends JPanel {
 			super.paintComponent(g);
 			// Nice water background.
 			waterAnimation.draw((Graphics2D)g, new Point(0, 0));
-			// TODO add shit so it displays the ship bits and bobs as well.
+			// TODO add stuff so it displays the ship bits and bobs as well.
 		}
 		
 		// Will be changed to become more dynamic with the window size, as well as being imported from outside class.

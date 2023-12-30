@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 import graphics.GamePanel;
+import graphics.GameStates;
 import graphicsManager.AnimationHandler;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class TitleScreen extends JPanel {
         // Set layout to BoxLayout with Y_AXIS alignment
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        startButtonAnimation = new AnimationHandler(GamePanel.sm.getStartButtonSprites(), 3);
+        startButtonAnimation = new AnimationHandler(GamePanel.sm.getStartButtonSprites(), 1);
         startButtonIcon = new ImageIcon(startButtonAnimation.getFrame(0).getScaledInstance((int)(32*4.5), (int)(16*4.5), Image.SCALE_SMOOTH));
         startButton = new JButton(startButtonIcon);
         startButton.setSize((int)(32*2.5), (int)(16*2.5));
@@ -41,8 +42,8 @@ public class TitleScreen extends JPanel {
         startButton.addActionListener(e -> {
             if (e.getSource() == startButton) {
                 System.out.println("BUTTON CLICKED!!!!");
-                // Add logic to transition to the next screen or start the game
-                // For example: GamePanel.gameState = GameStates.SHIP_PLACEMENT;
+                GamePanel.gameState = GameStates.GAMEPLAY;
+                GamePanel.screenChange = true;
             }
         });
         startButton.addMouseListener(new MouseAdapter() {
@@ -71,7 +72,7 @@ public class TitleScreen extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         // Draw the background image
-        g2.drawImage(titleScreenImage, 0, 0, 1138, 540, null);
+        g2.drawImage(titleScreenImage, 0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height, null);
         // Draw the logo image
         g2.drawImage(logo,
                 ((int) GamePanel.windowSize.getWidth() / 2) - (int) (logo.getWidth() * 2.5 / 2),
@@ -79,7 +80,6 @@ public class TitleScreen extends JPanel {
                 (int)(logo.getWidth() * 2.5),
                 (int)(logo.getHeight() * 2.5),
                 null);
-        g2.dispose();
     }
     
     public void update() {
