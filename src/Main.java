@@ -12,6 +12,7 @@ public class Main {
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.setResizable(false);
         gameWindow.setLayout(new BorderLayout());
+        
         GamePanel gamePanel = new GamePanel();
         gamePanel.setupGame();
         gameWindow.setPreferredSize(gamePanel.getPreferredSize());
