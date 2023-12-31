@@ -30,25 +30,11 @@ public class GameplayScreen extends JPanel {
 		playerPanel.repaint();
 	}
 	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		Graphics2D g2 = (Graphics2D) g;
-		BufferedImage logo = GamePanel.sm.getPlacementOverlay();
-		// Code for drawing goes here
-		g2.drawImage(logo,
-				((int) GamePanel.windowSize.getWidth() / 2) - (int) (logo.getWidth() * 2.5 / 2),
-				(int) GamePanel.windowSize.getHeight() / 2,
-				(int)(logo.getWidth() * 2.5),
-				(int)(logo.getHeight() * 2.5),
-				null);
-	}
-	
 	public void update() {
 		// This is used for anything that will be updated on the gameloop clock, like animations or logic that needs to be constantly updated.
 		// If you have any animation stuff you can call it here
 		playerPanel.board.update();
-		computerPanel.board.update();
+		computerPanel.compBoard.update();
 	}
 }
 
@@ -62,12 +48,12 @@ class PlayerBoard extends JPanel {
 		setLayout(null); // Set layout to null for absolute positioning
 //		setBounds(position.x, position.y, GamePanel.boardWidth, GamePanel.boardHeight);
 //		setBorder(BorderFactory.createTitledBorder("Player"));
-		setBackground(Color.BLUE);
+		setBackground(new Color(0x848482));
 		// Create the board panel for the player
 		board = new Board(GameplayScreen.gl.bot.shipLocations);
 		board.shipsVisible(false);
-		board.setBounds(6*GamePanel.scaledTileSize,
-				(int) GamePanel.getScreenSize().getHeight()/2 + 6*GamePanel.scaledTileSize,
+		board.setBounds((int)Math.ceil(6.5*GamePanel.scaledTileSize)-1,
+				((int) GamePanel.getScreenSize().getHeight()/2 + 7*GamePanel.scaledTileSize)+4,
 				GamePanel.boardWidth,
 				GamePanel.boardHeight);
 		add(board);
@@ -79,7 +65,7 @@ class PlayerBoard extends JPanel {
 //		System.out.println(getWidth());
 		// Code for drawing goes here
 		g2.drawImage(computerBoardOverlay,
-				0,
+				16,
 				(getHeight()/2) - (scaledComputerBoardOverlayHeight /2),
 				scaledComputerBoardOverlayWidth,
 				scaledComputerBoardOverlayHeight,
@@ -89,7 +75,7 @@ class PlayerBoard extends JPanel {
 }
 
 class ComputerBoard extends JPanel {
-	public Board board;
+	public Board compBoard;
 	BufferedImage playerBoardOverlay = GamePanel.sm.getPlacementOverlay();
 	int scaledPlayerBoardOverlayWidth = (int)Math.ceil(playerBoardOverlay.getWidth() * getSpriteScaleMultiplier());
 	int scaledPlayerBoardOverlayHeight = (int)Math.ceil(playerBoardOverlay.getHeight() * getSpriteScaleMultiplier());
@@ -98,17 +84,17 @@ class ComputerBoard extends JPanel {
 		setLayout(null); // Set layout to null for absolute positioning
 //		setBounds(position.x, position.y, GamePanel.boardWidth, GamePanel.boardHeight);
 //		setBorder(BorderFactory.createTitledBorder("Computer"));
-		setBackground(Color.GREEN);
+		setBackground(new Color(0x848482));
 		
 		// Create the board panel for the computer
-		board = new Board(GameplayScreen.gl.player.shipLocations);
+		compBoard = new Board(GameplayScreen.gl.player.shipLocations);
 
-		board.setBounds(6*GamePanel.scaledTileSize,
-				(int) GamePanel.getScreenSize().getHeight()/2 + 6*GamePanel.scaledTileSize +8,
+		compBoard.setBounds((6*GamePanel.scaledTileSize)+6,
+				((int) GamePanel.getScreenSize().getHeight()/2 + 7*GamePanel.scaledTileSize) +12,
 				GamePanel.boardWidth,
 				GamePanel.boardHeight);
 		
-		add(board);
+		add(compBoard);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -117,7 +103,7 @@ class ComputerBoard extends JPanel {
 //		System.out.println(getWidth());
 		// Code for drawing goes here
 		g2.drawImage(playerBoardOverlay,
-				0,
+				8,
 				(getHeight()/2) - (scaledPlayerBoardOverlayHeight/2),
 				scaledPlayerBoardOverlayWidth,
 				scaledPlayerBoardOverlayHeight,

@@ -2,6 +2,7 @@ package graphics;
 
 import gameLogic.ShipLocations;
 import gameLogic.ShipSection;
+import graphics.screens.GameplayScreen;
 import graphicsManager.AnimationHandler;
 import graphicsManager.SpriteManager;
 
@@ -13,9 +14,9 @@ import java.util.HashMap;
 
 public class Board extends JPanel {
 	private HashMap<Point, Cell> board;
-	private static boolean shipsVisible;
-	static ShipLocations sl;
-	public static AnimationHandler waterAnimation = new AnimationHandler(GamePanel.sm.getWaterTileset(), 42);
+	private boolean shipsVisible;
+	ShipLocations sl;
+	public AnimationHandler waterAnimation = new AnimationHandler(GamePanel.sm.getWaterTileset(), 42);
 	
 	public Board(ShipLocations spaceStatuses) {
 		board = new HashMap<>();
@@ -49,7 +50,7 @@ public class Board extends JPanel {
 		waterAnimation.update();
 	}
 	
-	public static class Cell extends JPanel {
+	public class Cell extends JPanel {
 		Point coord;
 		public Cell(Point coord) {
 			this.coord = coord;
@@ -67,8 +68,8 @@ public class Board extends JPanel {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// Makes sure the user is clicking with a left click.
-					if (e.getButton() == MouseEvent.BUTTON1) {
-						System.out.println("Clicked");
+					if (e.getButton() == MouseEvent.BUTTON1 && !shipsVisible) {
+						GameplayScreen.gl.bot.shipLocations.shootLocation(coord);
 					}
 				}
 			});
@@ -81,13 +82,30 @@ public class Board extends JPanel {
 			Graphics2D g2 = (Graphics2D) g;
 			// Nice water background.
 			waterAnimation.draw(g2, new Point(0, 0));
-			if (shipsVisible && sl.getUnguessedSections().containsKey(coord)) {
-				ShipSection section = sl.getUnguessedSections().get(coord);
-				try {
-					g2.drawImage(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()), GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
-				} catch (Exception e) {
-					e.printStackTrace();
+			try {
+				if (sl.getMisses().contains(coord)) {
+					g2.drawImage(GamePanel.sm.getIndicator(SpriteManager.Indicator.MISS), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+					return;
 				}
+				if (shipsVisible) {
+					if (sl.getUnguessedSections().containsKey(coord)) {
+						ShipSection section = sl.getUnguessedSections().get(coord);
+						g2.drawImage(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+					}
+					if (sl.getHitSections().containsKey(coord)) {
+						ShipSection section = sl.getHitSections().get(coord);
+						g2.drawImage(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+						g2.drawImage(GamePanel.sm.getIndicator(SpriteManager.Indicator.COMP_HIT), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+					}
+				}
+				else {
+					if (sl.getHitSections().containsKey(coord)) {
+						g2.drawImage(GamePanel.sm.getIndicator(SpriteManager.Indicator.HIT), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+					}
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		
