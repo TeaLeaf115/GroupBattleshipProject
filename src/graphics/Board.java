@@ -1,5 +1,6 @@
 package graphics;
 
+import gameLogic.Ship;
 import gameLogic.ShipLocations;
 import gameLogic.ShipSection;
 import graphics.screens.GameplayScreen;
@@ -10,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class Board extends JPanel {
@@ -90,11 +92,11 @@ public class Board extends JPanel {
 				if (shipsVisible) {
 					if (sl.getUnguessedSections().containsKey(coord)) {
 						ShipSection section = sl.getUnguessedSections().get(coord);
-						g2.drawImage(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+						g2.drawImage(rotate(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()), section.getRotation()), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
 					}
 					if (sl.getHitSections().containsKey(coord)) {
 						ShipSection section = sl.getHitSections().get(coord);
-						g2.drawImage(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+						g2.drawImage(rotate(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()), section.getRotation()), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
 						g2.drawImage(GamePanel.sm.getIndicator(SpriteManager.Indicator.COMP_HIT), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
 					}
 				}
@@ -114,5 +116,26 @@ public class Board extends JPanel {
 		public Dimension getPreferredSize() {
 			return new Dimension(GamePanel.scaledTileSize, GamePanel.scaledTileSize);
 		}
+	}
+	
+	private BufferedImage rotate(BufferedImage img, Ship.Rotation rotation) {
+		// Getting Dimensions of image
+		int width = img.getWidth();
+		int height = img.getHeight();
+		
+		// Creating a new buffered image
+		BufferedImage newImage = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+		
+		// creating Graphics in buffered image
+		Graphics2D g2 = newImage.createGraphics();
+		
+		// Rotating image by degrees using toRadians()
+		// method
+		// and setting new dimension t it
+		g2.rotate(rotation.rad, width / 2, height / 2);
+		g2.drawImage(img, null, 0, 0);
+		
+		// Return rotated buffer image
+		return newImage;
 	}
 }

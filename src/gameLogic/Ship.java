@@ -5,6 +5,7 @@ import graphicsManager.SpriteManager.Section;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The {@code Ship} class represents a ship in the game, with attributes such as
@@ -55,7 +56,15 @@ public class Ship {
      * Enumeration representing the possible rotations of a ship.
      */
     public enum Rotation {
-        UP, DOWN, LEFT, RIGHT
+        UP(Math.PI/2),
+        DOWN(Math.PI/2),
+        LEFT(0),
+        RIGHT(0);
+        public final double rad;
+    
+        private Rotation(double rad) {
+            this.rad = rad;
+        }
     }
 
     // Type of ship
@@ -146,8 +155,8 @@ public class Ship {
             section.setCoords(xPos, yPos);
 
             switch (this.rotation) {
-                case LEFT, RIGHT -> xPos++; // Horizontal rotation
-                case DOWN, UP -> yPos++; // Vertical rotation
+                case LEFT, RIGHT -> yPos++; // Horizontal rotation
+                case DOWN, UP -> xPos++; // Vertical rotation
 
             }
         }
@@ -173,7 +182,7 @@ public class Ship {
 
     /**
      * Rotates the coords of the ship sections and rect
-     * 
+     *
      * @param rotation the new rotation the ship is set to
      */
     public void rotateShip(Rotation rotation) {

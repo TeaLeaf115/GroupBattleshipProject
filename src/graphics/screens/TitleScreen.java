@@ -12,7 +12,7 @@ import javax.swing.*;
 
 public class TitleScreen extends JPanel {
     private final BufferedImage titleScreenImage;
-    private final BufferedImage logo;
+    public static BufferedImage logo;
     private final AnimationHandler startButtonAnimation;
     private final JButton startButton;
     private final ImageIcon startButtonIcon;
@@ -76,7 +76,7 @@ public class TitleScreen extends JPanel {
         // Draw the logo image
         g2.drawImage(logo,
                 ((int) GamePanel.windowSize.getWidth() / 2) - (int) (logo.getWidth() * 2.5 / 2),
-                titleScreenImage.getHeight() / 2,
+                (int) GamePanel.windowSize.getHeight() / 16,
                 (int)(logo.getWidth() * 2.5),
                 (int)(logo.getHeight() * 2.5),
                 null);

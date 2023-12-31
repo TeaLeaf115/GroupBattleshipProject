@@ -22,12 +22,14 @@ public class GameplayScreen extends JPanel {
 		// Add player and computer panels to the game panel
 		add(playerPanel);
 		add(computerPanel);
+		
 	}
 	
 	public void draw() {
 		// Don't touch this method.
 		computerPanel.repaint();
 		playerPanel.repaint();
+		repaint();
 	}
 	
 	public void update() {
@@ -35,6 +37,17 @@ public class GameplayScreen extends JPanel {
 		// If you have any animation stuff you can call it here
 		playerPanel.board.update();
 		computerPanel.compBoard.update();
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		g2.drawImage(TitleScreen.logo,
+				((int) GamePanel.windowSize.getWidth() / 2) - (int) (TitleScreen.logo.getWidth() * 2.5 / 2),
+				(int) GamePanel.windowSize.getHeight() / 16,
+				(int)(TitleScreen.logo.getWidth() * 2.5),
+				(int)(TitleScreen.logo.getHeight() * 2.5),
+				null);
 	}
 }
 
