@@ -1,13 +1,15 @@
 package graphics.screens;
 
+import graphics.Dnd2;
 import graphics.GamePanel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import gameLogic.Ship.ShipType;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class ShipPlacementScreen extends JPanel {
     private GamePanel gp;
@@ -15,36 +17,48 @@ public class ShipPlacementScreen extends JPanel {
     private BufferedImage shipPlacementScreen;
     private final BufferedImage[] fullShipSprites;
 
+    private ArrayList<Dnd2> dragComponents;
+
     public ShipPlacementScreen(GamePanel gp) {
         this.gp = gp;
 
-        try {
-            shipPlacementScreen = ImageIO.read(new File("res/images/PlacementOverlay.png"));
+        this.shipPlacementScreen = GamePanel.sm.getPlacementOverlay();
+        this.fullShipSprites = GamePanel.sm.getFullShipSprites();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        this.dragComponents = new ArrayList<>();
+        for (ShipType shipType : ShipType.values()) {
+            BufferedImage shipImage = switch (shipType) {
+                case DESTROYER -> this.fullShipSprites[0];
+                case CRUISER -> this.fullShipSprites[1];
+                case SUBMARINE -> this.fullShipSprites[2];
+                case BATTLESHIP -> this.fullShipSprites[3];
+                case CARRIER -> this.fullShipSprites[4];
+            };
+
+            Dnd2 dragComponent = new Dnd2(shipImage);
+            this.dragComponents.add(dragComponent);
+            this.add(dragComponent);
         }
-
-        fullShipSprites = GamePanel.sm.getFullShipSprites();
-
     }
 
-    public void draw(Graphics2D g2) {
+    public void draw() {
+        this.repaint();
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+
+        int screenWidth = (int) (this.shipPlacementScreen.getWidth() * GamePanel.getSpriteScaleMultiplier());
+        int screenHeight = (int) (this.shipPlacementScreen.getHeight() * GamePanel.getSpriteScaleMultiplier());
         g2.drawImage(
-                shipPlacementScreen,
-                0,
-                0,
-                (int) (shipPlacementScreen.getWidth() * GamePanel.getSpriteScaleMultiplier()),
-                (int) (shipPlacementScreen.getHeight() * GamePanel.getSpriteScaleMultiplier()),
+                this.shipPlacementScreen,
+                this.getWidth() / 2 - screenWidth / 2,
+                this.getHeight() / 2 - screenHeight / 2,
+                screenWidth,
+                screenHeight,
                 null);
 
-        g2.drawImage(
-                fullShipSprites[0],
-                189,
-                525,
-                (int) (fullShipSprites[0].getWidth() * GamePanel.getSpriteScaleMultiplier()),
-                (int) (fullShipSprites[0].getHeight() * GamePanel.getSpriteScaleMultiplier()),
-                null);
     }
 
     public void update() {
