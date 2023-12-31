@@ -1,13 +1,15 @@
 package graphics.screens;
 
+import graphics.Dnd2;
 import graphics.GamePanel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import gameLogic.Ship.ShipType;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class ShipPlacementScreen extends JPanel {
     private GamePanel gp;
@@ -15,16 +17,32 @@ public class ShipPlacementScreen extends JPanel {
     private BufferedImage shipPlacementScreen;
     private final BufferedImage[] fullShipSprites;
 
+    private ArrayList<Dnd2> dragComponents;
+
     public ShipPlacementScreen(GamePanel gp) {
         this.gp = gp;
 
         this.shipPlacementScreen = GamePanel.sm.getPlacementOverlay();
         this.fullShipSprites = GamePanel.sm.getFullShipSprites();
 
+        this.dragComponents = new ArrayList<>();
+        for (ShipType shipType : ShipType.values()) {
+            BufferedImage shipImage = switch (shipType) {
+                case DESTROYER -> this.fullShipSprites[0];
+                case CRUISER -> this.fullShipSprites[1];
+                case SUBMARINE -> this.fullShipSprites[2];
+                case BATTLESHIP -> this.fullShipSprites[3];
+                case CARRIER -> this.fullShipSprites[4];
+            };
+
+            Dnd2 dragComponent = new Dnd2(shipImage);
+            this.dragComponents.add(dragComponent);
+            this.add(dragComponent);
+        }
     }
 
     public void draw() {
-        repaint();
+        this.repaint();
     }
 
     public void paintComponent(Graphics g) {
@@ -41,13 +59,6 @@ public class ShipPlacementScreen extends JPanel {
                 screenHeight,
                 null);
 
-        g2.drawImage(
-                fullShipSprites[0],
-                189,
-                525,
-                (int) (fullShipSprites[0].getWidth() * GamePanel.getSpriteScaleMultiplier()),
-                (int) (fullShipSprites[0].getHeight() * GamePanel.getSpriteScaleMultiplier()),
-                null);
     }
 
     public void update() {

@@ -32,20 +32,13 @@ public class Dnd2 extends JPanel {
     private double rotationAngle = 0; // Store rotation angle in radians
 
     // Constructor for Dnd2 class
-    public Dnd2() {
-        // Load the image from file
-        try {
-            this.img = ImageIO.read(new File("res/Destroyer.png"));
-            
-        } catch (IOException e) {
-            // Handle IOException (image loading failure)
-            e.printStackTrace();
-        }
+    public Dnd2(BufferedImage img) {
+        this.img = img;
 
         // Create an icon and a ship JLabel to display the image
         this.icon = new ImageIcon(img);
         this.ship = new JLabel(icon);
-        this.ship.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Add a border for better visibility
+        this.ship.setBorder(BorderFactory.createLineBorder(Color.RED)); // Add a border for better visibility
 
         // Add mouse listeners for dragging and clicking
         this.ship.addMouseListener(new Click());
@@ -83,6 +76,10 @@ public class Dnd2 extends JPanel {
         g2.dispose();
 
         return rotatedImage;
+    }
+
+    public void draw() {
+        this.repaint();
     }
 
     // Method to paint the component

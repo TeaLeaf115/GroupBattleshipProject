@@ -56,19 +56,19 @@ public class GamePanel extends JFrame implements Runnable {
 
         this.setPreferredSize(new Dimension(1210, 635));
 
-        updateScreenSize(getSize());
+        this.updateScreenSize(getSize());
 
-        titleScreen = new TitleScreen();
-        shipPlacementScreen = new ShipPlacementScreen(this);
-        gameplayScreen = new GameplayScreen();
+        this.titleScreen = new TitleScreen();
+        this.shipPlacementScreen = new ShipPlacementScreen(this);
+        this.gameplayScreen = new GameplayScreen();
 
-        add(shipPlacementScreen, BorderLayout.CENTER);
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
+        this.add(this.shipPlacementScreen, BorderLayout.CENTER);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
 
-        setupGame();
-        startGameThread();
+        this.setupGame();
+        this.startGameThread();
     }
 
     public void setupGame() {
@@ -145,7 +145,7 @@ public class GamePanel extends JFrame implements Runnable {
                 }
                 case GAMEPLAY -> {
                     // System.out.println("Gameplay Screen");
-                    //gameplayScreen.update();
+                    // gameplayScreen.update();
 
                 }
                 case GAMEOVER -> {
