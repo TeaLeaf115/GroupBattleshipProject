@@ -1,12 +1,13 @@
 package graphicsManager;
 
-import graphics.GamePanel;
+import gameLogic.Ship.ShipType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * The SpriteManager class handles the management and retrieval of sprites from a spritesheet.
@@ -57,6 +58,8 @@ public class SpriteManager {
 	private BufferedImage logo;
 	private BufferedImage titleScreen;
 	
+	public BufferedImage windowIcon;
+	
 	
 	/**
 	 * Constructs a SpriteManager instance and initializes various tile sets based on a sprite sheet.
@@ -72,6 +75,9 @@ public class SpriteManager {
 			placementOverlay = ImageIO.read(new File("res/images/PlacementOverlay.png"));
 			logo = ImageIO.read(new File("res/images/Battleship_Logo.png"));
 			titleScreen = ImageIO.read(new File("res/images/TitleScreen.png"));
+			
+			java.util.Random rand = new Random();
+			windowIcon = ImageIO.read(new File("res/images/WindowIcon_" + (rand.nextInt(9) > 1 ? "1" : "2") + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -139,6 +145,16 @@ public class SpriteManager {
 		fullShipSprites[4] = ssr.getSpriteFromSheet(3, 0, 80, 16);
 
 		return fullShipSprites;
+	}
+	
+	public BufferedImage getShipSectionFromShip(ShipType ship, Section section) throws ImageSectionOutOfBounds {
+		return switch (ship) {
+			case DESTROYER -> getDestroyerSection(section);
+			case CRUISER -> getCruiserSection(section);
+			case SUBMARINE -> getSubmarineSection(section);
+			case BATTLESHIP -> getBattleshipSection(section);
+			case CARRIER -> getCarrierSection(section);
+		};
 	}
 
 	/**

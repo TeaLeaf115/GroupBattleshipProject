@@ -1,13 +1,10 @@
 package gameLogic;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import graphics.GamePanel;
 import graphicsManager.SpriteManager.Section;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * The {@code Ship} class represents a ship in the game, with attributes such as

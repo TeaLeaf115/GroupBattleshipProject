@@ -6,7 +6,7 @@ import javax.swing.*;
 
 import graphicsManager.SpriteManager;
 import graphics.screens.*;
-import graphics.screens.gameplay.GameplayScreen;
+import graphics.screens.GameplayScreen;
 
 public class GamePanel extends JFrame implements Runnable {
     // -----------------
@@ -51,15 +51,15 @@ public class GamePanel extends JFrame implements Runnable {
     public GamePanel() {
         this.setTitle("Battleship");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // this.setResizable(false);
+        this.setResizable(false);
         this.setLayout(new BorderLayout());
 
         this.setPreferredSize(new Dimension(1210, 635));
-
+        this.setIconImage(sm.windowIcon);
         this.updateScreenSize(getSize());
 
         this.titleScreen = new TitleScreen();
-        this.shipPlacementScreen = new ShipPlacementScreen(this);
+        this.shipPlacementScreen = new ShipPlacementScreen();
         this.gameplayScreen = new GameplayScreen();
 
         this.add(this.shipPlacementScreen, BorderLayout.CENTER);
@@ -139,13 +139,12 @@ public class GamePanel extends JFrame implements Runnable {
                     titleScreen.update();
                 }
                 case SHIP_PLACEMENT -> {
-                    this.remove(titleScreen);
-                    this.add(shipPlacementScreen);
+//                    System.out.println("Ship Placement Screen");
                     this.shipPlacementScreen.update();
                 }
                 case GAMEPLAY -> {
-                    // System.out.println("Gameplay Screen");
-                    // gameplayScreen.update();
+//                System.out.println("Gameplay Screen");
+                    gameplayScreen.update();
 
                 }
                 case GAMEOVER -> {
@@ -169,11 +168,13 @@ public class GamePanel extends JFrame implements Runnable {
                     titleScreen.draw();
                 }
                 case SHIP_PLACEMENT -> {
+                    shipPlacementScreen.draw();
+//                    System.out.println("Ship Placement Screen");
                 }
                 case GAMEPLAY -> {
-                    // System.out.println("Gameplay Screen");
-                    // gameplayScreen.draw();
-                    // System.out.println("here Now");
+//                System.out.println("Gameplay Screen");
+                    gameplayScreen.draw();
+//                    System.out.println("here Now");
                 }
                 case GAMEOVER -> {
                     System.out.println("Game-over Screen");
