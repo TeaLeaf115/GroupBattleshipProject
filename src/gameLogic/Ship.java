@@ -56,12 +56,13 @@ public class Ship {
      * Enumeration representing the possible rotations of a ship.
      */
     public enum Rotation {
-        UP(Math.PI/2),
-        DOWN(Math.PI/2),
+        UP(Math.PI / 2),
+        DOWN(Math.PI / 2),
         LEFT(0),
         RIGHT(0);
+
         public final double rad;
-    
+
         private Rotation(double rad) {
             this.rad = rad;
         }

@@ -10,18 +10,27 @@ public class GamePlayLogic {
 	public GamePlayLogic() {
 		player = new Player();
 		bot = new Bots(Bots.BotLevel.EASY);
+
+		// destroyer
 		Ship playerDestroyer = new Ship(Ship.ShipType.DESTROYER, Ship.Rotation.LEFT);
-		Ship playerSubmarine = new Ship(Ship.ShipType.SUBMARINE, Ship.Rotation.DOWN);
-		Ship playerCruiser = new Ship(Ship.ShipType.CRUISER, Ship.Rotation.RIGHT);
-		Ship playerBattleship = new Ship(Ship.ShipType.BATTLESHIP, Ship.Rotation.UP);
 		playerDestroyer.setCoords(0, 0);
-		playerSubmarine.setCoords(2, 3);
-		playerCruiser.setCoords(4, 4);
-		playerBattleship.setCoords(5, 5);
 		player.shipLocations.addUnguessedShip(playerDestroyer);
-		player.shipLocations.addUnguessedShip(playerCruiser);
-		player.shipLocations.addUnguessedShip(playerBattleship);
+
+		// submarine
+		Ship playerSubmarine = new Ship(Ship.ShipType.SUBMARINE, Ship.Rotation.DOWN);
+		playerSubmarine.setCoords(2, 3);
 		player.shipLocations.addUnguessedShip(playerSubmarine);
+
+		// cruiser
+		Ship playerCruiser = new Ship(Ship.ShipType.CRUISER, Ship.Rotation.RIGHT);
+		playerCruiser.setCoords(4, 4);
+		player.shipLocations.addUnguessedShip(playerCruiser);
+
+		// battleship
+		Ship playerBattleship = new Ship(Ship.ShipType.BATTLESHIP, Ship.Rotation.UP);
+		playerBattleship.setCoords(5, 5);
+		player.shipLocations.addUnguessedShip(playerBattleship);
+		
 //		player.shipLocations.shootLocation(new Point(0, 0));
 //		player.shipLocations.shootLocation(new Point(1,1));
 //		for (int i = 0; i < 10; i++) {

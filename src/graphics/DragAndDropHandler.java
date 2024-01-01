@@ -13,19 +13,16 @@ public class DragAndDropHandler {
     private final BufferedImage img;
     private final JLabel ship;
     private int initialX, initialY;
-    private double rotationAngle = 0;
+    private double rotationAngle;
     
     public DragAndDropHandler(BufferedImage pImg) {
-        BufferedImage img1;
-    
         // Scale the original image
         int scaledWidth = (int) Math.ceil(pImg.getWidth() * GamePanel.getSpriteScaleMultiplier());
         int scaledHeight = (int) Math.ceil(pImg.getHeight() * GamePanel.getSpriteScaleMultiplier());
         Image scaledImage = pImg.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
         
         // Create a new BufferedImage from the scaled image
-        img1 = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
-        this.img = img1;
+        this.img = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = this.img.createGraphics();
         g2d.drawImage(scaledImage, 0, 0, null);
         g2d.dispose();
@@ -35,12 +32,20 @@ public class DragAndDropHandler {
         this.ship.setBorder(BorderFactory.createLineBorder(Color.RED));
         this.ship.addMouseListener(new Click());
         this.ship.addMouseMotionListener(new Drag());
+
+        this.initialX = 0;
+        this.initialY = 0;
+        this.rotationAngle = 0;
     }
     
     public JLabel getShipLabel() {
         return this.ship;
     }
     
+    /**
+     * Rotates icon image by a radian angle
+     * @param angle the radian the icon image is rotated
+     */
     private void rotateImage(double angle) {
         // Get the width and height of the original image
         int w = this.img.getWidth();
@@ -92,6 +97,8 @@ public class DragAndDropHandler {
     private class Click extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
+            System.out.println(ship.getLocation());
+
             initialX = e.getXOnScreen() - ship.getX();
             initialY = e.getYOnScreen() - ship.getY();
         }
@@ -105,26 +112,27 @@ public class DragAndDropHandler {
         public void mouseClicked(MouseEvent e) {
             if (SwingUtilities.isRightMouseButton(e)) {
                 rotationAngle += Math.PI / 2;
+                System.out.println(rotationAngle);
                 rotateImage(rotationAngle);
             }
         }
     
         // Add this method to rotate the image
-        private void rotateImage(double angle) {
-            ship.setBounds(ship.getX(), ship.getY(), ship.getHeight(), ship.getWidth());
+        // private void rotateImage(double angle) {
+        //     ship.setBounds(ship.getX(), ship.getY(), ship.getHeight(), ship.getWidth());
             
-            BufferedImage rotatedImage = new BufferedImage(img.getHeight(), img.getWidth(), BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = rotatedImage.createGraphics();
+        //     BufferedImage rotatedImage = new BufferedImage(img.getHeight(), img.getWidth(), BufferedImage.TYPE_INT_ARGB);
+        //     Graphics2D g2d = rotatedImage.createGraphics();
             
-            g2d.rotate(angle, img.getWidth() / 2,  ship.getHeight() / 2);
-            g2d.drawImage(img, 0, 0, null);
-            g2d.dispose();
+        //     g2d.rotate(angle, img.getWidth() / 2,  ship.getHeight() / 2);
+        //     g2d.drawImage(img, 0, 0, null);
+        //     g2d.dispose();
         
-            ImageIcon rotatedIcon = new ImageIcon(img);
+        //     ImageIcon rotatedIcon = new ImageIcon(img);
             
             
-            ship.setIcon(rotatedIcon);
-        }
+        //     ship.setIcon(rotatedIcon);
+        // }
     }
     
     private class Drag extends MouseMotionAdapter {
