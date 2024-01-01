@@ -11,46 +11,80 @@ import java.util.ArrayList;
 import static graphics.GamePanel.getSpriteScaleMultiplier;
 
 public class ShipPlacementScreen extends JPanel {
+    // screen
     private final BufferedImage shipPlacementScreen;
+    private Dimension screenSize;
+    private Point screenLocation, originPoint;
+
+    // drag components
     private final ArrayList<DragAndDropHandler> dragComponents;
-    
+
     public ShipPlacementScreen() {
-        this.setBackground(Color.green);
+        this.setBackground(new Color(0x848482));
+        this.setSize(new Dimension(1274, 699));
+
+        // screen
         this.shipPlacementScreen = GamePanel.sm.getPlacementOverlay();
+        this.screenSize = new Dimension(
+                (int) Math.floor(shipPlacementScreen.getWidth() * getSpriteScaleMultiplier()),
+                (int) Math.floor(shipPlacementScreen.getHeight() * getSpriteScaleMultiplier()));
+
+        // location where the screen is drawn
+        this.screenLocation = new Point(
+                this.getWidth() / 2 - this.screenSize.width / 2,
+                this.getHeight() / 2 - this.screenSize.height / 2);
+
+        // location where the board starts
+        this.originPoint = new Point(
+                (int) Math.floor(this.screenLocation.x + this.screenSize.width * 96.0 / 336),
+                (int) Math.floor(this.screenLocation.y + this.screenSize.height * 44.0 / 207));
+
+        System.out.println(this.originPoint);
+
+        // drag components
         BufferedImage[] fullShipSprites = GamePanel.sm.getFullShipSprites();
         this.dragComponents = new ArrayList<>();
-        
+
         for (BufferedImage shipImage : fullShipSprites) {
             DragAndDropHandler dragComponent = new DragAndDropHandler(shipImage);
             this.dragComponents.add(dragComponent);
             this.add(dragComponent.getShipLabel()); // Add the ship JLabel directly
         }
+
     }
-    
+
     public void draw() {
         this.repaint();
     }
-    
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        
-        int screenWidth = (int) Math.ceil(shipPlacementScreen.getWidth() * getSpriteScaleMultiplier());
-        int screenHeight = (int) Math.ceil(shipPlacementScreen.getHeight() * getSpriteScaleMultiplier());
+
         g2.drawImage(
                 this.shipPlacementScreen,
-                this.getWidth() / 2 - screenWidth / 2,
-                this.getHeight() / 2 - screenHeight / 2,
-                screenWidth,
-                screenHeight,
+                this.screenLocation.x,
+                this.screenLocation.y,
+                this.screenSize.width,
+                this.screenSize.height,
                 null);
-        
+
+        g2.drawRect(
+                this.originPoint.x,
+                this.originPoint.y,
+                10 * GamePanel.scaledTileSize,
+                10 * GamePanel.scaledTileSize);
+
         for (DragAndDropHandler dadh : dragComponents) {
-            dadh.draw();
+            // dadh.draw();
         }
     }
-    
+
     public void update() {
+        // this.screenLocation.setLocation(
+        // this.getWidth() / 2 - this.screenSize.width / 2,
+        // this.getHeight() / 2 - this.screenSize.height / 2);
+
         // Add update logic if needed
     }
 }

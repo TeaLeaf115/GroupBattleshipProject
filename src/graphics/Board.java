@@ -89,6 +89,7 @@ public class Board extends JPanel {
 					g2.drawImage(GamePanel.sm.getIndicator(SpriteManager.Indicator.MISS), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
 					return;
 				}
+				
 				if (shipsVisible) {
 					if (sl.getUnguessedSections().containsKey(coord)) {
 						ShipSection section = sl.getUnguessedSections().get(coord);

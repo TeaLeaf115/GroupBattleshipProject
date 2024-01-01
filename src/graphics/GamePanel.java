@@ -6,7 +6,6 @@ import javax.swing.*;
 
 import graphicsManager.SpriteManager;
 import graphics.screens.*;
-import graphics.screens.GameplayScreen;
 
 public class GamePanel extends JFrame implements Runnable {
     // -----------------
@@ -29,7 +28,7 @@ public class GamePanel extends JFrame implements Runnable {
     public static final int boardWidth = scaledTileSize * maxBoardCol;
     public static final int boardHeight = scaledTileSize * maxBoardRow;
 
-    public static Dimension windowSize;
+    public static Dimension windowSize = new Dimension(1274, 699);
 
     // The thread that the game will be run on.
     private Thread gameThread;
