@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import gameLogic.Player;
 import gameLogic.Ship;
 import gameLogic.Ship.Rotation;
 
@@ -16,11 +17,12 @@ public class DragAndDropHandler {
     private final BufferedImage img;
     private final JLabel shipLabel;
     private Ship ship;
+    private Player player;
 
     private Point gridOriginPoint, labelPoint, initalLabelPoint;
     private double rotationAngle;
 
-    public DragAndDropHandler(Ship ship, Point gridOriginPoint) {
+    public DragAndDropHandler(Ship ship, Player player, Point gridOriginPoint) {
         BufferedImage[] fullShipSprites = GamePanel.sm.getFullShipSprites();
         BufferedImage shipImage = switch (ship.getShipType()) {
             case DESTROYER -> fullShipSprites[0];
@@ -48,6 +50,7 @@ public class DragAndDropHandler {
         this.shipLabel.addMouseMotionListener(new Drag());
 
         this.ship = ship;
+        this.player = player;
 
         this.gridOriginPoint = gridOriginPoint;
         this.labelPoint = new Point();
@@ -139,20 +142,27 @@ public class DragAndDropHandler {
                         gridOriginPoint.x + mappedCoords.x * GamePanel.scaledTileSize,
                         gridOriginPoint.y + mappedCoords.y * GamePanel.scaledTileSize);
 
-                // checks if the ship is out of bounds
-                // if so, return it to its starting position
-                // otherwise snap the ship to the board
+                // snaps ship to location on board
                 ship.setCoords(mappedCoords);
                 shipLabel.setLocation(newLabelCoords);
 
+                // checks if the ship is out of bounds
+                // if so, return it to its starting position
                 Rectangle shipRect = ship.getRect();
-
                 if (newLabelCoords.x < gridOriginPoint.x
                         || newLabelCoords.y < gridOriginPoint.y
                         || newLabelCoords.x + shipRect.width > gridOriginPoint.x + GamePanel.boardWidth
                         || newLabelCoords.y + shipRect.height > gridOriginPoint.y + GamePanel.boardHeight) {
                     shipLabel.setLocation(initalLabelPoint);
+                }
 
+                // checks if the ship intersects other ship
+                // if so, return it to its starting position
+                for (Ship otherShip : player.getShips()) {
+                    if (otherShip != ship && ship.intersect(otherShip)) {
+                        shipLabel.setLocation(initalLabelPoint);
+                        System.out.println("Bump");
+                    }
                 }
 
                 

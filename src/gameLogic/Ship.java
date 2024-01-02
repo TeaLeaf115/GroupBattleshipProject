@@ -241,6 +241,7 @@ public class Ship {
      * @return A string representation of the ship.
      */
     public String toString() {
-        return this.rotation.toString() + " : " + this.shipSections.toString();
+        return super.toString();
+        // return this.rotation.toString() + " : " + this.shipSections.toString();
     }
 }
