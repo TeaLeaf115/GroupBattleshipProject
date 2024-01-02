@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -18,12 +17,10 @@ public class DragAndDropHandler {
     private final JLabel shipLabel;
     private Ship ship;
 
-    private Point originPoint;
-
-    private Point coords;
+    private Point gridOriginPoint, labelPoint, initalLabelPoint;
     private double rotationAngle;
 
-    public DragAndDropHandler(Ship ship, Point originPoint) {
+    public DragAndDropHandler(Ship ship, Point gridOriginPoint) {
         BufferedImage[] fullShipSprites = GamePanel.sm.getFullShipSprites();
         BufferedImage shipImage = switch (ship.getShipType()) {
             case DESTROYER -> fullShipSprites[0];
@@ -52,9 +49,12 @@ public class DragAndDropHandler {
 
         this.ship = ship;
 
-        this.originPoint = originPoint;
-        this.coords = new Point();
+        this.gridOriginPoint = gridOriginPoint;
+        this.labelPoint = new Point();
+        this.initalLabelPoint = null;
+
         this.rotationAngle = 0;
+        System.out.println(labelPoint);
     }
 
     public JLabel getShipLabel() {
@@ -117,24 +117,51 @@ public class DragAndDropHandler {
     private class Click extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
-            coords.setLocation(
+            if (initalLabelPoint == null) {
+                initalLabelPoint = shipLabel.getLocation();
+            }
+
+            labelPoint.setLocation(
                     e.getXOnScreen() - shipLabel.getX(),
                     e.getYOnScreen() - shipLabel.getY());
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            shipLabel.setCursor(Cursor.getDefaultCursor());
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                shipLabel.setCursor(Cursor.getDefaultCursor());
 
-            Point labelCoords = shipLabel.getLocation();
-            Point mappedCoords = new Point(
-                    (labelCoords.x - originPoint.x) / GamePanel.scaledTileSize,
-                    (labelCoords.y - originPoint.y) / GamePanel.scaledTileSize);
+                Point labelCoords = shipLabel.getLocation();
+                Point mappedCoords = new Point(
+                        (labelCoords.x - gridOriginPoint.x) / GamePanel.scaledTileSize,
+                        (labelCoords.y - gridOriginPoint.y) / GamePanel.scaledTileSize);
 
-            ship.setCoords(mappedCoords);
-            shipLabel.setLocation(
-                originPoint.x + mappedCoords.x * GamePanel.scaledTileSize,
-                originPoint.y + mappedCoords.y * GamePanel.scaledTileSize);
+                Point newLabelCoords = new Point(
+                        gridOriginPoint.x + mappedCoords.x * GamePanel.scaledTileSize,
+                        gridOriginPoint.y + mappedCoords.y * GamePanel.scaledTileSize);
+
+                // checks if the ship is out of bounds
+                // if so, return it to its starting position
+                // otherwise snap the ship to the board
+                ship.setCoords(mappedCoords);
+                shipLabel.setLocation(newLabelCoords);
+
+                Rectangle shipRect = ship.getRect();
+                // System.out.println(labelCoords.x < gridOriginPoint.x);
+                // System.out.println(labelCoords.y < gridOriginPoint.y);
+                // System.out.println(labelCoords.x + shipRect.width > gridOriginPoint.x + GamePanel.boardWidth);
+                // System.out.println(labelCoords.y + shipRect.height > gridOriginPoint.y + GamePanel.boardHeight);
+
+                if (newLabelCoords.x < gridOriginPoint.x
+                        || newLabelCoords.y < gridOriginPoint.y
+                        || newLabelCoords.x + shipRect.width > gridOriginPoint.x + GamePanel.boardWidth - GamePanel.scaledTileSize
+                        || newLabelCoords.y + shipRect.height > gridOriginPoint.y + GamePanel.boardHeight + GamePanel.scaledTileSize) {
+                    shipLabel.setLocation(initalLabelPoint);
+
+                }
+
+                
+            }
         }
 
         @Override
@@ -175,8 +202,8 @@ public class DragAndDropHandler {
     private class Drag extends MouseMotionAdapter {
         public void mouseDragged(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e)) {
-                int x = e.getXOnScreen() - coords.x;
-                int y = e.getYOnScreen() - coords.y;
+                int x = e.getXOnScreen() - labelPoint.x;
+                int y = e.getYOnScreen() - labelPoint.y;
                 shipLabel.setLocation(x, y);
             }
         }

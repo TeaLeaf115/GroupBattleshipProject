@@ -66,7 +66,7 @@ public class GamePanel extends JFrame implements Runnable {
         this.shipPlacementScreen = new ShipPlacementScreen();
         this.gameplayScreen = new GameplayScreen();
 
-        this.add(this.gameplayScreen, BorderLayout.CENTER);
+        this.add(this.shipPlacementScreen, BorderLayout.CENTER);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -76,7 +76,7 @@ public class GamePanel extends JFrame implements Runnable {
     }
 
     public void setupGame() {
-        gameState = GameStates.GAMEPLAY;
+        gameState = GameStates.SHIP_PLACEMENT;
         System.out.println("Game successfully loaded and ready to play!");
     }
 

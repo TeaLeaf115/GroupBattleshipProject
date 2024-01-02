@@ -54,7 +54,7 @@ public class ShipPlacementScreen extends JPanel {
         for (Ship ship : player.getShips()) {
             DragAndDropHandler dragComponent = new DragAndDropHandler(ship, this.originPoint);
             this.dragComponents.add(dragComponent);
-            this.add(dragComponent.getShipLabel()); // Add the ship JLabel directly
+            this.add(dragComponent.getShipLabel()); // add the ship JLabel directly
         }
 
     }
