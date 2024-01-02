@@ -54,7 +54,6 @@ public class DragAndDropHandler {
         this.initalLabelPoint = null;
 
         this.rotationAngle = 0;
-        System.out.println(labelPoint);
     }
 
     public JLabel getShipLabel() {
@@ -147,15 +146,11 @@ public class DragAndDropHandler {
                 shipLabel.setLocation(newLabelCoords);
 
                 Rectangle shipRect = ship.getRect();
-                // System.out.println(labelCoords.x < gridOriginPoint.x);
-                // System.out.println(labelCoords.y < gridOriginPoint.y);
-                // System.out.println(labelCoords.x + shipRect.width > gridOriginPoint.x + GamePanel.boardWidth);
-                // System.out.println(labelCoords.y + shipRect.height > gridOriginPoint.y + GamePanel.boardHeight);
 
                 if (newLabelCoords.x < gridOriginPoint.x
                         || newLabelCoords.y < gridOriginPoint.y
-                        || newLabelCoords.x + shipRect.width > gridOriginPoint.x + GamePanel.boardWidth - GamePanel.scaledTileSize
-                        || newLabelCoords.y + shipRect.height > gridOriginPoint.y + GamePanel.boardHeight + GamePanel.scaledTileSize) {
+                        || newLabelCoords.x + shipRect.width > gridOriginPoint.x + GamePanel.boardWidth
+                        || newLabelCoords.y + shipRect.height > gridOriginPoint.y + GamePanel.boardHeight) {
                     shipLabel.setLocation(initalLabelPoint);
 
                 }
@@ -170,7 +165,7 @@ public class DragAndDropHandler {
                 rotationAngle += Math.PI / 2;
 
                 rotateImage(rotationAngle);
-                Rotation rotation = switch ((int) (rotationAngle / Math.PI % 4)) {
+                Rotation rotation = switch ((int) (rotationAngle / (Math.PI / 2) % 4)) {
                     case 0 -> Ship.Rotation.RIGHT;
                     case 1 -> Ship.Rotation.UP;
                     case 2 -> Ship.Rotation.LEFT;

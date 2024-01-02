@@ -45,8 +45,6 @@ public class ShipPlacementScreen extends JPanel {
                 (int) Math.floor(this.screenLocation.x + this.screenSize.width * 96.0 / 336),
                 (int) Math.floor(this.screenLocation.y + this.screenSize.height * 44.0 / 207));
 
-        System.out.println(this.originPoint);
-
         // drag components
         this.dragComponents = new ArrayList<>();
         Player player = ShipPlacementScreen.gameLogic.player;

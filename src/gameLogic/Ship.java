@@ -127,7 +127,7 @@ public class Ship {
      *                 CARRIER).
      */
     public Ship(ShipType shipType) {
-        this(shipType, Rotation.UP);
+        this(shipType, Rotation.RIGHT);
     }
 
     /**
