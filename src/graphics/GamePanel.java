@@ -4,6 +4,9 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import gameLogic.Bots;
+import gameLogic.Player;
+import gameLogic.Bots.BotLevel;
 import graphicsManager.SpriteManager;
 import graphics.screens.*;
 
@@ -46,6 +49,7 @@ public class GamePanel extends JFrame implements Runnable {
     public ShipPlacementScreen shipPlacementScreen;
     public GameplayScreen gameplayScreen;
     public static boolean screenChange = false;
+    
 
     public GamePanel() {
         this.setTitle("Battleship");
@@ -57,6 +61,7 @@ public class GamePanel extends JFrame implements Runnable {
         this.setIconImage(sm.windowIcon);
         this.updateScreenSize(getSize());
 
+        // screens
         this.titleScreen = new TitleScreen();
         this.shipPlacementScreen = new ShipPlacementScreen();
         this.gameplayScreen = new GameplayScreen();
