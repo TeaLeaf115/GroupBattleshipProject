@@ -4,6 +4,11 @@ import graphics.DragAndDropHandler;
 import graphics.GamePanel;
 
 import javax.swing.*;
+
+import gameLogic.GamePlayLogic;
+import gameLogic.Player;
+import gameLogic.Ship;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -18,6 +23,7 @@ public class ShipPlacementScreen extends JPanel {
 
     // drag components
     private final ArrayList<DragAndDropHandler> dragComponents;
+    public static GamePlayLogic gameLogic = GameplayScreen.gl;
 
     public ShipPlacementScreen() {
         this.setBackground(new Color(0x848482));
@@ -42,13 +48,13 @@ public class ShipPlacementScreen extends JPanel {
         System.out.println(this.originPoint);
 
         // drag components
-        BufferedImage[] fullShipSprites = GamePanel.sm.getFullShipSprites();
         this.dragComponents = new ArrayList<>();
+        Player player = ShipPlacementScreen.gameLogic.player;
 
-        for (BufferedImage shipImage : fullShipSprites) {
-            DragAndDropHandler dragComponent = new DragAndDropHandler(shipImage);
+        for (Ship ship : player.getShips()) {
+            DragAndDropHandler dragComponent = new DragAndDropHandler(ship, this.originPoint);
             this.dragComponents.add(dragComponent);
-            this.add(dragComponent.getShipLabel()); // Add the ship JLabel directly
+            this.add(dragComponent.getShipLabel()); // add the ship JLabel directly
         }
 
     }

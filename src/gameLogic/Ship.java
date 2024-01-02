@@ -172,16 +172,6 @@ public class Ship {
     }
 
     /**
-     * Retrieves the ship sections that constitute the ship.
-     *
-     * @return ArrayList of ShipSection objects representing each section of the
-     *         ship.
-     */
-    public ArrayList<ShipSection> getShipSections() {
-        return this.shipSections;
-    }
-
-    /**
      * Rotates the coords of the ship sections and rect
      *
      * @param rotation the new rotation the ship is set to
@@ -215,6 +205,24 @@ public class Ship {
                 case DOWN, UP -> yPos++; // Vertical rotation
             }
         }
+    }
+
+    public ShipType getShipType() {
+        return this.shipType;
+    }
+
+    /**
+     * Retrieves the ship sections that constitute the ship.
+     *
+     * @return ArrayList of ShipSection objects representing each section of the
+     *         ship.
+     */
+    public ArrayList<ShipSection> getShipSections() {
+        return this.shipSections;
+    }
+
+    public Rectangle getRect() {
+        return this.rect;
     }
 
     /**
