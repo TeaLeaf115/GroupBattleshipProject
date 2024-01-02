@@ -73,15 +73,11 @@ public class ShipPlacementScreen extends JPanel {
                 this.screenSize.height,
                 null);
 
-        g2.drawRect(
-                this.originPoint.x,
-                this.originPoint.y,
-                10 * GamePanel.scaledTileSize,
-                10 * GamePanel.scaledTileSize);
-
-        for (DragAndDropHandler dadh : dragComponents) {
-            // dadh.draw();
-        }
+        // g2.drawRect(
+        //         this.originPoint.x,
+        //         this.originPoint.y,
+        //         10 * GamePanel.scaledTileSize,
+        //         10 * GamePanel.scaledTileSize);
     }
 
     public void update() {

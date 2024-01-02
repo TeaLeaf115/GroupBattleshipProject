@@ -82,6 +82,8 @@ public class Ship {
     private ArrayList<ShipSection> shipSections;
     private Rectangle rect;
 
+    private boolean placed;
+
     /**
      * Constructs a ship with the specified type and rotation.
      *
@@ -118,6 +120,7 @@ public class Ship {
 
         // sets the coordinates for all the ship sections
         this.rotateShip(this.rotation);
+        this.placed = false;
     }
 
     /**
@@ -235,13 +238,20 @@ public class Ship {
         return this.rect.intersects(other.rect);
     }
 
+    public boolean isPlaced() {
+        return this.placed;
+    }
+
+    public void setPlaced(boolean placed) {
+        this.placed = placed;
+    }
+
     /**
      * Returns a string representation of the ship.
      *
      * @return A string representation of the ship.
      */
     public String toString() {
-        return super.toString();
-        // return this.rotation.toString() + " : " + this.shipSections.toString();
+        return this.rotation.toString() + " | " + this.rect.toString();
     }
 }

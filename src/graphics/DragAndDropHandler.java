@@ -63,6 +63,13 @@ public class DragAndDropHandler {
         return this.shipLabel;
     }
 
+    public boolean checkWithinBoard(Point point, Rectangle shipRect) {
+        return (point.x < this.gridOriginPoint.x
+                || point.y < this.gridOriginPoint.y
+                || point.x + shipRect.width > this.gridOriginPoint.x + GamePanel.boardWidth
+                || point.y + shipRect.height > this.gridOriginPoint.y + GamePanel.boardHeight);
+    }
+
     /**
      * Rotates icon image by a radian angle
      * 
@@ -144,28 +151,28 @@ public class DragAndDropHandler {
 
                 // snaps ship to location on board
                 ship.setCoords(mappedCoords);
+                ship.setPlaced(true);
                 shipLabel.setLocation(newLabelCoords);
 
                 // checks if the ship is out of bounds
                 // if so, return it to its starting position
-                Rectangle shipRect = ship.getRect();
-                if (newLabelCoords.x < gridOriginPoint.x
-                        || newLabelCoords.y < gridOriginPoint.y
-                        || newLabelCoords.x + shipRect.width > gridOriginPoint.x + GamePanel.boardWidth
-                        || newLabelCoords.y + shipRect.height > gridOriginPoint.y + GamePanel.boardHeight) {
+
+                if (checkWithinBoard(newLabelCoords, ship.getRect())) {
+                    ship.setPlaced(false);
                     shipLabel.setLocation(initalLabelPoint);
                 }
 
                 // checks if the ship intersects other ship
                 // if so, return it to its starting position
+
                 for (Ship otherShip : player.getShips()) {
-                    if (otherShip != ship && ship.intersect(otherShip)) {
+                    if (otherShip != ship
+                            && otherShip.isPlaced()
+                            && ship.intersect(otherShip)) {
                         shipLabel.setLocation(initalLabelPoint);
-                        System.out.println("Bump");
+                        break;
                     }
                 }
-
-                
             }
         }
 
