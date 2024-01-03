@@ -42,8 +42,8 @@ public class ShipPlacementScreen extends JPanel {
         
         // location where the board starts
         this.originPoint = new Point(
-                (int) Math.floor(this.screenLocation.x + this.screenSize.width * 96.0 / 336),
-                (int) Math.floor(this.screenLocation.y + this.screenSize.height * 44.0 / 207));
+                (int) Math.floor(this.screenLocation.x + this.screenSize.width * 2 / 7),
+                (int) Math.floor(this.screenLocation.y + this.screenSize.height * 3 / 14));
         
         // drag components
         this.dragComponents = new ArrayList<>();
