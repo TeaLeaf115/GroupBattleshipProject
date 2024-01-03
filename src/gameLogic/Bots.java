@@ -11,7 +11,7 @@ import gameLogic.Ship.Rotation;
 import gameLogic.Ship.ShipType;
 import graphics.GamePanel;
 
-public class Bots extends Player {
+public class Bots {
 	public enum BotLevel {
 		EASY,
 		NORMAL,
@@ -21,6 +21,8 @@ public class Bots extends Player {
 
 	private final BotLevel botLevel;
 	private ArrayList<Point> possibleGuesses;
+	public ShipLocations shipLocations;
+	private ArrayList<Ship> ships;
 
 	private final Random random = new Random();
 	private final double impossibleProb = 0.85;
@@ -92,6 +94,18 @@ public class Bots extends Player {
 
 			default -> impossibleBot(opponentLocations);
 		}
+	}
+
+	public ArrayList<Ship> getShips() {
+		return this.ships;
+	}
+
+	public ArrayList<ShipSection> getShipSections() {
+		ArrayList<ShipSection> shipSections = new ArrayList<>();
+		shipSections.addAll(this.shipLocations.getUnguessedSections().values());
+		shipSections.addAll(this.shipLocations.getHitSections().values());
+
+		return shipSections;
 	}
 
 	public void easyBot(ShipLocations opponentLocations) {
