@@ -14,12 +14,14 @@ import gameLogic.Ship;
 import gameLogic.Ship.Rotation;
 
 public class DragAndDropHandler {
-    private final BufferedImage img;
+    private BufferedImage img;
+    private final BufferedImage[] rotatedImages;
     private final JLabel shipLabel;
+
     private Ship ship;
     private Player player;
     
-    private Point gridOriginPoint, labelPoint, initalLabelPoint;
+    private Point gridOriginPoint, labelPoint, initialLabelPoint;
     private double rotationAngle;
     
     public DragAndDropHandler(Ship ship, Player player, Point gridOriginPoint) {
@@ -42,19 +44,27 @@ public class DragAndDropHandler {
         Graphics2D g2d = this.img.createGraphics();
         g2d.drawImage(scaledImage, 0, 0, null);
         g2d.dispose();
-        
-        ImageIcon icon = new ImageIcon(this.img);
-        this.shipLabel = new JLabel(icon);
+
+        // create rotated images
+        this.rotatedImages = new BufferedImage[4];
+        for (int i = 0; i < 4; i++) {
+            double angle = i * Math.PI / 2;
+            this.rotatedImages[i] = rotateImage(angle);
+        }
+
+        // create ship label
+        this.shipLabel = new JLabel(new ImageIcon(this.img));
         this.shipLabel.setBorder(BorderFactory.createLineBorder(Color.RED));
         this.shipLabel.addMouseListener(new Click());
         this.shipLabel.addMouseMotionListener(new Drag());
+        this.rotateShipIcon(this.rotationAngle);
         
         this.ship = ship;
         this.player = player;
         
         this.gridOriginPoint = gridOriginPoint;
         this.labelPoint = new Point();
-        this.initalLabelPoint = null;
+        this.initialLabelPoint = null;
         
         this.rotationAngle = 0;
     }
@@ -62,20 +72,13 @@ public class DragAndDropHandler {
     public JLabel getShipLabel() {
         return this.shipLabel;
     }
-    
-    public boolean checkWithinBoard(Point point, Rectangle shipRect) {
-        return (point.x < this.gridOriginPoint.x
-                || point.y < this.gridOriginPoint.y
-                || point.x + shipRect.width > this.gridOriginPoint.x + GamePanel.boardWidth
-                || point.y + shipRect.height > this.gridOriginPoint.y + GamePanel.boardHeight);
-    }
-    
+
     /**
-     * Rotates icon image by a radian angle
+     * Rotates image by a radian angle
      *
      * @param angle the radian the icon image is rotated
      */
-    private void rotateImage(double angle) {
+    private BufferedImage rotateImage(double angle) {
         // Get the width and height of the original image
         int w = this.img.getWidth();
         int h = this.img.getHeight();
@@ -114,9 +117,19 @@ public class DragAndDropHandler {
         // Dispose of the graphics context
         g2.dispose();
         
-        // Set the rotated image as the icon for the JLabel
-        ImageIcon rotatedIcon = new ImageIcon(rotatedImage);
-        this.shipLabel.setIcon(rotatedIcon);
+        return rotatedImage;
+    }
+
+    public void rotateShipIcon(double angle) {
+        int halfPiCoefficient = (int) (rotationAngle / (Math.PI / 2) % 4);
+        this.shipLabel.setIcon(new ImageIcon(this.rotatedImages[halfPiCoefficient]));
+    }
+    
+    public boolean checkWithinBoard(Point point, Rectangle shipRect) {
+        return (point.x < this.gridOriginPoint.x
+                || point.y < this.gridOriginPoint.y
+                || point.x + shipRect.width > this.gridOriginPoint.x + GamePanel.boardWidth
+                || point.y + shipRect.height > this.gridOriginPoint.y + GamePanel.boardHeight);
     }
     
     public void draw() {
@@ -126,8 +139,8 @@ public class DragAndDropHandler {
     private class Click extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
-            if (initalLabelPoint == null) {
-                initalLabelPoint = shipLabel.getLocation();
+            if (initialLabelPoint == null) {
+                initialLabelPoint = shipLabel.getLocation();
             }
             
             labelPoint.setLocation(
@@ -162,7 +175,7 @@ public class DragAndDropHandler {
             // if so, return it to its starting position
             if (checkWithinBoard(newLabelCoords, ship.getRect())) {
                 ship.setPlaced(false);
-                shipLabel.setLocation(initalLabelPoint);
+                shipLabel.setLocation(initialLabelPoint);
             }
             
             // checks if the ship intersects other ship
@@ -172,7 +185,7 @@ public class DragAndDropHandler {
                         && otherShip.isPlaced()
                         && ship.intersect(otherShip)) {
                     ship.setPlaced(false);
-                    shipLabel.setLocation(initalLabelPoint);
+                    shipLabel.setLocation(initialLabelPoint);
                     break;
                 }
             }
@@ -188,7 +201,10 @@ public class DragAndDropHandler {
             
             // rotates image
             rotationAngle += Math.PI / 2;
-            rotateImage(rotationAngle);
+            if (rotationAngle == 2 * Math.PI)
+                rotationAngle = 0;
+
+            rotateShipIcon(rotationAngle);
             
             // rotates ship
             Rotation rotation = switch ((int) (rotationAngle / (Math.PI / 2) % 4)) {
@@ -197,27 +213,12 @@ public class DragAndDropHandler {
                 case 2 -> Ship.Rotation.LEFT;
                 default -> Ship.Rotation.DOWN;
             };
-            
+
             ship.rotateShip(rotation);
-            
+            int x = e.getXOnScreen() - labelPoint.x;
+            int y = e.getYOnScreen() - labelPoint.y;
+            shipLabel.setLocation(x, y);
         }
-        
-        // Add this method to rotate the image
-        // private void rotateImage(double angle) {
-        // ship.setBounds(ship.getX(), ship.getY(), ship.getHeight(), ship.getWidth());
-        
-        // BufferedImage rotatedImage = new BufferedImage(img.getHeight(),
-        // img.getWidth(), BufferedImage.TYPE_INT_ARGB);
-        // Graphics2D g2d = rotatedImage.createGraphics();
-        
-        // g2d.rotate(angle, img.getWidth() / 2, ship.getHeight() / 2);
-        // g2d.drawImage(img, 0, 0, null);
-        // g2d.dispose();
-        
-        // ImageIcon rotatedIcon = new ImageIcon(img);
-        
-        // ship.setIcon(rotatedIcon);
-        // }
     }
     
     private class Drag extends MouseMotionAdapter {
