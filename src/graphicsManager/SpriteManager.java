@@ -52,6 +52,16 @@ public class SpriteManager {
 	public final BufferedImage[] fullShipSprites;
 	
 	private BufferedImage[] startButtonSprites;
+	private BufferedImage[] easyButtonSprites;
+	private BufferedImage[] normalButtonSprites;
+	private BufferedImage[] hardButtonSprites;
+	private BufferedImage[] impossibleButtonSprites;
+	private BufferedImage[] easyButtonSpritesHighlighted;
+	private BufferedImage[] normalButtonSpritesHighlighted;
+	private BufferedImage[] hardButtonSpritesHighlighted;
+	private BufferedImage[] impossibleButtonSpritesHighlighted;
+	
+	private BufferedImage[] continueButtonSprites;
 	
 	private BufferedImage guessingOverlay;
 	private BufferedImage placementOverlay;
@@ -68,7 +78,22 @@ public class SpriteManager {
 		try {
 			ssr = new SpriteSheetReader("res/images/StartButtonSpriteSheet.png", 32, 16);
 			startButtonSprites = ssr.spriteSheetToArray();
-			ssr = new SpriteSheetReader("res/images/BattleshipSpritesheet.png", 16, 16);
+			
+			ssr = new SpriteSheetReader("res/images/ContinueButtonSpriteSheet.png", 48, 16);
+			continueButtonSprites = ssr.spriteSheetToArray();
+			
+			ssr = new SpriteSheetReader("res/images/BotLevelButtonSpriteSheet.png", 64, 16);
+			BufferedImage[] botLevelButtons = ssr.spriteSheetToArray();
+			easyButtonSprites = Arrays.copyOfRange(botLevelButtons, 0, 6);
+			normalButtonSprites = Arrays.copyOfRange(botLevelButtons, 6, 12);
+			hardButtonSprites = Arrays.copyOfRange(botLevelButtons, 12, 18);
+			impossibleButtonSprites = Arrays.copyOfRange(botLevelButtons, 18, 24);
+			easyButtonSpritesHighlighted = Arrays.copyOfRange(botLevelButtons, 24, 30);
+			normalButtonSpritesHighlighted = Arrays.copyOfRange(botLevelButtons, 30, 36);
+			hardButtonSpritesHighlighted = Arrays.copyOfRange(botLevelButtons, 36, 42);
+			impossibleButtonSpritesHighlighted = Arrays.copyOfRange(botLevelButtons, 42, 48);
+			
+			ssr = new SpriteSheetReader("res/images/BattleshipSpriteSheet.png", 16, 16);
 			tileset = ssr.spriteSheetToArray();
 			
 			guessingOverlay = ImageIO.read(new File("res/images/GuessingOverlay.png"));
@@ -299,7 +324,43 @@ public class SpriteManager {
 	public BufferedImage getTitleScreen() {
 		return titleScreen;
 	}
-
+	
+	public BufferedImage[] getEasyButtonSprites() {
+		return easyButtonSprites;
+	}
+	
+	public BufferedImage[] getNormalButtonSprites() {
+		return normalButtonSprites;
+	}
+	
+	public BufferedImage[] getHardButtonSprites() {
+		return hardButtonSprites;
+	}
+	
+	public BufferedImage[] getImpossibleButtonSprites() {
+		return impossibleButtonSprites;
+	}
+	
+	public BufferedImage[] getContinueButtonSprites() {
+		return continueButtonSprites;
+	}
+	
+	public BufferedImage[] getEasyButtonSpritesHighlighted() {
+		return easyButtonSpritesHighlighted;
+	}
+	
+	public BufferedImage[] getNormalButtonSpritesHighlighted() {
+		return normalButtonSpritesHighlighted;
+	}
+	
+	public BufferedImage[] getHardButtonSpritesHighlighted() {
+		return hardButtonSpritesHighlighted;
+	}
+	
+	public BufferedImage[] getImpossibleButtonSpritesHighlighted() {
+		return impossibleButtonSpritesHighlighted;
+	}
+	
 	/**
 	 * The {@code ShipSectionOutOfBounds} class is a custom exception that should be thrown
 	 * when attempting to access a section of a ship that does not exist. It extends the standard

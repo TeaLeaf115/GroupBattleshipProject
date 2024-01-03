@@ -171,10 +171,10 @@ public class DragAndDropHandler {
 
                 rotateImage(rotationAngle);
                 Rotation rotation = switch ((int) (rotationAngle / Math.PI % 4)) {
-                    case 0 -> Ship.Rotation.RIGHT;
-                    case 1 -> Ship.Rotation.UP;
-                    case 2 -> Ship.Rotation.LEFT;
-                    default -> Ship.Rotation.DOWN;
+                    case 0 -> Ship.Rotation.UP;
+                    case 1 -> Ship.Rotation.RIGHT;
+                    case 2 -> Ship.Rotation.DOWN;
+                    default -> Ship.Rotation.LEFT;
                 };
 
                 ship.rotateShip(rotation);

@@ -64,7 +64,7 @@ class PlayerBoard extends JPanel {
 		setBackground(new Color(0x848482));
 		// Create the board panel for the player
 		board = new Board(GameplayScreen.gl.bot.shipLocations);
-		board.shipsVisible(false);
+		board.shipsVisible(true);
 		board.setBounds((int)Math.ceil(6.5*GamePanel.scaledTileSize)-1,
 				((int) GamePanel.getScreenSize().getHeight()/2 + 7*GamePanel.scaledTileSize)+4,
 				GamePanel.boardWidth,

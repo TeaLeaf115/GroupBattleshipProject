@@ -5,7 +5,6 @@ import graphicsManager.SpriteManager.Section;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * The {@code Ship} class represents a ship in the game, with attributes such as
@@ -56,10 +55,10 @@ public class Ship {
      * Enumeration representing the possible rotations of a ship.
      */
     public enum Rotation {
-        UP(Math.PI / 2),
-        DOWN(Math.PI / 2),
+        RIGHT(0),
         LEFT(0),
-        RIGHT(0);
+        DOWN(Math.PI / 2),
+        UP(Math.PI / 2);
 
         public final double rad;
 
@@ -127,7 +126,7 @@ public class Ship {
      *                 CARRIER).
      */
     public Ship(ShipType shipType) {
-        this(shipType, Rotation.UP);
+        this(shipType, Rotation.RIGHT);
     }
 
     /**
@@ -156,8 +155,8 @@ public class Ship {
             section.setCoords(xPos, yPos);
 
             switch (this.rotation) {
-                case LEFT, RIGHT -> yPos++; // Horizontal rotation
-                case DOWN, UP -> xPos++; // Vertical rotation
+                case DOWN, UP -> xPos++; // Horizontal rotation
+                case LEFT, RIGHT -> yPos++; // Vertical rotation
 
             }
         }
@@ -183,7 +182,7 @@ public class Ship {
         this.rotation = rotation;
 
         // rotates rectangle
-        if (this.rotation == Rotation.DOWN || this.rotation == Rotation.UP) {
+        if (this.rotation == Rotation.LEFT || this.rotation == Rotation.RIGHT) {
             rectDimension.setSize(GamePanel.scaledTileSize, this.shipLength * GamePanel.scaledTileSize);
 
         } else {
@@ -201,8 +200,8 @@ public class Ship {
             section.setCoords(xPos, yPos);
 
             switch (this.rotation) {
-                case LEFT, RIGHT -> xPos++; // Horizontal rotation
-                case DOWN, UP -> yPos++; // Vertical rotation
+                case DOWN, UP -> xPos++; // Horizontal rotation
+                case LEFT, RIGHT -> yPos++; // Vertical rotation
             }
         }
     }

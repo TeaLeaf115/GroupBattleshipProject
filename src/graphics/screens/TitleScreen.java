@@ -3,7 +3,9 @@ package graphics.screens;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
+import gameLogic.Bots;
 import graphics.GamePanel;
 import graphics.GameStates;
 import graphicsManager.AnimationHandler;
@@ -13,12 +15,18 @@ import javax.swing.*;
 public class TitleScreen extends JPanel {
     private final BufferedImage titleScreenImage;
     public static BufferedImage logo;
-    private final AnimationHandler startButtonAnimation;
-    private final JButton startButton;
-    private final ImageIcon startButtonIcon;
-    private boolean startButtonEnterAnimation = false;
-    private boolean startButtonExitAnimation = false;
-    private boolean mouseIn = false;
+    private final AnimationHandler[] buttonAnimations;
+    private final AnimationHandler[] highlightedButtonAnimations;
+    private final JButton[] buttons;
+    private final ImageIcon[] buttonIcons;
+    private boolean[] enterAnimations;
+    private boolean[] exitAnimations;
+    private final boolean[] buttonStates;
+    
+    private final int startWidth = (int)Math.ceil(32*5.5);
+    private final int startHeight = (int)Math.ceil(16*5.5);
+    private final int difficultyWidth = (int)Math.ceil(64*2.5);
+    private final int difficultyHeight = (int)Math.ceil(16*2.5);
     
     public TitleScreen() {
         setBounds(0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height);
@@ -29,39 +37,100 @@ public class TitleScreen extends JPanel {
         // Set layout to BoxLayout with Y_AXIS alignment
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        startButtonAnimation = new AnimationHandler(GamePanel.sm.getStartButtonSprites(), 1);
-        startButtonIcon = new ImageIcon(startButtonAnimation.getFrame(0).getScaledInstance((int)(32*4.5), (int)(16*4.5), Image.SCALE_SMOOTH));
-        startButton = new JButton(startButtonIcon);
-        startButton.setSize((int)(32*2.5), (int)(16*2.5));
-        startButton.setContentAreaFilled(false);  // Make the button background transparent
-        startButton.setBorderPainted(false);  // Remove the border
-        startButton.setFocusPainted(false);  // Remove the focus border
-        startButton.setOpaque(false);  // Make the button itself transparent
-        startButton.setVisible(true);
-        startButton.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center horizontally
-        startButton.addActionListener(e -> {
-            if (e.getSource() == startButton) {
-                System.out.println("BUTTON CLICKED!!!!");
-                GamePanel.gameState = GameStates.GAMEPLAY;
-                GamePanel.screenChange = true;
-            }
-        });
-        startButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                startButtonEnterAnimation = true;
-                mouseIn = true;
-            }
+        buttonAnimations = new AnimationHandler[]{
+                new AnimationHandler(GamePanel.sm.getStartButtonSprites(), 1),
+                new AnimationHandler(GamePanel.sm.getEasyButtonSprites(), 1),
+                new AnimationHandler(GamePanel.sm.getNormalButtonSprites(), 1),
+                new AnimationHandler(GamePanel.sm.getHardButtonSprites(), 1),
+                new AnimationHandler(GamePanel.sm.getImpossibleButtonSprites(), 1)
+        };
+        
+        highlightedButtonAnimations = new AnimationHandler[]{
+                new AnimationHandler(GamePanel.sm.getEasyButtonSpritesHighlighted(), 1),
+                new AnimationHandler(GamePanel.sm.getNormalButtonSpritesHighlighted(), 1),
+                new AnimationHandler(GamePanel.sm.getHardButtonSpritesHighlighted(), 1),
+                new AnimationHandler(GamePanel.sm.getImpossibleButtonSpritesHighlighted(), 1)
+        };
+        
+        buttonIcons = new ImageIcon[]{
+                new ImageIcon(buttonAnimations[0].getFrame(0).getScaledInstance(startWidth, startHeight, Image.SCALE_SMOOTH)),
+                new ImageIcon(buttonAnimations[1].getFrame(0).getScaledInstance(difficultyWidth, difficultyHeight, Image.SCALE_SMOOTH)),
+                new ImageIcon(highlightedButtonAnimations[1].getFrame(0).getScaledInstance(difficultyWidth, difficultyHeight, Image.SCALE_SMOOTH)),
+                new ImageIcon(buttonAnimations[3].getFrame(0).getScaledInstance(difficultyWidth, difficultyHeight, Image.SCALE_SMOOTH)),
+                new ImageIcon(buttonAnimations[4].getFrame(0).getScaledInstance(difficultyWidth, difficultyHeight, Image.SCALE_SMOOTH))
+        };
+        
+        buttons = new JButton[5];
     
-            @Override
-            public void mouseExited(MouseEvent e) {
-                startButtonExitAnimation = true;
-                mouseIn = false;
-            }
-        });
-        this.add(Box.createVerticalGlue());
-        this.add(startButton);
-        this.add(Box.createVerticalGlue());
+        add(Box.createVerticalGlue());
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i] = new JButton(buttonIcons[i]);
+            buttons[i].setSize(buttonIcons[i].getIconWidth(), buttonIcons[i].getIconHeight());
+            setUpButton(buttons[i]);
+            
+            final int buttonIndex = i;
+            buttons[i].addActionListener(e -> {
+                if (e.getSource() == buttons[buttonIndex]) {
+                    handleButtonClick(buttonIndex);
+                }
+            });
+            
+            buttons[i].addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    handleMouseEnter(buttonIndex);
+                }
+                
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    handleMouseExit(buttonIndex);
+                }
+            });
+            
+            add(buttons[i]);
+            add(Box.createRigidArea(new Dimension(0, i == 0 ? 30 : 5)));
+        }
+        add(Box.createRigidArea(new Dimension(0, 20)));
+        
+        // Initialize animation flags
+        enterAnimations = new boolean[buttons.length];
+        exitAnimations = new boolean[buttons.length];
+        buttonStates = new boolean[buttons.length];
+    }
+    
+    private void handleButtonClick(int buttonIndex) {
+        System.out.println("BUTTON CLICKED!!!!");
+        
+        if (buttonIndex == 0) {
+            GamePanel.gameState = GameStates.GAMEPLAY;
+            GamePanel.screenChange = true;
+            removeAll();
+        } else {
+            Bots.BotLevel botLevel = Bots.BotLevel.values()[buttonIndex - 1];
+            System.out.println("Difficulty changed to " + botLevel);
+            GamePanel.computerDifficulty = botLevel;
+        }
+    }
+    
+    private void handleMouseEnter(int buttonIndex) {
+        enterAnimations[buttonIndex] = true;
+        buttonStates[buttonIndex] = true;
+    }
+    
+    private void handleMouseExit(int buttonIndex) {
+        exitAnimations[buttonIndex] = true;
+        buttonStates[buttonIndex] = false;
+    }
+    
+    private void setUpButton(JButton button) {
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setOpaque(false);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setVerticalAlignment(SwingConstants.CENTER);
+        button.setHorizontalAlignment(SwingConstants.CENTER);
+        button.setVisible(true);
     }
     
     public void draw() {
@@ -71,44 +140,87 @@ public class TitleScreen extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        // Draw the background image
         g2.drawImage(titleScreenImage, 0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height, null);
-        // Draw the logo image
         g2.drawImage(logo,
-                ((int) GamePanel.windowSize.getWidth() / 2) - (int) (logo.getWidth() * 2.5 / 2),
+                ((int) GamePanel.windowSize.getWidth() / 2) - (int) (logo.getWidth() * 3.5 / 2),
                 (int) GamePanel.windowSize.getHeight() / 16,
-                (int)(logo.getWidth() * 2.5),
-                (int)(logo.getHeight() * 2.5),
+                (int) (logo.getWidth() * 3.5),
+                (int) (logo.getHeight() * 3.5),
                 null);
     }
     
     public void update() {
-        // Update any logic related to the title screen
-        if (mouseIn && startButtonEnterAnimation) {
-            startButtonAnimation.update();
-            startButtonIcon.setImage(
-                    startButtonAnimation
-                            .getCurrentFrame()
-                            .getScaledInstance(
-                                    (int)(32 * 4.5),
-                                    (int) (16 * 4.5),
-                                    Image.SCALE_SMOOTH));
-            startButton.setIcon(startButtonIcon);
-            if (startButtonAnimation.getCurrentFrame(0) == startButtonAnimation.getMaxFrames()-1)
-                startButtonEnterAnimation = false;
+        for (int i = 0; i < buttons.length; i++) {
+            animateMouseHover(buttons[i], buttonIcons[i], buttonAnimations[i], buttonStates[i], enterAnimations[i], exitAnimations[i]);
         }
-        if (!mouseIn && (startButtonExitAnimation || startButtonAnimation.getCurrentFrame(1) != 0)) {
-            startButtonAnimation.updateReverse();
-            startButtonIcon.setImage(
-                    startButtonAnimation
-                            .getCurrentFrame()
-                            .getScaledInstance(
-                                    (int)(32 * 4.5),
-                                    (int) (16 * 4.5),
+    }
+    
+    private void animateMouseHover(JButton button, ImageIcon icon, AnimationHandler AH, boolean mouseIn, boolean enterAnimation, boolean exitAnimation) {
+        if (mouseIn && enterAnimation) {
+            AH.update();
+            if (button.equals(buttons[0])) {
+                icon.setImage(
+                        AH.getCurrentFrame().getScaledInstance(
+                                button.getWidth(),
+                                button.getHeight(),
+                                Image.SCALE_SMOOTH));
+            }
+            else {
+                // Use highlighted animations for difficulty buttons when the difficulty is selected
+                Bots.BotLevel botLevel = Bots.BotLevel.values()[Arrays.asList(buttons).indexOf(button) - 1];
+                if (GamePanel.computerDifficulty == botLevel) {
+                    highlightedButtonAnimations[botLevel.ordinal()].updateReverse();
+                    icon.setImage(
+                            highlightedButtonAnimations[botLevel.ordinal()].getCurrentFrame().getScaledInstance(
+                                    button.getWidth(),
+                                    button.getHeight(),
                                     Image.SCALE_SMOOTH));
-            startButton.setIcon(startButtonIcon);
-            if (startButtonAnimation.getCurrentFrame(0) == 0)
-                startButtonExitAnimation = false;
+                }
+                else {
+                    icon.setImage(
+                            AH.getCurrentFrame().getScaledInstance(
+                                    button.getWidth(),
+                                    button.getHeight(),
+                                    Image.SCALE_SMOOTH));
+                }
+            }
+            button.setIcon(icon);
+            if (AH.getCurrentFrame(0) == AH.getMaxFrames() - 1) {
+                enterAnimations = new boolean[buttons.length]; // Reset enterAnimations
+            }
+        }
+        if (!mouseIn && (exitAnimation || AH.getCurrentFrame(1) != 0)) {
+            AH.updateReverse();
+            if (button.equals(buttons[0])) {
+                icon.setImage(
+                        AH.getCurrentFrame().getScaledInstance(
+                                startWidth,
+                                startHeight,
+                                Image.SCALE_SMOOTH));
+            }
+            else {
+                // Use highlighted animations for difficulty buttons when the difficulty is selected
+                Bots.BotLevel botLevel = Bots.BotLevel.values()[Arrays.asList(buttons).indexOf(button) - 1];
+                if (GamePanel.computerDifficulty == botLevel) {
+                    highlightedButtonAnimations[botLevel.ordinal()].updateReverse();
+                    icon.setImage(
+                            highlightedButtonAnimations[botLevel.ordinal()].getCurrentFrame().getScaledInstance(
+                                    difficultyWidth,
+                                    difficultyHeight,
+                                    Image.SCALE_SMOOTH));
+                }
+                else {
+                    icon.setImage(
+                            AH.getCurrentFrame().getScaledInstance(
+                                    difficultyWidth,
+                                    difficultyHeight,
+                                    Image.SCALE_SMOOTH));
+                }
+            }
+            button.setIcon(icon);
+            if (AH.getCurrentFrame(0) == 0) {
+                exitAnimations = new boolean[buttons.length]; // Reset exitAnimations
+            }
         }
     }
 }
