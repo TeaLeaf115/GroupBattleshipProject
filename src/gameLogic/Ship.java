@@ -159,8 +159,8 @@ public class Ship {
             section.setCoords(xPos, yPos);
 
             switch (this.rotation) {
-                case LEFT, RIGHT -> yPos++; // Horizontal rotation
-                case DOWN, UP -> xPos++; // Vertical rotation
+                case LEFT, RIGHT -> xPos++; // horizontal rotation
+                case DOWN, UP -> yPos++; // vertical rotation
 
             }
         }
