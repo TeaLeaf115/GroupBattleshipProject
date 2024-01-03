@@ -81,9 +81,9 @@ public class Ship {
     // Ship sections
     private ArrayList<ShipSection> shipSections;
     private Rectangle rect;
-    
+
     private boolean placed;
-    
+
     /**
      * Constructs a ship with the specified type and rotation.
      *
@@ -115,7 +115,6 @@ public class Ship {
         
         ShipSection backSection = new ShipSection(this.shipType, this.rotation, Section.BACK);
         this.shipSections.add(backSection);
-        
         this.rect = new Rectangle();
         
         // sets the coordinates for all the ship sections
@@ -154,13 +153,12 @@ public class Ship {
         this.rect.setLocation(
                 (int) (xPos * GamePanel.scaledTileSize),
                 (int) (yPos * GamePanel.scaledTileSize));
-        
         for (ShipSection section : this.shipSections) {
             section.setCoords(xPos, yPos);
             
             switch (this.rotation) {
-                case LEFT, RIGHT -> xPos++; // horizontal rotation
-                case DOWN, UP -> yPos++; // vertical rotation
+                case LEFT, RIGHT -> xPos++; // Horizontal rotation
+                case DOWN, UP -> yPos++; // Vertical rotation
             }
         }
     }
@@ -172,7 +170,6 @@ public class Ship {
     public int getShipLength() {
         return this.shipLength;
     }
-    
     /**
      * Rotates the coords of the ship sections and rect
      *
@@ -208,11 +205,11 @@ public class Ship {
             }
         }
     }
-    
+
     public ShipType getShipType() {
         return this.shipType;
     }
-    
+
     /**
      * Retrieves the ship sections that constitute the ship.
      *
@@ -222,29 +219,29 @@ public class Ship {
     public ArrayList<ShipSection> getShipSections() {
         return this.shipSections;
     }
-    
-    public Rectangle getRect() {
-        return this.rect;
-    }
-    
+
     /**
      * Determines whether the rectangle of another ship intersects
-     *
+     * 
      * @param other the other ship to be compared to
      * @return whether this ship intersects with the rect of the other
      */
     public boolean intersect(Ship other) {
         return this.rect.intersects(other.rect);
     }
-    
+
+    public Rectangle getRect() {
+        return this.rect;
+    }
+
     public boolean isPlaced() {
         return this.placed;
     }
-    
+
     public void setPlaced(boolean placed) {
         this.placed = placed;
     }
-    
+
     /**
      * Returns a string representation of the ship.
      *
