@@ -5,6 +5,7 @@ import graphicsManager.SpriteManager.Section;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The {@code Ship} class represents a ship in the game, with attributes such as
@@ -24,7 +25,7 @@ import java.util.ArrayList;
  *
  * <p>
  * Example Usage:
- * 
+ *
  * <pre>
  * {@code
  * // Create a new Destroyer ship with default rotation (UP)
@@ -44,43 +45,45 @@ import java.util.ArrayList;
  * @see ShipSection
  */
 public class Ship {
-
+    
     private Point coords;
     private int shipLength;
-
+    
     // Rotation of the ship sprite direction
     private Rotation rotation;
-
+    
     /**
      * Enumeration representing the possible rotations of a ship.
      */
     public enum Rotation {
-        RIGHT(0),
-        LEFT(0),
-        DOWN(Math.PI / 2),
-        UP(Math.PI / 2);
-
+        UP(0),
+        DOWN(0),
+        LEFT(Math.PI / 2),
+        RIGHT(Math.PI / 2);
+        
         public final double rad;
-
+        
         private Rotation(double rad) {
             this.rad = rad;
         }
     }
-
+    
     // Type of ship
     private ShipType shipType;
-
+    
     /**
      * Enumeration representing the possible types of ships.
      */
     public enum ShipType {
         DESTROYER, CRUISER, SUBMARINE, BATTLESHIP, CARRIER
     }
-
+    
     // Ship sections
     private ArrayList<ShipSection> shipSections;
     private Rectangle rect;
-
+    
+    private boolean placed;
+    
     /**
      * Constructs a ship with the specified type and rotation.
      *
@@ -92,7 +95,7 @@ public class Ship {
         this.coords = new Point();
         this.shipType = shipType;
         this.rotation = rotation;
-
+        
         // determines ship length from the type of ship
         this.shipLength = switch (this.shipType) {
             case DESTROYER -> 2;
@@ -100,25 +103,26 @@ public class Ship {
             case BATTLESHIP -> 4;
             case CARRIER -> 5;
         };
-
+        
         // creates ship length number of ship sections
         Section[] sections = Section.values();
         this.shipSections = new ArrayList<>();
-
+        
         for (int i = 0; i < shipLength - 1; i++) {
             ShipSection section = new ShipSection(this.shipType, this.rotation, sections[i]);
             this.shipSections.add(section);
         }
-
+        
         ShipSection backSection = new ShipSection(this.shipType, this.rotation, Section.BACK);
         this.shipSections.add(backSection);
-
+        
         this.rect = new Rectangle();
-
+        
         // sets the coordinates for all the ship sections
         this.rotateShip(this.rotation);
+        this.placed = false;
     }
-
+    
     /**
      * Constructs a ship with the specified type and default rotation (UP).
      *
@@ -128,7 +132,7 @@ public class Ship {
     public Ship(ShipType shipType) {
         this(shipType, Rotation.RIGHT);
     }
-
+    
     /**
      * Retrieves the top-left coordinates of the ship.
      *
@@ -137,7 +141,7 @@ public class Ship {
     public Point getCoords() {
         return coords;
     }
-
+    
     /**
      * Sets the top-left location of the ship to the specified coordinate.
      *
@@ -150,26 +154,25 @@ public class Ship {
         this.rect.setLocation(
                 (int) (xPos * GamePanel.scaledTileSize),
                 (int) (yPos * GamePanel.scaledTileSize));
-
+        
         for (ShipSection section : this.shipSections) {
             section.setCoords(xPos, yPos);
-
+            
             switch (this.rotation) {
-                case DOWN, UP -> xPos++; // Horizontal rotation
-                case LEFT, RIGHT -> yPos++; // Vertical rotation
-
+                case LEFT, RIGHT -> xPos++; // horizontal rotation
+                case DOWN, UP -> yPos++; // vertical rotation
             }
         }
     }
-
+    
     public void setCoords(Point point) {
         this.setCoords(point.getX(), point.getY());
     }
-
+    
     public int getShipLength() {
         return this.shipLength;
     }
-
+    
     /**
      * Rotates the coords of the ship sections and rect
      *
@@ -177,39 +180,39 @@ public class Ship {
      */
     public void rotateShip(Rotation rotation) {
         // does not continue if rotation is not changed
-
+        
         Dimension rectDimension = new Dimension();
         this.rotation = rotation;
-
+        
         // rotates rectangle
-        if (this.rotation == Rotation.LEFT || this.rotation == Rotation.RIGHT) {
+        if (this.rotation == Rotation.DOWN || this.rotation == Rotation.UP) {
             rectDimension.setSize(GamePanel.scaledTileSize, this.shipLength * GamePanel.scaledTileSize);
-
+            
         } else {
             rectDimension.setSize(this.shipLength * GamePanel.scaledTileSize, GamePanel.scaledTileSize);
         }
-
+        
         this.rect.setSize(rectDimension);
-
+        
         // rotates ship sprites
         int xPos = this.coords.x;
         int yPos = this.coords.y;
-
+        
         for (ShipSection section : this.shipSections) {
             section.setRotation(this.rotation);
             section.setCoords(xPos, yPos);
-
+            
             switch (this.rotation) {
-                case DOWN, UP -> xPos++; // Horizontal rotation
-                case LEFT, RIGHT -> yPos++; // Vertical rotation
+                case LEFT, RIGHT -> xPos++; // horizontal rotation
+                case DOWN, UP -> yPos++; // vertical rotation
             }
         }
     }
-
+    
     public ShipType getShipType() {
         return this.shipType;
     }
-
+    
     /**
      * Retrieves the ship sections that constitute the ship.
      *
@@ -219,27 +222,35 @@ public class Ship {
     public ArrayList<ShipSection> getShipSections() {
         return this.shipSections;
     }
-
+    
     public Rectangle getRect() {
         return this.rect;
     }
-
+    
     /**
      * Determines whether the rectangle of another ship intersects
-     * 
+     *
      * @param other the other ship to be compared to
      * @return whether this ship intersects with the rect of the other
      */
     public boolean intersect(Ship other) {
         return this.rect.intersects(other.rect);
     }
-
+    
+    public boolean isPlaced() {
+        return this.placed;
+    }
+    
+    public void setPlaced(boolean placed) {
+        this.placed = placed;
+    }
+    
     /**
      * Returns a string representation of the ship.
      *
      * @return A string representation of the ship.
      */
     public String toString() {
-        return this.rotation.toString() + " : " + this.shipSections.toString();
+        return this.rotation.toString() + " | " + this.rect.toString();
     }
 }
