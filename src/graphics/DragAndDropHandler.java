@@ -137,60 +137,69 @@ public class DragAndDropHandler {
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e)) {
-                shipLabel.setCursor(Cursor.getDefaultCursor());
+            // do not continue if left mouse is not pressed
+            if (!SwingUtilities.isLeftMouseButton(e)) {
+                return;
+            }
 
-                Point labelCoords = shipLabel.getLocation();
-                Point mappedCoords = new Point(
-                        (labelCoords.x - gridOriginPoint.x) / GamePanel.scaledTileSize,
-                        (labelCoords.y - gridOriginPoint.y) / GamePanel.scaledTileSize);
+            shipLabel.setCursor(Cursor.getDefaultCursor());
 
-                Point newLabelCoords = new Point(
-                        gridOriginPoint.x + mappedCoords.x * GamePanel.scaledTileSize,
-                        gridOriginPoint.y + mappedCoords.y * GamePanel.scaledTileSize);
+            Point labelCoords = shipLabel.getLocation();
+            Point mappedCoords = new Point(
+                    (labelCoords.x - gridOriginPoint.x) / GamePanel.scaledTileSize,
+                    (labelCoords.y - gridOriginPoint.y) / GamePanel.scaledTileSize);
 
-                // snaps ship to location on board
-                ship.setCoords(mappedCoords);
-                ship.setPlaced(true);
-                shipLabel.setLocation(newLabelCoords);
+            Point newLabelCoords = new Point(
+                    gridOriginPoint.x + mappedCoords.x * GamePanel.scaledTileSize,
+                    gridOriginPoint.y + mappedCoords.y * GamePanel.scaledTileSize);
 
-                // checks if the ship is out of bounds
-                // if so, return it to its starting position
+            // snaps ship to location on board
+            ship.setCoords(mappedCoords);
+            ship.setPlaced(true);
+            shipLabel.setLocation(newLabelCoords);
 
-                if (checkWithinBoard(newLabelCoords, ship.getRect())) {
+            // checks if the ship is out of bounds
+            // if so, return it to its starting position
+            if (checkWithinBoard(newLabelCoords, ship.getRect())) {
+                ship.setPlaced(false);
+                shipLabel.setLocation(initalLabelPoint);
+            }
+
+            // checks if the ship intersects other ship
+            // if so, return it to its starting position
+            for (Ship otherShip : player.getShips()) {
+                if (otherShip != ship
+                        && otherShip.isPlaced()
+                        && ship.intersect(otherShip)) {
                     ship.setPlaced(false);
                     shipLabel.setLocation(initalLabelPoint);
-                }
-
-                // checks if the ship intersects other ship
-                // if so, return it to its starting position
-
-                for (Ship otherShip : player.getShips()) {
-                    if (otherShip != ship
-                            && otherShip.isPlaced()
-                            && ship.intersect(otherShip)) {
-                        shipLabel.setLocation(initalLabelPoint);
-                        break;
-                    }
+                    break;
                 }
             }
+
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (SwingUtilities.isRightMouseButton(e)) {
-                rotationAngle += Math.PI / 2;
-
-                rotateImage(rotationAngle);
-                Rotation rotation = switch ((int) (rotationAngle / (Math.PI / 2) % 4)) {
-                    case 0 -> Ship.Rotation.RIGHT;
-                    case 1 -> Ship.Rotation.UP;
-                    case 2 -> Ship.Rotation.LEFT;
-                    default -> Ship.Rotation.DOWN;
-                };
-
-                ship.rotateShip(rotation);
+            // do not continue if right mouse is not pressed
+            if (!SwingUtilities.isRightMouseButton(e)) {
+                return;
             }
+
+            // rotates image
+            rotationAngle += Math.PI / 2;
+            rotateImage(rotationAngle);
+
+            // rotates ship
+            Rotation rotation = switch ((int) (rotationAngle / (Math.PI / 2) % 4)) {
+                case 0 -> Ship.Rotation.RIGHT;
+                case 1 -> Ship.Rotation.UP;
+                case 2 -> Ship.Rotation.LEFT;
+                default -> Ship.Rotation.DOWN;
+            };
+
+            ship.rotateShip(rotation);
+
         }
 
         // Add this method to rotate the image

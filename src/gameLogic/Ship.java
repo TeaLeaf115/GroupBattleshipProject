@@ -161,7 +161,6 @@ public class Ship {
             switch (this.rotation) {
                 case LEFT, RIGHT -> xPos++; // horizontal rotation
                 case DOWN, UP -> yPos++; // vertical rotation
-
             }
         }
     }
@@ -204,8 +203,8 @@ public class Ship {
             section.setCoords(xPos, yPos);
 
             switch (this.rotation) {
-                case LEFT, RIGHT -> xPos++; // Horizontal rotation
-                case DOWN, UP -> yPos++; // Vertical rotation
+                case LEFT, RIGHT -> xPos++; // horizontal rotation
+                case DOWN, UP -> yPos++; // vertical rotation
             }
         }
     }
