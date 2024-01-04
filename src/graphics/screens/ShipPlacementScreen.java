@@ -2,6 +2,7 @@ package graphics.screens;
 
 import graphics.DragAndDropHandler;
 import graphics.GamePanel;
+import graphicsManager.AnimationHandler;
 
 import javax.swing.*;
 
@@ -17,6 +18,7 @@ import static graphics.GamePanel.getSpriteScaleMultiplier;
 
 public class ShipPlacementScreen extends JPanel {
     // screen
+    private AnimationHandler waterAnimation = new AnimationHandler(GamePanel.sm.getWaterTileset(), 42);
     private final BufferedImage shipPlacementScreen;
     private Dimension screenSize;
     private Point screenLocation, originPoint;
@@ -64,6 +66,7 @@ public class ShipPlacementScreen extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
+        // draw placement screen
         g2.drawImage(
                 this.shipPlacementScreen,
                 this.screenLocation.x,
@@ -72,6 +75,21 @@ public class ShipPlacementScreen extends JPanel {
                 this.screenSize.height,
                 null);
 
+        // draw water
+        BufferedImage waterSprite = this.waterAnimation.getCurrentFrame();
+        for (int x = 0; x < GamePanel.maxBoardCol; x++) {
+            for (int y = 0; y < GamePanel.maxBoardRow; y++) {
+                g2.drawImage(
+                    waterSprite,
+                    originPoint.x + x * GamePanel.scaledTileSize,
+                    originPoint.y + y * GamePanel.scaledTileSize,
+                    (int) (waterSprite.getWidth() * GamePanel.getSpriteScaleMultiplier()),
+                    (int) (waterSprite.getHeight() * GamePanel.getSpriteScaleMultiplier()),
+                    null);
+            }
+        }
+
+        // draw ships
         for (DragAndDropHandler dragComponent : this.dragComponents) {
             BufferedImage shipImage = dragComponent.getImg();
             Point labelCoords = dragComponent.getShipLabel().getLocation();
@@ -88,10 +106,6 @@ public class ShipPlacementScreen extends JPanel {
     }
 
     public void update() {
-        // this.screenLocation.setLocation(
-        // this.getWidth() / 2 - this.screenSize.width / 2,
-        // this.getHeight() / 2 - this.screenSize.height / 2);
-
-        // Add update logic if needed
+        this.waterAnimation.update();
     }
 }
