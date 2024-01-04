@@ -53,8 +53,7 @@ public class Board extends JPanel {
 	}
 	
 	public class Cell extends JPanel {
-		Point coord;
-    public boolean clicked = false; 
+		Point coord; 
     
 		public Cell(Point coord) {
 			this.coord = coord;
@@ -69,33 +68,17 @@ public class Board extends JPanel {
 					setBackground(Color.CYAN);
 				}
 
-        public boolean wasClicked(){
-          return clicked; 
-        }
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// Makes sure the user is clicking with a left click.
-					if (e.getButton() == MouseEvent.BUTTON1 && !shipsVisible) {
+					if (e.getButton() == MouseEvent.BUTTON1 && !shipsVisible && gameLogic.GamePlayLogic.turnOrder%2 == 0) {
 						GameplayScreen.gl.bot.shootLocation(coord);
-            GamePlayLogic.turnOrder++; 
+            gameLogic.GamePlayLogic.turnOrder++; 
             clicked = true; 
-            // Increment turnorder by 1
 					}
 				}
-      }
-			
+      });
 		}
-
-    public Point getClickedCellCoord() {
-        // Iterate through cells and return the first one with clicked == true
-        for (Cell cell : board.values()) {
-            if (cell.wasClicked()) {
-                return cell.getCoord();
-            }
-        }
-        // If no cell was clicked, handle it appropriately (e.g., throw exception or return null)
-        throw new IllegalStateException("No cell has been clicked yet");
-    }
 
 		
 		// Paints the graphical stuff to the cell.
