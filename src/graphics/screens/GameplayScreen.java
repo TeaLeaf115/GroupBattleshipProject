@@ -54,15 +54,13 @@ public class GameplayScreen extends JPanel {
 class PlayerBoard extends JPanel {
 	public Board board;
 	BufferedImage computerBoardOverlay = GamePanel.sm.getGuessingOverlay();
+	BufferedImage titleHalf = TitleScreen.logo;
 	int scaledComputerBoardOverlayWidth = (int)Math.ceil(computerBoardOverlay.getWidth() * getSpriteScaleMultiplier());
 	int scaledComputerBoardOverlayHeight = (int)Math.ceil(computerBoardOverlay.getHeight() * getSpriteScaleMultiplier());
 	
 	public PlayerBoard() {
 		setLayout(null); // Set layout to null for absolute positioning
-//		setBounds(position.x, position.y, GamePanel.boardWidth, GamePanel.boardHeight);
-//		setBorder(BorderFactory.createTitledBorder("Player"));
 		setBackground(new Color(0x848482));
-		// Create the board panel for the player
 		board = new Board(GameplayScreen.gl.bot.shipLocations);
 		board.shipsVisible(true);
 		board.setBounds((int)Math.ceil(6.5*GamePanel.scaledTileSize)-1,
@@ -75,28 +73,30 @@ class PlayerBoard extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-//		System.out.println(getWidth());
-		// Code for drawing goes here
 		g2.drawImage(computerBoardOverlay,
 				16,
 				(getHeight()/2) - (scaledComputerBoardOverlayHeight /2),
 				scaledComputerBoardOverlayWidth,
 				scaledComputerBoardOverlayHeight,
 				null);
-//		g2.drawLine(0, getHeight()/2, getWidth(), getHeight()/2);
+		g2.drawImage(titleHalf,
+				(getWidth() - (titleHalf.getWidth() * 2) /2),
+				(int) GamePanel.windowSize.getHeight() / 32,
+				titleHalf.getWidth() * 2,
+				titleHalf.getHeight() * 2,
+				null);
 	}
 }
 
 class ComputerBoard extends JPanel {
 	public Board compBoard;
+	BufferedImage titleHalf = TitleScreen.logo;
 	BufferedImage playerBoardOverlay = GamePanel.sm.getPlacementOverlay();
 	int scaledPlayerBoardOverlayWidth = (int)Math.ceil(playerBoardOverlay.getWidth() * getSpriteScaleMultiplier());
 	int scaledPlayerBoardOverlayHeight = (int)Math.ceil(playerBoardOverlay.getHeight() * getSpriteScaleMultiplier());
 	
 	public ComputerBoard() {
-		setLayout(null); // Set layout to null for absolute positioning
-//		setBounds(position.x, position.y, GamePanel.boardWidth, GamePanel.boardHeight);
-//		setBorder(BorderFactory.createTitledBorder("Computer"));
+		setLayout(null);
 		setBackground(new Color(0x848482));
 		
 		// Create the board panel for the computer
@@ -106,14 +106,12 @@ class ComputerBoard extends JPanel {
 				((int) GamePanel.getScreenSize().getHeight()/2 + 7*GamePanel.scaledTileSize) +12,
 				GamePanel.boardWidth,
 				GamePanel.boardHeight);
-		
 		add(compBoard);
 	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-//		System.out.println(getWidth());
 		// Code for drawing goes here
 		g2.drawImage(playerBoardOverlay,
 				8,
@@ -121,6 +119,11 @@ class ComputerBoard extends JPanel {
 				scaledPlayerBoardOverlayWidth,
 				scaledPlayerBoardOverlayHeight,
 				null);
-//		g2.drawLine(0, getHeight()/2, getWidth(), getHeight()/2);
+		g2.drawImage(titleHalf,
+				(-((titleHalf.getWidth() * 2)) / 2),
+				(int) GamePanel.windowSize.getHeight() / 32,
+				titleHalf.getWidth() * 2,
+				titleHalf.getHeight() * 2,
+				null);
 	}
 }

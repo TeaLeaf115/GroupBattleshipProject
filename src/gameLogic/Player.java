@@ -44,11 +44,11 @@ public class Player {
 	 */
 	public boolean isShipsPlaced() {
 		for (Ship ship : this.ships) {
+			System.out.println("Here");
 			if (!ship.isPlaced()) {
 				return false;
 			}
 		}
-		
 		return true;
 	}
 }
