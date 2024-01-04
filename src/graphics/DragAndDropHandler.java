@@ -263,6 +263,13 @@ public class DragAndDropHandler {
             Point labelCoords = shipLabel.getLocation();
             shipLabel.setBounds(labelCoords.x, labelCoords.y, ship.getRect().width, ship.getRect().height);
 
+            // checks if the ship is out of bounds
+            // if so, return it to its starting position
+            if (checkWithinBoard(labelCoords, ship.getRect())) {
+                ship.setPlaced(false);
+                shipLabel.setLocation(initialLabelPoint);
+            }
+
             // checks if the ship intersects other ship
             // if so, return it to its starting position
             if (checkShipCollision(ship)) {

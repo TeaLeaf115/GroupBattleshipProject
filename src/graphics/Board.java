@@ -34,7 +34,7 @@ public class Board extends JPanel {
 				gbc.gridx = col;
 				gbc.gridy = row;
 				
-				Cell cellPane = new Cell(new Point(row, col));
+				Cell cellPane = new Cell(new Point(col, row));
 				cellPane.setBackground(Color.CYAN);
 				// Adds the cell to a HashMap of every board position.
 //				board.put(, cellPane);
@@ -95,6 +95,7 @@ public class Board extends JPanel {
 						ShipSection section = sl.getUnguessedSections().get(coord);
 						g2.drawImage(rotate(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()), section.getRotation()), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
 					}
+
 					if (sl.getHitSections().containsKey(coord)) {
 						ShipSection section = sl.getHitSections().get(coord);
 						g2.drawImage(rotate(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()), section.getRotation()), 0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
