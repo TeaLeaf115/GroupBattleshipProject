@@ -69,6 +69,7 @@ public class SpriteManager {
 	private BufferedImage titleScreen;
 	
 	public BufferedImage windowIcon;
+	private BufferedImage loadingTitle;
 	
 	
 	/**
@@ -100,6 +101,8 @@ public class SpriteManager {
 			placementOverlay = ImageIO.read(new File("res/images/PlacementOverlay.png"));
 			logo = ImageIO.read(new File("res/images/Battleship_Logo.png"));
 			titleScreen = ImageIO.read(new File("res/images/TitleScreen.png"));
+			
+			loadingTitle = ImageIO.read(new File("res/images/LoadingTitle.png"));
 			
 			java.util.Random rand = new Random();
 			windowIcon = ImageIO.read(new File("res/images/WindowIcon_" + (rand.nextInt(9) > 1 ? "1" : "2") + ".png"));
@@ -355,6 +358,10 @@ public class SpriteManager {
 	
 	public BufferedImage[] getHardButtonSpritesHighlighted() {
 		return hardButtonSpritesHighlighted;
+	}
+	
+	public BufferedImage getLoadingTitle() {
+		return loadingTitle;
 	}
 	
 	public BufferedImage[] getImpossibleButtonSpritesHighlighted() {

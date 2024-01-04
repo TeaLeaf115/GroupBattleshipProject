@@ -3,6 +3,8 @@ package graphics.screens;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 import gameLogic.Bots;
@@ -13,8 +15,9 @@ import graphicsManager.AnimationHandler;
 import javax.swing.*;
 
 public class TitleScreen extends JPanel {
-    private final BufferedImage titleScreenImage;
+    private static final BufferedImage titleScreenImage = GamePanel.sm.getTitleScreen();
     public static BufferedImage logo;
+    Font pixelFont;
     private final AnimationHandler[] buttonAnimations;
     private final AnimationHandler[] highlightedButtonAnimations;
     private final JButton[] buttons;
@@ -30,7 +33,15 @@ public class TitleScreen extends JPanel {
     
     public TitleScreen() {
         setBounds(0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height);
-        titleScreenImage = GamePanel.sm.getTitleScreen();
+        try {
+            pixelFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/5x4-ish Pixel Font.ttf")).deriveFont(24f);
+        } catch (FontFormatException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        JLabel credits = new JLabel("BY: KEVIN, OWEN & ANSH");
+        JLabel license = new JLabel("GPL-3.0 LICENSE");
+        credits.setFont(pixelFont);
+        license.setFont(pixelFont);
         logo = GamePanel.sm.getLogo();
         setBackground(Color.red);
         
@@ -91,6 +102,8 @@ public class TitleScreen extends JPanel {
             add(Box.createRigidArea(new Dimension(0, i == 0 ? 30 : 5)));
         }
         add(Box.createRigidArea(new Dimension(0, 20)));
+//        add(credits);
+//        add(license);
         
         // Initialize animation flags
         enterAnimations = new boolean[buttons.length];
@@ -102,7 +115,7 @@ public class TitleScreen extends JPanel {
         System.out.println("BUTTON CLICKED!!!!");
         
         if (buttonIndex == 0) {
-            GamePanel.gameState = GameStates.GAMEPLAY;
+            GamePanel.gameState = GameStates.SHIP_PLACEMENT;
             GamePanel.screenChange = true;
             removeAll();
         } else {
@@ -122,7 +135,7 @@ public class TitleScreen extends JPanel {
         buttonStates[buttonIndex] = false;
     }
     
-    private void setUpButton(JButton button) {
+    public static void setUpButton(JButton button) {
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
@@ -140,13 +153,35 @@ public class TitleScreen extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        
+        // Draw title screen background
         g2.drawImage(titleScreenImage, 0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height, null);
+        
+        // Draw logo
         g2.drawImage(logo,
                 ((int) GamePanel.windowSize.getWidth() / 2) - (int) (logo.getWidth() * 3.5 / 2),
                 (int) GamePanel.windowSize.getHeight() / 16,
                 (int) (logo.getWidth() * 3.5),
                 (int) (logo.getHeight() * 3.5),
                 null);
+        
+        g2.setFont(pixelFont);
+        // Set font for license and credits
+        g2.setFont(pixelFont);
+    
+        // Draw text with black background
+        drawTextWithBackground(g2, "GPL-3.0 LICENSE", 10, getHeight() - 10);
+        drawTextWithBackground(g2, "BY: KEVIN, OWEN & ANSH", getWidth() - g2.getFontMetrics().stringWidth("BY: KEVIN, OWEN & ANSH") - 10, getHeight() - 10);
+    }
+    
+    private void drawTextWithBackground(Graphics2D g2, String text, int x, int y) {
+        // Draw black background
+        g2.setColor(new Color(0x59717D));
+        g2.fillRect(x-5, y - pixelFont.getSize()+2, g2.getFontMetrics().stringWidth(text) + 5, pixelFont.getSize() + 6);
+        
+        // Draw white text
+        g2.setColor(Color.BLACK);
+        g2.drawString(text, x, y);
     }
     
     public void update() {

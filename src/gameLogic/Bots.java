@@ -50,7 +50,7 @@ public class Bots {
 			int maxX = GamePanel.maxBoardCol;
 			int maxY = GamePanel.maxBoardRow;
 
-			if (rotation == Rotation.DOWN || rotation == Rotation.UP) {
+			if (rotation == Rotation.LEFT || rotation == Rotation.RIGHT) {
 				maxX -= ship.getShipLength();
 
 			} else {

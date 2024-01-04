@@ -206,6 +206,17 @@ public class Ship {
         }
     }
 
+    public void rotateShip(double rotationAngle) {
+        Rotation rotation = switch ((int) (rotationAngle / (Math.PI / 2) % 4)) {
+            case 0 -> Ship.Rotation.RIGHT;
+            case 1 -> Ship.Rotation.UP;
+            case 2 -> Ship.Rotation.LEFT;
+            default -> Ship.Rotation.DOWN;
+        };
+
+        this.rotateShip(rotation);
+    }
+
     public ShipType getShipType() {
         return this.shipType;
     }
@@ -248,6 +259,6 @@ public class Ship {
      * @return A string representation of the ship.
      */
     public String toString() {
-        return this.rotation.toString() + " | " + this.rect.toString();
+        return this.coords.toString();//this.rotation.toString() + " | " + this.rect.toString();
     }
 }
