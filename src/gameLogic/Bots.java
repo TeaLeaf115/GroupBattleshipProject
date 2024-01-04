@@ -109,7 +109,7 @@ public class Bots {
 		return shipSections;
 	}
 
-	public ShotStatus easyBot(ShipLocations opponentLocations) {
+	public ShipLocations.ShotStatus easyBot(ShipLocations opponentLocations) {
 		// picks a random unguessed location
 		Point guessLocation = this.possibleGuesses.remove(
 				this.random.nextInt(this.possibleGuesses.size()));
@@ -117,7 +117,7 @@ public class Bots {
 		return opponentLocations.shootLocation(guessLocation);
 	}
 
-	public ShotStatus normalBot(ShipLocations opponentLocations) {
+	public ShipLocations.ShotStatus normalBot(ShipLocations opponentLocations) {
 		Integer[][] heatMap = new Integer[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
 
 		// sets each missed location to lowest priority
@@ -152,7 +152,7 @@ public class Bots {
 		return opponentLocations.shootLocation(guessLocation);
 	}
 	
-	public ShotStatus hardBot(ShipLocations opponentLocations) {
+	public ShipLocations.ShotStatus hardBot(ShipLocations opponentLocations) {
 		Integer[][] heatMap = new Integer[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
 		
 		// Set each missed location to lowest priority

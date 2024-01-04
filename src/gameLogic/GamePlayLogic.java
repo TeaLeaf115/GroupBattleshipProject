@@ -7,48 +7,50 @@ import java.awt.*;
 import gameLogic.ShipLocations.ShotStatus;
 
 public class GamePlayLogic {
-	
+
 	public Player player;
 	public Bots bot;
 	public static int turnOrder;
-	public static boolean compWon = false; 
-	public static boolean playerWon = false;  
-  
+	public static boolean compWon = false;
+	public static boolean playerWon = false;
+
 	public GamePlayLogic() {
 		player = new Player();
 		bot = new Bots(GamePanel.computerDifficulty);
-    state = GameState.GAMEPLAY; 
+		GamePanel.gameState = GameStates.GAMEPLAY;
 	}
 
+	public void gameLoop() {
+		ShipLocations playerShipLocations = player.getShipLocations();
+		while (GamePanel.gameState == GameStates.GAMEPLAY) {
+			if (GamePlayLogic.turnOrder % 2 == 1) {
+				switch (this.bot.getLevel()) {
+					case EASY -> this.bot.easyBot(playerShipLocations);
 
-  public void gameLoop(){
-    while(state == GameState.GAMEPLAY){ 
-      if(turnOrder % 2 == 1)  {
-      	switch (bot.botLevel) {
-						case EASY ->  status = easyBot(opponentLocations);
+					case NORMAL -> this.bot.normalBot(playerShipLocations);
 
-						case NORMAL ->  status = normalBot(opponentLocations);
+					case HARD -> this.bot.hardBot(playerShipLocations);
 
-						case HARD ->  status = hardBot(opponentLocations);
+					default -> this.bot.impossibleBot(playerShipLocations);
+				}
 
-						default ->  status = impossibleBot(opponentLocations);
-					}
-      turnOrder++;
-    }
-			if(gameOver()){
-				state = GameStates.GAMEOVER; 
+				turnOrder++;
 			}
-  }
-}
 
-  public boolean gameOver(){ 
-    if (player.getUnguessedSections().size() == 0) {
+			if (this.gameOver()) {
+				GamePanel.gameState = GameStates.GAMEOVER;
+			}
+		}
+	}
+
+	public boolean gameOver() {
+		if (player.shipLocations.getUnguessedSections().size() == 0) {
 			compWon = true;
 		}
-		if (computer.getUnguessedSections().size() == 0) {
+		if (bot.shipLocations.getUnguessedSections().size() == 0) {
 			playerWon = true;
 		}
-    
-    return compWon || playerWon; 
-  }
+
+		return compWon || playerWon;
+	}
 }
