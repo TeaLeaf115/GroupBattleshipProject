@@ -54,6 +54,8 @@ public class Board extends JPanel {
 	
 	public class Cell extends JPanel {
 		Point coord;
+    public boolean clicked = false; 
+    
 		public Cell(Point coord) {
 			this.coord = coord;
 			// Mouse functionality per cell.
@@ -66,16 +68,35 @@ public class Board extends JPanel {
 				public void mouseExited(MouseEvent e) {
 					setBackground(Color.CYAN);
 				}
-				
+
+        public boolean wasClicked(){
+          return clicked; 
+        }
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// Makes sure the user is clicking with a left click.
 					if (e.getButton() == MouseEvent.BUTTON1 && !shipsVisible) {
-						GameplayScreen.gl.bot.shipLocations.shootLocation(coord);
+						GameplayScreen.gl.bot.shootLocation(coord);
+            GamePlayLogic.turnOrder++; 
+            clicked = true; 
+            // Increment turnorder by 1
 					}
 				}
-			});
+      }
+			
 		}
+
+    public Point getClickedCellCoord() {
+        // Iterate through cells and return the first one with clicked == true
+        for (Cell cell : board.values()) {
+            if (cell.wasClicked()) {
+                return cell.getCoord();
+            }
+        }
+        // If no cell was clicked, handle it appropriately (e.g., throw exception or return null)
+        throw new IllegalStateException("No cell has been clicked yet");
+    }
+
 		
 		// Paints the graphical stuff to the cell.
 		@Override
