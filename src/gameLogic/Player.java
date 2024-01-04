@@ -32,4 +32,5 @@ public class Player {
 	public ShipLocations getShipLocations() {
 		return shipLocations;
 	}
+  
 }
