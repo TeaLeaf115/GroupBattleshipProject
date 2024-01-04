@@ -242,7 +242,6 @@ public class DragAndDropHandler {
                 ship.setPlaced(false);
                 shipLabel.setLocation(initialLabelPoint);
             }
-
         }
 
         @Override

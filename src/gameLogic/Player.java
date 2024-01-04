@@ -20,6 +20,10 @@ public class Player {
 		return this.shipLocations;
 	}
 
+	public void setShipLocations() {
+		this.shipLocations.addUnguessedShips(this.ships);
+	}
+
 	public ArrayList<Ship> getShips() {
 		return this.ships;
 	}
@@ -44,7 +48,6 @@ public class Player {
 	 */
 	public boolean isShipsPlaced() {
 		for (Ship ship : this.ships) {
-			System.out.println("Here");
 			if (!ship.isPlaced()) {
 				return false;
 			}

@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import gameLogic.Bots;
+import gameLogic.GamePlayLogic;
 import graphicsManager.SpriteManager;
 import graphics.screens.*;
 
@@ -41,7 +42,7 @@ public class GamePanel extends JFrame implements Runnable {
 
     // The different game states for the game.
     public static GameStates gameState;
-    
+
     public static Bots.BotLevel computerDifficulty;
 
     // Screen Initialises
@@ -75,11 +76,11 @@ public class GamePanel extends JFrame implements Runnable {
         this.startGameThread();
         instance = this;
     }
-    
+
     public static GamePanel getInstance() {
         return instance;
     }
-    
+
     public void setupGame() {
         gameState = GameStates.TITLE;
         computerDifficulty = Bots.BotLevel.NORMAL;
@@ -120,7 +121,7 @@ public class GamePanel extends JFrame implements Runnable {
             if (delta >= 1) {
                 update();
                 paint();
-//                System.out.println(gameState);
+                // System.out.println(gameState);
                 // System.out.println(delta);
                 delta--;
             }
@@ -141,13 +142,17 @@ public class GamePanel extends JFrame implements Runnable {
                 switch (gameState) {
                     case TITLE -> add(titleScreen);
                     case SHIP_PLACEMENT -> add(shipPlacementScreen);
-                    case GAMEPLAY -> add(gameplayScreen);
+                    case GAMEPLAY -> {
+                        add(gameplayScreen);
+                        GameplayScreen.gl.player.setShipLocations();
+                    }
+                    
                     case GAMEOVER -> System.out.println("Game-over Screen");
                     case PAUSED -> System.out.println("Pause Screen");
                     case SETTINGS -> System.out.println("Settings Screen");
                 }
                 screenChange = false;
-    
+
                 revalidate(); // Add this line to update the UI hierarchy
                 paint();
             }
@@ -160,11 +165,11 @@ public class GamePanel extends JFrame implements Runnable {
                     titleScreen.update();
                 }
                 case SHIP_PLACEMENT -> {
-//                    System.out.println("Ship Placement Screen");
+                    // System.out.println("Ship Placement Screen");
                     this.shipPlacementScreen.update();
                 }
                 case GAMEPLAY -> {
-//                System.out.println("Gameplay Screen");
+                    // System.out.println("Gameplay Screen");
                     gameplayScreen.update();
 
                 }
@@ -190,12 +195,12 @@ public class GamePanel extends JFrame implements Runnable {
                 }
                 case SHIP_PLACEMENT -> {
                     shipPlacementScreen.draw();
-//                    System.out.println("Ship Placement Screen");
+                    // System.out.println("Ship Placement Screen");
                 }
                 case GAMEPLAY -> {
-//                System.out.println("Gameplay Screen");
+                    // System.out.println("Gameplay Screen");
                     gameplayScreen.draw();
-//                    System.out.println("here Now");
+                    // System.out.println("here Now");
                 }
                 case GAMEOVER -> {
                     System.out.println("Game-over Screen");
