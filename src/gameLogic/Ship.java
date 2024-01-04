@@ -259,6 +259,6 @@ public class Ship {
      * @return A string representation of the ship.
      */
     public String toString() {
-        return this.rotation.toString() + " | " + this.rect.toString();
+        return this.coords.toString();//this.rotation.toString() + " | " + this.rect.toString();
     }
 }

@@ -67,6 +67,7 @@ class PlayerBoard extends JPanel {
 				((int) GamePanel.getScreenSize().getHeight()/2 + 7*GamePanel.scaledTileSize)+4,
 				GamePanel.boardWidth,
 				GamePanel.boardHeight);
+
 		add(board);
 	}
 	
