@@ -55,10 +55,11 @@ public class DragAndDropHandler {
         // create ship label
         this.shipLabel = new JLabel(new ImageIcon(new BufferedImage(
                 GamePanel.scaledTileSize * ship.getShipLength(),
-                GamePanel.scaledTileSize * ship.getShipLength(),
+                GamePanel.scaledTileSize,
                 BufferedImage.TYPE_INT_ARGB)));
 
         this.shipLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        this.shipLabel.setBounds(ship.getRect());
         this.shipLabel.addMouseListener(new Click());
         this.shipLabel.addMouseMotionListener(new Drag());
         this.rotateShipImage(this.rotationAngle);
@@ -137,8 +138,8 @@ public class DragAndDropHandler {
         int halfPiCoefficient = (int) (rotationAngle / (Math.PI / 2) % 4);
 
         this.img = this.rotatedImages[halfPiCoefficient];
-        //this.shipLabel.setIcon(new ImageIcon(this.img));
-        //shipLabel.setLocation(initialLabelPoint);
+        // this.shipLabel.setIcon(new ImageIcon(this.img));
+        // shipLabel.setLocation(initialLabelPoint);
     }
 
     /**
@@ -159,7 +160,7 @@ public class DragAndDropHandler {
     /**
      * Check if the point is within the ship rect
      * 
-     * @param point the point to be checked
+     * @param point    the point to be checked
      * @param shipRect the shipRect which is used to determine collision
      * @return whether the point is within the ship rect
      */
@@ -251,16 +252,6 @@ public class DragAndDropHandler {
                 return;
             }
             
-            Point labelCoords = shipLabel.getLocation();
-            Point mouseCoords = new Point(
-                labelCoords.x + e.getX(),
-                labelCoords.y + e.getY());
-
-            // do not continue if the right mouse is not pressed over the ship image
-            if (!checkWithinShipRect(mouseCoords, ship.getRect())) {
-                return;
-            }
-
             // rotates image
             rotationAngle += Math.PI / 2;
             if (rotationAngle == 2 * Math.PI)
@@ -277,6 +268,10 @@ public class DragAndDropHandler {
             };
 
             ship.rotateShip(rotation);
+
+            // rotates ship label bounds
+            Point labelCoords = shipLabel.getLocation();
+            shipLabel.setBounds(labelCoords.x, labelCoords.y, ship.getRect().width, ship.getRect().height);
 
             // checks if the ship intersects other ship
             // if so, return it to its starting position
