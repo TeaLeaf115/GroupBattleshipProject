@@ -1,5 +1,6 @@
 package graphics;
 
+import gameLogic.GamePlayLogic;
 import gameLogic.Ship;
 import gameLogic.ShipLocations;
 import gameLogic.ShipSection;
@@ -75,7 +76,8 @@ public class Board extends JPanel {
 					if (e.getButton() == MouseEvent.BUTTON1 && !shipsVisible
 							&& gameLogic.GamePlayLogic.turnOrder % 2 == 0) {
 						GameplayScreen.gl.bot.getShipLocations().shootLocation(coord);
-						gameLogic.GamePlayLogic.turnOrder++;
+						GamePlayLogic.turnOrder++;
+						GameplayScreen.gl.ComputerTurn();
 					}
 				}
 			});

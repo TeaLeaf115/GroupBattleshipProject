@@ -1,12 +1,15 @@
 package gameLogic;
 
 import graphics.*;
+import graphics.screens.GameOverScreen;
+
+import java.awt.*;
 
 public class GamePlayLogic {
 
 	public Player player;
 	public Bots bot;
-	public static int turnOrder;
+	public static int turnOrder = 0;
 	public static boolean compWon = false;
 	public static boolean playerWon = false;
 
@@ -16,15 +19,23 @@ public class GamePlayLogic {
 		GamePanel.gameState = GameStates.GAMEPLAY;
 	}
 
-	public void gameLoop() {
+	public void ComputerTurn() {
 		ShipLocations playerShipLocations = this.player.getShipLocations();
-		while (GamePanel.gameState == GameStates.GAMEPLAY) {
-			if (GamePlayLogic.turnOrder % 2 == 1) {
-				this.bot.shootOpponent(playerShipLocations);
-				turnOrder++;
-			}
-
+		if (GamePanel.gameState == GameStates.GAMEPLAY) {
+			
+			this.bot.shootOpponent(playerShipLocations);
+			turnOrder++;
 			if (this.gameOver()) {
+				try {
+					Robot rob = new Robot();
+					GamePanel gp = GamePanel.getInstance();
+					GameOverScreen.boardSS = rob.createScreenCapture(new Rectangle(gp.getX(), gp.getY()+30, gp.getWidth(), gp.getHeight()));
+				}
+				catch (AWTException e) {
+					e.printStackTrace();
+				}
+				
+				
 				GamePanel.gameState = GameStates.GAMEOVER;
 			}
 		}
