@@ -54,7 +54,6 @@ public class ShipPlacementScreen extends JPanel {
             this.dragComponents.add(dragComponent);
             this.add(dragComponent.getShipLabel()); // add the ship JLabel directly
         }
-
     }
 
     public void draw() {
@@ -84,13 +83,6 @@ public class ShipPlacementScreen extends JPanel {
                     shipImage.getWidth(),
                     shipImage.getHeight(),
                     null);
-
-            g2.setColor(Color.RED);
-            g2.drawRect(
-                labelCoords.x, 
-                labelCoords.y, 
-                shipImage.getWidth(), 
-                shipImage.getHeight());
         }
 
     }
