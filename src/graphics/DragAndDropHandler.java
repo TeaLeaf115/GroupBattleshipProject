@@ -258,16 +258,7 @@ public class DragAndDropHandler {
                 rotationAngle = 0;
 
             rotateShipImage(rotationAngle);
-
-            // rotates ship
-            Rotation rotation = switch ((int) (rotationAngle / (Math.PI / 2) % 4)) {
-                case 0 -> Ship.Rotation.RIGHT;
-                case 1 -> Ship.Rotation.UP;
-                case 2 -> Ship.Rotation.LEFT;
-                default -> Ship.Rotation.DOWN;
-            };
-
-            ship.rotateShip(rotation);
+            ship.rotateShip(rotationAngle);
 
             // rotates ship label bounds
             Point labelCoords = shipLabel.getLocation();

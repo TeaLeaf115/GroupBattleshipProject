@@ -27,10 +27,11 @@ public class ShipPlacementScreen extends JPanel {
     private AnimationHandler continueButtonAnimation;
     private ImageIcon continueButtonIcon;
     private JButton continueButton;
-    private final int continueWidth = (int)Math.ceil(48*4);
-    private final int continueHeight = (int)Math.ceil(16*4);
-    private boolean continueEnterAnimation, continueExitAnimation, mouseIn= false;
-//    private
+    private final int continueWidth = (int) Math.ceil(48 * 4);
+    private final int continueHeight = (int) Math.ceil(16 * 4);
+    private boolean continueEnterAnimation, continueExitAnimation, mouseIn = false;
+
+    // private
     private Dimension screenSize;
     private Point screenLocation, originPoint;
 
@@ -42,13 +43,15 @@ public class ShipPlacementScreen extends JPanel {
         this.setBackground(new Color(0x848482));
         this.setSize(new Dimension(1274, 699));
         setLayout(null);
-    
+
         Player player = ShipPlacementScreen.gameLogic.player;
+
         // screen
         this.shipPlacementScreen = GamePanel.sm.getPlacementOverlay();
-        
+
         continueButtonAnimation = new AnimationHandler(GamePanel.sm.getContinueButtonSprites(), 1);
-        continueButtonIcon = new ImageIcon(continueButtonAnimation.getFrame(0).getScaledInstance(continueWidth, continueHeight, Image.SCALE_SMOOTH));
+        continueButtonIcon = new ImageIcon(continueButtonAnimation.getFrame(0).getScaledInstance(continueWidth,
+                continueHeight, Image.SCALE_SMOOTH));
         continueButton = new JButton(continueButtonIcon);
         continueButton.setSize(continueButtonIcon.getIconWidth(), continueButtonIcon.getIconHeight());
         TitleScreen.setUpButton(continueButton);
@@ -59,20 +62,21 @@ public class ShipPlacementScreen extends JPanel {
                 removeAll();
             }
         });
+
         continueButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 continueEnterAnimation = true;
                 mouseIn = true;
             }
-        
+
             @Override
             public void mouseExited(MouseEvent e) {
                 continueExitAnimation = true;
                 mouseIn = false;
             }
         });
-        
+
         this.screenSize = new Dimension(
                 (int) Math.floor(shipPlacementScreen.getWidth() * getSpriteScaleMultiplier()),
                 (int) Math.floor(shipPlacementScreen.getHeight() * getSpriteScaleMultiplier()));
@@ -89,17 +93,16 @@ public class ShipPlacementScreen extends JPanel {
 
         // drag components
         this.dragComponents = new ArrayList<>();
-        
 
         for (Ship ship : player.getShips()) {
             DragAndDropHandler dragComponent = new DragAndDropHandler(ship, player, this.originPoint);
             this.dragComponents.add(dragComponent);
             this.add(dragComponent.getShipLabel()); // add the ship JLabel directly
         }
-    
+
         this.add(continueButton);
-        int continueButtonX = getWidth() - continueButton.getWidth()-50; // Adjust the margin as needed
-        int continueButtonY = getHeight() - continueButton.getHeight()*2; // Adjust the margin as needed
+        int continueButtonX = getWidth() - continueButton.getWidth() - 50; // Adjust the margin as needed
+        int continueButtonY = getHeight() - continueButton.getHeight() * 2; // Adjust the margin as needed
         continueButton.setLocation(continueButtonX, continueButtonY);
     }
 
@@ -119,8 +122,9 @@ public class ShipPlacementScreen extends JPanel {
                 this.screenSize.width,
                 this.screenSize.height,
                 null);
+
         g2.drawImage(title,
-                getWidth()/2- title.getWidth(),
+                getWidth() / 2 - title.getWidth(),
                 (int) GamePanel.windowSize.getHeight() / 32,
                 title.getWidth() * 2,
                 title.getHeight() * 2,
@@ -131,12 +135,12 @@ public class ShipPlacementScreen extends JPanel {
         for (int x = 0; x < GamePanel.maxBoardCol; x++) {
             for (int y = 0; y < GamePanel.maxBoardRow; y++) {
                 g2.drawImage(
-                    waterSprite,
-                    originPoint.x + x * GamePanel.scaledTileSize,
-                    originPoint.y + y * GamePanel.scaledTileSize,
-                    (int) (waterSprite.getWidth() * GamePanel.getSpriteScaleMultiplier()),
-                    (int) (waterSprite.getHeight() * GamePanel.getSpriteScaleMultiplier()),
-                    null);
+                        waterSprite,
+                        originPoint.x + x * GamePanel.scaledTileSize,
+                        originPoint.y + y * GamePanel.scaledTileSize,
+                        (int) (waterSprite.getWidth() * GamePanel.getSpriteScaleMultiplier()),
+                        (int) (waterSprite.getHeight() * GamePanel.getSpriteScaleMultiplier()),
+                        null);
             }
         }
 
@@ -158,7 +162,7 @@ public class ShipPlacementScreen extends JPanel {
 
     public void update() {
         this.waterAnimation.update();
-    
+
         if (mouseIn && continueEnterAnimation) {
             continueButtonAnimation.update();
             continueButtonIcon.setImage(
@@ -166,11 +170,13 @@ public class ShipPlacementScreen extends JPanel {
                             continueButton.getWidth(),
                             continueButton.getHeight(),
                             Image.SCALE_SMOOTH));
+
             continueButton.setIcon(continueButtonIcon);
             if (continueButtonAnimation.getCurrentFrame(0) == continueButtonAnimation.getMaxFrames() - 1) {
                 continueEnterAnimation = false;
             }
         }
+
         if (!mouseIn && (continueExitAnimation || continueButtonAnimation.getCurrentFrame(1) != 0)) {
             continueButtonAnimation.updateReverse();
             continueButtonIcon.setImage(
@@ -178,6 +184,7 @@ public class ShipPlacementScreen extends JPanel {
                             continueWidth,
                             continueHeight,
                             Image.SCALE_SMOOTH));
+                            
             continueButton.setIcon(continueButtonIcon);
             if (continueButtonAnimation.getCurrentFrame(0) == 0) {
                 continueExitAnimation = false;
