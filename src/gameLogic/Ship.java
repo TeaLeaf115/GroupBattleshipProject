@@ -56,10 +56,10 @@ public class Ship {
      * Enumeration representing the possible rotations of a ship.
      */
     public enum Rotation {
-        UP(0),
-        DOWN(0),
-        LEFT(Math.PI / 2),
-        RIGHT(Math.PI / 2);
+        UP(Math.PI / 2),
+        DOWN(Math.PI / 2),
+        LEFT(0),
+        RIGHT(0);
         
         public final double rad;
         
@@ -259,6 +259,6 @@ public class Ship {
      * @return A string representation of the ship.
      */
     public String toString() {
-        return this.coords.toString();//this.rotation.toString() + " | " + this.rect.toString();
+        return this.rotation.toString() + " | " + this.rect.toString();
     }
 }
