@@ -74,7 +74,7 @@ public class Board extends JPanel {
 					// Makes sure the user is clicking with a left click.
 					if (e.getButton() == MouseEvent.BUTTON1 && !shipsVisible
 							&& gameLogic.GamePlayLogic.turnOrder % 2 == 0) {
-						GameplayScreen.gl.bot.shipLocations.shootLocation(coord);
+						GameplayScreen.gl.bot.getShipLocations().shootLocation(coord);
 						gameLogic.GamePlayLogic.turnOrder++;
 					}
 				}
@@ -90,8 +90,14 @@ public class Board extends JPanel {
 			waterAnimation.draw(g2, new Point(0, 0));
 			try {
 				if (sl.getMisses().contains(coord)) {
-					g2.drawImage(GamePanel.sm.getIndicator(SpriteManager.Indicator.MISS), 0, 0,
-							GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+					g2.drawImage(
+							GamePanel.sm.getIndicator(SpriteManager.Indicator.MISS),
+							0,
+							0,
+							GamePanel.scaledTileSize,
+							GamePanel.scaledTileSize,
+							null);
+
 					return;
 				}
 
@@ -101,7 +107,11 @@ public class Board extends JPanel {
 						g2.drawImage(
 								rotate(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()),
 										section.getRotation()),
-								0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+								0,
+								0,
+								GamePanel.scaledTileSize,
+								GamePanel.scaledTileSize,
+								null);
 					}
 
 					if (sl.getHitSections().containsKey(coord)) {
@@ -109,16 +119,33 @@ public class Board extends JPanel {
 						g2.drawImage(
 								rotate(GamePanel.sm.getShipSectionFromShip(section.getShipType(), section.getSection()),
 										section.getRotation()),
-								0, 0, GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
-						g2.drawImage(GamePanel.sm.getIndicator(SpriteManager.Indicator.COMP_HIT), 0, 0,
-								GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+								0,
+								0,
+								GamePanel.scaledTileSize,
+								GamePanel.scaledTileSize,
+								null);
+
+						g2.drawImage(
+								GamePanel.sm.getIndicator(SpriteManager.Indicator.COMP_HIT),
+								0,
+								0,
+								GamePanel.scaledTileSize,
+								GamePanel.scaledTileSize,
+								null);
 					}
+
 				} else {
 					if (sl.getHitSections().containsKey(coord)) {
-						g2.drawImage(GamePanel.sm.getIndicator(SpriteManager.Indicator.HIT), 0, 0,
-								GamePanel.scaledTileSize, GamePanel.scaledTileSize, null);
+						g2.drawImage(
+								GamePanel.sm.getIndicator(SpriteManager.Indicator.HIT),
+								0,
+								0,
+								GamePanel.scaledTileSize,
+								GamePanel.scaledTileSize,
+								null);
 					}
 				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
