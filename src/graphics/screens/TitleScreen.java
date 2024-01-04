@@ -112,12 +112,11 @@ public class TitleScreen extends JPanel {
     }
     
     private void handleButtonClick(int buttonIndex) {
-        System.out.println("BUTTON CLICKED!!!!");
-        
         if (buttonIndex == 0) {
             GamePanel.gameState = GameStates.SHIP_PLACEMENT;
             GamePanel.screenChange = true;
             removeAll();
+            
         } else {
             Bots.BotLevel botLevel = Bots.BotLevel.values()[buttonIndex - 1];
             System.out.println("Difficulty changed to " + botLevel);

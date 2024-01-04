@@ -2,53 +2,45 @@ package gameLogic;
 
 import graphics.*;
 
-import java.awt.*;
-
-import gameLogic.ShipLocations.ShotStatus;
-
 public class GamePlayLogic {
-	
+
 	public Player player;
 	public Bots bot;
 	public static int turnOrder;
-	public static boolean compWon = false; 
-	public static boolean playerWon = false;  
-  
+	public static boolean compWon = false;
+	public static boolean playerWon = false;
+
 	public GamePlayLogic() {
 		player = new Player();
 		bot = new Bots(GamePanel.computerDifficulty);
-    state = GameState.GAMEPLAY; 
+		GamePanel.gameState = GameStates.GAMEPLAY;
 	}
 
-
-  public void gameLoop(){
-    while(state == GameState.GAMEPLAY){ 
-      if(turnOrder % 2 == 1)  {
-      	switch (bot.botLevel) {
-						case EASY ->  status = easyBot(opponentLocations);
-
-						case NORMAL ->  status = normalBot(opponentLocations);
-
-						case HARD ->  status = hardBot(opponentLocations);
-
-						default ->  status = impossibleBot(opponentLocations);
-					}
-      turnOrder++;
-    }
-			if(gameOver()){
-				state = GameStates.GAMEOVER; 
+	public void gameLoop() {
+		ShipLocations playerShipLocations = this.player.getShipLocations();
+		while (GamePanel.gameState == GameStates.GAMEPLAY) {
+			if (GamePlayLogic.turnOrder % 2 == 1) {
+				this.bot.shootOpponent(playerShipLocations);
+				turnOrder++;
 			}
-  }
-}
 
-  public boolean gameOver(){ 
-    if (player.getUnguessedSections().size() == 0) {
+			if (this.gameOver()) {
+				GamePanel.gameState = GameStates.GAMEOVER;
+			}
+		}
+	}
+
+	public boolean gameOver() {
+		ShipLocations playerShipLocations = this.player.getShipLocations();
+		if (playerShipLocations.getUnguessedSections().size() == 0) {
 			compWon = true;
 		}
-		if (computer.getUnguessedSections().size() == 0) {
+
+		ShipLocations botShipLocations = this.bot.getShipLocations();
+		if (botShipLocations.getUnguessedSections().size() == 0) {
 			playerWon = true;
 		}
-    
-    return compWon || playerWon; 
-  }
+
+		return compWon || playerWon;
+	}
 }
