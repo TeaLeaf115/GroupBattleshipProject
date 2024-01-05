@@ -97,21 +97,18 @@ public class Bots {
 	public void shootOpponent(ShipLocations opponentLocations) {
 		switch (GamePanel.computerDifficulty) {
 			case EASY -> this.easyBot(opponentLocations);
-
 			case NORMAL -> this.normalBot(opponentLocations);
-
 			case HARD -> this.hardBot(opponentLocations);
-
 			default -> this.impossibleBot(opponentLocations);
 		}
 	}
 
-	public ShipLocations.ShotStatus easyBot(ShipLocations opponentLocations) {
+	public void easyBot(ShipLocations opponentLocations) {
 		// picks a random unguessed location
 		Point guessLocation = this.possibleGuesses.remove(
 				this.random.nextInt(this.possibleGuesses.size()));
-
-		return opponentLocations.shootLocation(guessLocation);
+		
+		opponentLocations.shootLocation(guessLocation);
 	}
 
 	public ShipLocations.ShotStatus normalBot(ShipLocations opponentLocations) {
@@ -146,7 +143,7 @@ public class Bots {
 
 		Point guessLocation = readHeatMap(heatMap);
 		this.possibleGuesses.remove(guessLocation);
-		return opponentLocations.shootLocation(guessLocation);
+		opponentLocations.shootLocation(guessLocation);
 	}
 
 	public ShipLocations.ShotStatus hardBot(ShipLocations opponentLocations) {
@@ -173,7 +170,7 @@ public class Bots {
 
 		Point guessLocation = readHeatMap(heatMap);
 		this.possibleGuesses.remove(guessLocation);
-		return opponentLocations.shootLocation(guessLocation);
+		opponentLocations.shootLocation(guessLocation);
 	}
 
 	public void impossibleBot(ShipLocations opponentLocations) {
@@ -215,7 +212,7 @@ public class Bots {
 		// Determines which point has the highest weight
 		int shootX = 0;
 		int shootY = 0;
-		int maxWeight = heatMap[0][0];
+		int maxWeight = heatMap[1][1];
 
 		for (int x = 0; x < heatMap.length; x++) {
 			for (int y = 0; y < heatMap[x].length; y++) {

@@ -63,6 +63,10 @@ public class SpriteManager {
 	
 	private BufferedImage[] continueButtonSprites;
 	
+	private BufferedImage[] tryAgainButtonSprites;
+	private BufferedImage compWin;
+	private BufferedImage playWin;
+	
 	private BufferedImage guessingOverlay;
 	private BufferedImage placementOverlay;
 	private BufferedImage logo;
@@ -83,6 +87,9 @@ public class SpriteManager {
 			ssr = new SpriteSheetReader("res/images/ContinueButtonSpriteSheet.png", 48, 16);
 			continueButtonSprites = ssr.spriteSheetToArray();
 			
+			ssr = new SpriteSheetReader("res/images/TryAgainButtonSpriteSheet.png", 48, 16);
+			tryAgainButtonSprites = ssr.spriteSheetToArray();
+			
 			ssr = new SpriteSheetReader("res/images/BotLevelButtonSpriteSheet.png", 64, 16);
 			BufferedImage[] botLevelButtons = ssr.spriteSheetToArray();
 			easyButtonSprites = Arrays.copyOfRange(botLevelButtons, 0, 6);
@@ -101,6 +108,9 @@ public class SpriteManager {
 			placementOverlay = ImageIO.read(new File("res/images/PlacementOverlay.png"));
 			logo = ImageIO.read(new File("res/images/Battleship_Logo.png"));
 			titleScreen = ImageIO.read(new File("res/images/TitleScreen.png"));
+			
+			compWin = ImageIO.read(new File("res/images/GameOver.png"));
+			playWin = ImageIO.read(new File("res/images/Win.png"));
 			
 			loadingTitle = ImageIO.read(new File("res/images/LoadingTitle.png"));
 			
@@ -362,6 +372,18 @@ public class SpriteManager {
 	
 	public BufferedImage getLoadingTitle() {
 		return loadingTitle;
+	}
+	
+	public BufferedImage[] getTryAgainButtonSprites() {
+		return tryAgainButtonSprites;
+	}
+	
+	public BufferedImage getCompWin() {
+		return compWin;
+	}
+	
+	public BufferedImage getPlayWin() {
+		return playWin;
 	}
 	
 	public BufferedImage[] getImpossibleButtonSpritesHighlighted() {

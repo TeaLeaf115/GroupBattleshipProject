@@ -1,5 +1,6 @@
 package graphics;
 
+import gameLogic.GamePlayLogic;
 import gameLogic.Ship;
 import gameLogic.ShipLocations;
 import gameLogic.ShipSection;
@@ -74,7 +75,7 @@ public class Board extends JPanel {
 					// Makes sure the user is clicking with a left click.
 					if (e.getButton() == MouseEvent.BUTTON1 && !shipsVisible) {
 						GameplayScreen.gl.bot.getShipLocations().shootLocation(coord);
-						GameplayScreen.gl.gameLoop();
+						GameplayScreen.gl.computerTurn();
 					}
 				}
 			});
