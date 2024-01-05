@@ -111,7 +111,7 @@ public class Bots {
 		opponentLocations.shootLocation(guessLocation);
 	}
 
-	public ShipLocations.ShotStatus normalBot(ShipLocations opponentLocations) {
+	public void normalBot(ShipLocations opponentLocations) {
 		int[][] heatMap = new int[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
 
 		// sets each missed location to lowest priority
@@ -146,7 +146,7 @@ public class Bots {
 		opponentLocations.shootLocation(guessLocation);
 	}
 
-	public ShipLocations.ShotStatus hardBot(ShipLocations opponentLocations) {
+	public void hardBot(ShipLocations opponentLocations) {
 		int[][] heatMap = new int[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
 
 		// Set each missed location to lowest priority

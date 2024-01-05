@@ -3,6 +3,7 @@ package graphics.screens;
 import gameLogic.GamePlayLogic;
 import graphics.Board;
 import graphics.GamePanel;
+import graphics.GameStates;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,9 +35,21 @@ public class GameplayScreen extends JPanel {
 	}
 
 	public void update() {
-		// This is used for anything that will be updated on the gameloop clock, like
-		// animations or logic that needs to be constantly updated.
-		// If you have any animation stuff you can call it here
+		if (GamePlayLogic.compWon || GamePlayLogic.playerWon) {
+			draw();
+			try {
+				Robot rob = new Robot();
+				GamePanel gp = GamePanel.getInstance();
+				GameOverScreen.boardSS = rob.createScreenCapture(new Rectangle(gp.getX()+8, gp.getY()+30, gp.getWidth(), gp.getHeight()));
+			}
+			catch (AWTException e) {
+				e.printStackTrace();
+			}
+			
+			GamePanel.gameState = GameStates.GAMEOVER;
+			GamePanel.screenChange = true;
+			removeAll();
+		}
 		playerPanel.board.update();
 		computerPanel.compBoard.update();
 	}

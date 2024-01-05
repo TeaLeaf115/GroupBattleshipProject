@@ -9,7 +9,7 @@ public class GamePlayLogic {
 
 	public Player player;
 	public Bots bot;
-
+	public static int turnOrder = 0;
 	public static boolean compWon = false;
 	public static boolean playerWon = false;
 
@@ -23,26 +23,14 @@ public class GamePlayLogic {
 		ShipLocations playerShipLocations = this.player.getShipLocations();
     
 		if (GamePanel.gameState == GameStates.GAMEPLAY) {
-			if (!this.gameOver()) {
-			  this.bot.shootOpponent(playerShipLocations);
-		  } 
-			else {
-				try {
-					Robot rob = new Robot();
-					GamePanel gp = GamePanel.getInstance();
-					GameOverScreen.boardSS = rob.createScreenCapture(new Rectangle(gp.getX(), gp.getY()+30, gp.getWidth(), gp.getHeight()));
-				}
-				catch (AWTException e) {
-					e.printStackTrace();
-				}
-				
-				
-				GamePanel.gameState = GameStates.GAMEOVER;
-			}
+			this.bot.shootOpponent(playerShipLocations);
+			turnOrder++;
+			
+			gameOver();
 		}
 	}
 
-	public boolean gameOver() {
+	public void gameOver() {
 		ShipLocations playerShipLocations = this.player.getShipLocations();
 		if (playerShipLocations.getUnguessedSections().size() == 0) {
 			compWon = true;
@@ -52,7 +40,5 @@ public class GamePlayLogic {
 		if (botShipLocations.getUnguessedSections().size() == 0) {
 			playerWon = true;
 		}
-
-		return compWon || playerWon;
 	}
 }

@@ -19,6 +19,7 @@ public class GameOverScreen extends JPanel{
 	private boolean tryAgainEnter, tryAgainExit, mouseIn = false;
 	
 	public GameOverScreen() {
+		setBounds(0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height);
 		tryAgainAnimation = new AnimationHandler(GamePanel.sm.getTryAgainButtonSprites(), 1);
 		tryAgainIcon = new ImageIcon(tryAgainAnimation.getCurrentFrame());
 		tryAgainButton = new JButton(tryAgainIcon);
@@ -34,7 +35,7 @@ public class GameOverScreen extends JPanel{
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(boardSS, 0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height, null);
-		
+		g2.draw(new Rectangle(0, 0, 100, 100));
 	}
 	
 	public void update() {

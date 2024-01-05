@@ -60,8 +60,7 @@ public class DragAndDropHandler {
                 GamePanel.scaledTileSize * ship.getShipLength(),
                 GamePanel.scaledTileSize,
                 BufferedImage.TYPE_INT_ARGB)));
-
-        this.shipLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        
         this.shipLabel.setBounds(ship.getRect());
 
         this.shipLabel.addMouseListener(new Click());
