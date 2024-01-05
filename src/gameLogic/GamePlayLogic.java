@@ -27,11 +27,11 @@ public class GamePlayLogic {
 			if (!this.gameOver()) {
 				this.bot.shootOpponent(playerShipLocations);
 			}
-
 		}
+		turnOrder++;
 	}
 
-	public void gameOver() {
+	public boolean gameOver() {
 		ShipLocations playerShipLocations = this.player.getShipLocations();
 		if (playerShipLocations.getUnguessedSections().size() == 0) {
 			compWon = true;
@@ -41,5 +41,7 @@ public class GamePlayLogic {
 		if (botShipLocations.getUnguessedSections().size() == 0) {
 			playerWon = true;
 		}
+		
+		return compWon || playerWon;
 	}
 }

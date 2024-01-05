@@ -126,9 +126,8 @@ public class ShipLocations {
      * Attempts to shoot at a specified location and updates the corresponding maps accordingly.
      *
      * @param coords The coordinates where the shot is fired.
-     * @return ShotStatus representing the result of the shot (HIT, MISS, or GUESSED).
      */
-    public ShotStatus shootLocation(Point coords) {
+    public void shootLocation(Point coords) {
         if (this.unguessedSections.containsKey(coords)) {
             // Shot hits an unguessed location of a ship
 
@@ -138,16 +137,15 @@ public class ShipLocations {
 
             hitSections.put(coords, hitSection);
 
-            return ShotStatus.HIT;
+            return;
 
         } else if (this.hitSections.containsKey(coords) || this.misses.contains(coords)) {
             // Shot fired at an already guessed location
-            return ShotStatus.GUESSED;
+            return;
         }
 
         // Shot is a miss
         this.misses.add(coords);
-        return ShotStatus.MISS;
     }
 
     /**
