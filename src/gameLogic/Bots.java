@@ -183,6 +183,7 @@ public class Bots {
 	public void impossibleBot(ShipLocations opponentLocations) {
 		// only shoot opponent locations when impossibleProb is true
 		if (random.nextDouble() > this.impossibleProb) {
+			this.easyBot(opponentLocations);
 			return;
 		}
 
@@ -217,9 +218,6 @@ public class Bots {
 		}
 
 		// Determines which point has the highest weight
-		int shootX = 0;
-		int shootY = 0;
-
 		int maxWeight = heatMap[0][0];
 		ArrayList<Point> maxWeights = new ArrayList<>();
 
