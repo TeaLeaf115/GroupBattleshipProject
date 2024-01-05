@@ -85,6 +85,7 @@ class PlayerBoard extends JPanel {
 				scaledComputerBoardOverlayWidth,
 				scaledComputerBoardOverlayHeight,
 				null);
+
 		g2.drawImage(titleHalf,
 				(getWidth() - (titleHalf.getWidth() * 2) / 2),
 				(int) GamePanel.windowSize.getHeight() / 32,
@@ -127,6 +128,7 @@ class ComputerBoard extends JPanel {
 				scaledPlayerBoardOverlayWidth,
 				scaledPlayerBoardOverlayHeight,
 				null);
+
 		g2.drawImage(titleHalf,
 				(-((titleHalf.getWidth() * 2)) / 2),
 				(int) GamePanel.windowSize.getHeight() / 32,

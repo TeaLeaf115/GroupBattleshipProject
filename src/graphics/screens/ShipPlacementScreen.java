@@ -95,7 +95,7 @@ public class ShipPlacementScreen extends JPanel {
         this.dragComponents = new ArrayList<>();
 
         for (Ship ship : player.getShips()) {
-            DragAndDropHandler dragComponent = new DragAndDropHandler(ship, player, this.originPoint);
+            DragAndDropHandler dragComponent = new DragAndDropHandler(ship, player, this.originPoint, this.screenSize);
             this.dragComponents.add(dragComponent);
             this.add(dragComponent.getShipLabel()); // add the ship JLabel directly
         }
@@ -184,7 +184,7 @@ public class ShipPlacementScreen extends JPanel {
                             continueWidth,
                             continueHeight,
                             Image.SCALE_SMOOTH));
-                            
+
             continueButton.setIcon(continueButtonIcon);
             if (continueButtonAnimation.getCurrentFrame(0) == 0) {
                 continueExitAnimation = false;

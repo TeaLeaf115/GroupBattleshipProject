@@ -6,27 +6,23 @@ public class GamePlayLogic {
 
 	public Player player;
 	public Bots bot;
-	public static int turnOrder;
 	public static boolean compWon = false;
 	public static boolean playerWon = false;
 
 	public GamePlayLogic() {
 		player = new Player();
-		bot = new Bots(GamePanel.computerDifficulty);
+		bot = new Bots();
 		GamePanel.gameState = GameStates.GAMEPLAY;
 	}
 
 	public void gameLoop() {
 		ShipLocations playerShipLocations = this.player.getShipLocations();
-		while (GamePanel.gameState == GameStates.GAMEPLAY) {
-			if (GamePlayLogic.turnOrder % 2 == 1) {
-				this.bot.shootOpponent(playerShipLocations);
-				turnOrder++;
-			}
-
-			if (this.gameOver()) {
-				GamePanel.gameState = GameStates.GAMEOVER;
-			}
+		if (!this.gameOver()) {
+			this.bot.shootOpponent(playerShipLocations);
+		} 
+		
+		if (this.gameOver()){
+			GamePanel.gameState = GameStates.GAMEOVER;
 		}
 	}
 

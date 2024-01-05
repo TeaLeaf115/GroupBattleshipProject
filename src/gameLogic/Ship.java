@@ -45,13 +45,13 @@ import java.util.Arrays;
  * @see ShipSection
  */
 public class Ship {
-    
+
     private Point coords;
     private int shipLength;
-    
+
     // Rotation of the ship sprite direction
     private Rotation rotation;
-    
+
     /**
      * Enumeration representing the possible rotations of a ship.
      */
@@ -60,24 +60,24 @@ public class Ship {
         DOWN(Math.PI / 2),
         LEFT(0),
         RIGHT(0);
-        
+
         public final double rad;
-        
+
         private Rotation(double rad) {
             this.rad = rad;
         }
     }
-    
+
     // Type of ship
     private ShipType shipType;
-    
+
     /**
      * Enumeration representing the possible types of ships.
      */
     public enum ShipType {
         DESTROYER, CRUISER, SUBMARINE, BATTLESHIP, CARRIER
     }
-    
+
     // Ship sections
     private ArrayList<ShipSection> shipSections;
     private Rectangle rect;
@@ -95,7 +95,7 @@ public class Ship {
         this.coords = new Point();
         this.shipType = shipType;
         this.rotation = rotation;
-        
+
         // determines ship length from the type of ship
         this.shipLength = switch (this.shipType) {
             case DESTROYER -> 2;
@@ -103,25 +103,25 @@ public class Ship {
             case BATTLESHIP -> 4;
             case CARRIER -> 5;
         };
-        
+
         // creates ship length number of ship sections
         Section[] sections = Section.values();
         this.shipSections = new ArrayList<>();
-        
+
         for (int i = 0; i < shipLength - 1; i++) {
             ShipSection section = new ShipSection(this.shipType, this.rotation, sections[i]);
             this.shipSections.add(section);
         }
-        
+
         ShipSection backSection = new ShipSection(this.shipType, this.rotation, Section.BACK);
         this.shipSections.add(backSection);
         this.rect = new Rectangle();
-        
+
         // sets the coordinates for all the ship sections
         this.rotateShip(this.rotation);
         this.placed = false;
     }
-    
+
     /**
      * Constructs a ship with the specified type and default rotation (UP).
      *
@@ -131,7 +131,7 @@ public class Ship {
     public Ship(ShipType shipType) {
         this(shipType, Rotation.RIGHT);
     }
-    
+
     /**
      * Retrieves the top-left coordinates of the ship.
      *
@@ -140,7 +140,7 @@ public class Ship {
     public Point getCoords() {
         return coords;
     }
-    
+
     /**
      * Sets the top-left location of the ship to the specified coordinate.
      *
@@ -155,21 +155,26 @@ public class Ship {
                 (int) (yPos * GamePanel.scaledTileSize));
         for (ShipSection section : this.shipSections) {
             section.setCoords(xPos, yPos);
-            
+
             switch (this.rotation) {
                 case LEFT, RIGHT -> xPos++; // Horizontal rotation
                 case DOWN, UP -> yPos++; // Vertical rotation
             }
         }
     }
-    
+
     public void setCoords(Point point) {
         this.setCoords(point.getX(), point.getY());
     }
-    
+
     public int getShipLength() {
         return this.shipLength;
     }
+
+    public Rotation getRotation() {
+        return this.rotation;
+    }
+
     /**
      * Rotates the coords of the ship sections and rect
      *
@@ -177,28 +182,28 @@ public class Ship {
      */
     public void rotateShip(Rotation rotation) {
         // does not continue if rotation is not changed
-        
+
         Dimension rectDimension = new Dimension();
         this.rotation = rotation;
-        
+
         // rotates rectangle
         if (this.rotation == Rotation.DOWN || this.rotation == Rotation.UP) {
             rectDimension.setSize(GamePanel.scaledTileSize, this.shipLength * GamePanel.scaledTileSize);
-            
+
         } else {
             rectDimension.setSize(this.shipLength * GamePanel.scaledTileSize, GamePanel.scaledTileSize);
         }
-        
+
         this.rect.setSize(rectDimension);
-        
+
         // rotates ship sprites
         int xPos = this.coords.x;
         int yPos = this.coords.y;
-        
+
         for (ShipSection section : this.shipSections) {
             section.setRotation(this.rotation);
             section.setCoords(xPos, yPos);
-            
+
             switch (this.rotation) {
                 case LEFT, RIGHT -> xPos++; // horizontal rotation
                 case DOWN, UP -> yPos++; // vertical rotation

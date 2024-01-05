@@ -18,7 +18,6 @@ public class Bots {
 		IMPOSSIBLE
 	}
 
-	private final BotLevel botLevel;
 	private ArrayList<Point> possibleGuesses;
 	private ShipLocations shipLocations;
 
@@ -27,8 +26,7 @@ public class Bots {
 	private final Random random = new Random();
 	private final double impossibleProb = 0.85;
 
-	public Bots(BotLevel botLevel) {
-		this.botLevel = botLevel;
+	public Bots() {
 		possibleGuesses = new ArrayList<>();
 
 		// fills possibleGuesses with all potential guesses
@@ -80,10 +78,6 @@ public class Bots {
 		}
 	}
 
-	public BotLevel getLevel() {
-		return botLevel;
-	}
-
 	public ShipLocations getShipLocations() {
 		return this.shipLocations;
 	}
@@ -101,7 +95,7 @@ public class Bots {
 	}
 
 	public void shootOpponent(ShipLocations opponentLocations) {
-		switch (this.botLevel) {
+		switch (GamePanel.computerDifficulty) {
 			case EASY -> this.easyBot(opponentLocations);
 
 			case NORMAL -> this.normalBot(opponentLocations);
@@ -121,7 +115,7 @@ public class Bots {
 	}
 
 	public ShipLocations.ShotStatus normalBot(ShipLocations opponentLocations) {
-		Integer[][] heatMap = new Integer[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
+		int[][] heatMap = new int[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
 
 		// sets each missed location to lowest priority
 		for (Point missedLocations : opponentLocations.getMisses()) {
@@ -156,7 +150,7 @@ public class Bots {
 	}
 
 	public ShipLocations.ShotStatus hardBot(ShipLocations opponentLocations) {
-		Integer[][] heatMap = new Integer[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
+		int[][] heatMap = new int[GamePanel.maxBoardCol][GamePanel.maxBoardRow];
 
 		// Set each missed location to lowest priority
 		for (Point missedLocation : opponentLocations.getMisses()) {
@@ -198,7 +192,7 @@ public class Bots {
 		opponentLocations.shootLocation(guessLocation); // guaranteed hit
 	}
 
-	private void updateHeatMapAdjacent(Integer[][] heatMap, int x, int y) {
+	private void updateHeatMapAdjacent(int[][] heatMap, int x, int y) {
 		// Mark all positions adjacent to hit location
 		if (x - 1 >= 0)
 			heatMap[x - 1][y]++;
@@ -213,7 +207,7 @@ public class Bots {
 			heatMap[x][y + 1]++;
 	}
 
-	public static Point readHeatMap(Integer[][] heatMap) throws IndexOutOfBoundsException {
+	public static Point readHeatMap(int[][] heatMap) throws IndexOutOfBoundsException {
 		if (heatMap.length == 0 || heatMap[0].length == 0) {
 			throw new IndexOutOfBoundsException();
 		}

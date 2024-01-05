@@ -12,6 +12,7 @@ import javax.swing.*;
 import gameLogic.Player;
 import gameLogic.Ship;
 import gameLogic.Ship.Rotation;
+import gameLogic.Ship.ShipType;
 
 public class DragAndDropHandler {
     private BufferedImage img;
@@ -22,9 +23,11 @@ public class DragAndDropHandler {
     private Player player;
 
     private Point gridOriginPoint, labelPoint, initialLabelPoint;
+    private Dimension screenSize;
+
     private double rotationAngle;
 
-    public DragAndDropHandler(Ship ship, Player player, Point gridOriginPoint) {
+    public DragAndDropHandler(Ship ship, Player player, Point gridOriginPoint, Dimension screenSize) {
         BufferedImage[] fullShipSprites = GamePanel.sm.getFullShipSprites();
         BufferedImage shipImage = switch (ship.getShipType()) {
             case DESTROYER -> fullShipSprites[0];
@@ -60,18 +63,28 @@ public class DragAndDropHandler {
 
         this.shipLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
         this.shipLabel.setBounds(ship.getRect());
+
         this.shipLabel.addMouseListener(new Click());
         this.shipLabel.addMouseMotionListener(new Drag());
-        this.rotateShipImage(this.rotationAngle);
 
         this.ship = ship;
         this.player = player;
 
         this.gridOriginPoint = gridOriginPoint;
-        this.labelPoint = new Point();
-        this.initialLabelPoint = null;
+        this.screenSize = screenSize;
 
-        this.rotationAngle = 0;
+        this.labelPoint = new Point();
+        this.setInitialLabelPoint(this.ship.getShipType());;
+        this.shipLabel.setLocation(this.initialLabelPoint);
+
+        this.rotateShipImage(this.ship.getRotation());
+        this.rotationAngle = switch (this.ship.getRotation()) {
+            case RIGHT -> 0;
+            case UP -> Math.PI / 2;
+            case LEFT -> Math.PI;
+            case DOWN -> 3 * Math.PI / 2;
+        };
+
     }
 
     public BufferedImage getImg() {
@@ -136,10 +149,42 @@ public class DragAndDropHandler {
      */
     public void rotateShipImage(double angle) {
         int halfPiCoefficient = (int) (rotationAngle / (Math.PI / 2) % 4);
+        this.img = this.rotatedImages[halfPiCoefficient];
+    }
+
+    public void rotateShipImage(Rotation rotation) {
+        int halfPiCoefficient = switch (rotation) {
+            case RIGHT -> 0;
+            case UP -> 1;
+            case LEFT -> 2;
+            case DOWN -> 3;
+        };
 
         this.img = this.rotatedImages[halfPiCoefficient];
-        // this.shipLabel.setIcon(new ImageIcon(this.img));
-        // shipLabel.setLocation(initialLabelPoint);
+    }
+
+    public void setInitialLabelPoint(ShipType shipType) {
+        this.initialLabelPoint = switch (shipType) {
+            case SUBMARINE -> new Point(
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 23 / 336),
+                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 49 / 224));
+
+            case CARRIER -> new Point(
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 23 / 336),
+                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 103 / 224));
+
+            case BATTLESHIP -> new Point(
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 56 / 336),
+                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 49 / 224));
+
+            case DESTROYER -> new Point(
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 56 / 336),
+                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 119 / 224));
+
+            case CRUISER -> new Point(
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 56 / 336),
+                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 157 / 224));
+        };
     }
 
     /**
@@ -250,7 +295,7 @@ public class DragAndDropHandler {
             if (!SwingUtilities.isRightMouseButton(e)) {
                 return;
             }
-            
+
             // rotates image
             rotationAngle += Math.PI / 2;
             if (rotationAngle == 2 * Math.PI)
