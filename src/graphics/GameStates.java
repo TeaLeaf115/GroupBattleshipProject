@@ -44,30 +44,29 @@ public enum GameStates {
     /**
      * The initial state when the game starts, displaying the title screen.
      */
-    TITLE,
-
+    TITLE(true),
+    
     /**
-     * The state for adjusting game settings or configurations.
+     * The state for placing ships on the game board before gameplay.
      */
-    SETTINGS,
-
-    /**
-     * The state when the game is temporarily halted or paused.
-     */
-    PAUSED,
+    SHIP_PLACEMENT(false),
 
     /**
      * The main gameplay state where the player interacts with the game.
      */
-    GAMEPLAY,
+    GAMEPLAY(false),
 
     /**
      * The state indicating the end of the game with a game over screen.
      */
-    GAMEOVER,
-
-    /**
-     * The state for placing ships on the game board before gameplay.
-     */
-    SHIP_PLACEMENT
+    GAMEOVER(false);
+    
+    public boolean enabled;
+    private GameStates(boolean enabled) {
+        this.enabled = enabled;
+    }
+    
+    public void setGamestate(GameStates g, boolean enabled) {
+        g.enabled = enabled;
+    }
 }
