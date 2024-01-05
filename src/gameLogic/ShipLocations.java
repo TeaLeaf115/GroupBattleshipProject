@@ -134,7 +134,6 @@ public class ShipLocations {
             // Removes ship from unguessedSections and places it in hitSections
             ShipSection hitSection = this.unguessedSections.remove(coords);
             hitSection.setHit(true);
-
             hitSections.put(coords, hitSection);
 
             return;

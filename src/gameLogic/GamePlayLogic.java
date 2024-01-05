@@ -28,6 +28,7 @@ public class GamePlayLogic {
 				this.bot.shootOpponent(playerShipLocations);
 			}
 		}
+		
 		turnOrder++;
 	}
 

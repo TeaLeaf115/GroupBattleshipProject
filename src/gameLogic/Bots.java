@@ -130,6 +130,8 @@ public class Bots {
 			// sets each hit location to lowest priority
 			int x = (int) hitLocations.getX();
 			int y = (int) hitLocations.getY();
+
+			// Set hit location to lowest priority
 			heatMap[x][y] = Integer.MIN_VALUE;
 
 			// marks all positions adjacent to hit location
@@ -209,7 +211,7 @@ public class Bots {
 			heatMap[x][y + 1]++;
 	}
 
-	public static Point readHeatMap(int[][] heatMap) throws IndexOutOfBoundsException {
+	public Point readHeatMap(int[][] heatMap) throws IndexOutOfBoundsException {
 		if (heatMap.length == 0 || heatMap[0].length == 0) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -217,20 +219,27 @@ public class Bots {
 		// Determines which point has the highest weight
 		int shootX = 0;
 		int shootY = 0;
-		int maxWeight = heatMap[1][1];
+
+		int maxWeight = heatMap[0][0];
+		ArrayList<Point> maxWeights = new ArrayList<>();
 
 		for (int x = 0; x < heatMap.length; x++) {
 			for (int y = 0; y < heatMap[x].length; y++) {
 				int weight = heatMap[x][y];
 
 				if (weight > maxWeight) {
-					shootX = x;
-					shootY = y;
 					maxWeight = weight;
+
+					maxWeights.clear();
+					maxWeights.add(new Point(x, y));
+				}
+
+				else if (weight == maxWeight) {
+					maxWeights.add(new Point(x, y));
 				}
 			}
 		}
 
-		return new Point(shootX, shootY);
+		return maxWeights.get(random.nextInt(maxWeights.size()));
 	}
 }
