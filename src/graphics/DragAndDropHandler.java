@@ -166,24 +166,24 @@ public class DragAndDropHandler {
     public void setInitialLabelPoint(ShipType shipType) {
         this.initialLabelPoint = switch (shipType) {
             case SUBMARINE -> new Point(
-                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 23 / 336),
-                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 49 / 224));
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 73 / 336),
+                (int) Math.floor(this.gridOriginPoint.y + this.screenSize.height * 1 / 224));
 
             case CARRIER -> new Point(
-                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 23 / 336),
-                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 103 / 224));
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 73 / 336),
+                (int) Math.floor(this.gridOriginPoint.y + this.screenSize.height * 55 / 224));
 
             case BATTLESHIP -> new Point(
-                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 56 / 336),
-                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 49 / 224));
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 40 / 336),
+                (int) Math.floor(this.gridOriginPoint.y + this.screenSize.height * 1 / 224));
 
             case DESTROYER -> new Point(
-                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 56 / 336),
-                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 119 / 224));
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 40 / 336),
+                (int) Math.floor(this.gridOriginPoint.y + this.screenSize.height * 72 / 224));
 
             case CRUISER -> new Point(
-                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 56 / 336),
-                (int) Math.floor(this.gridOriginPoint.y - this.screenSize.height * 157 / 224));
+                (int) Math.floor(this.gridOriginPoint.x - this.screenSize.width * 40 / 336),
+                (int) Math.floor(this.gridOriginPoint.y + this.screenSize.height * 109 / 224));
         };
     }
 
