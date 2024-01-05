@@ -129,13 +129,14 @@ public class GamePanel extends JFrame implements Runnable {
 
     public void update() {
         SwingUtilities.invokeLater(() -> {
+//            System.out.println(gameState);
 //            System.out.println("x: " + getX() + " y: " + getY());
             if (screenChange) {
                 switch (gameState) {
                     case TITLE -> remove(titleScreen);
                     case SHIP_PLACEMENT -> remove(shipPlacementScreen);
                     case GAMEPLAY -> remove(gameplayScreen);
-                    case GAMEOVER -> System.out.println("Game-over Screen");
+                    case GAMEOVER -> remove(gameOverScreen);
                     case PAUSED -> System.out.println("Pause Screen");
                     case SETTINGS -> System.out.println("Settings Screen");
                 }
@@ -146,8 +147,7 @@ public class GamePanel extends JFrame implements Runnable {
                         add(gameplayScreen);
                         GameplayScreen.gl.player.setShipLocations();
                     }
-                    
-                    case GAMEOVER -> System.out.println("Game-over Screen");
+                    case GAMEOVER -> add(gameOverScreen);
                     case PAUSED -> System.out.println("Pause Screen");
                     case SETTINGS -> System.out.println("Settings Screen");
                 }
