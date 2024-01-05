@@ -21,22 +21,24 @@ public class GamePlayLogic {
 
 	public void computerTurn() {
 		ShipLocations playerShipLocations = this.player.getShipLocations();
-    
+
 		if (GamePanel.gameState == GameStates.GAMEPLAY) {
+			System.out.println("Shoot");
 			if (!this.gameOver()) {
-			  this.bot.shootOpponent(playerShipLocations);
-		  } 
-			else {
+				this.bot.shootOpponent(playerShipLocations);
+			}
+
+			if (this.gameOver()) {
 				try {
 					Robot rob = new Robot();
 					GamePanel gp = GamePanel.getInstance();
-					GameOverScreen.boardSS = rob.createScreenCapture(new Rectangle(gp.getX(), gp.getY()+30, gp.getWidth(), gp.getHeight()));
-				}
-				catch (AWTException e) {
+					GameOverScreen.boardSS = rob.createScreenCapture(
+							new Rectangle(gp.getX(), gp.getY() + 30, gp.getWidth(), gp.getHeight()));
+
+				} catch (AWTException e) {
 					e.printStackTrace();
 				}
-				
-				
+
 				GamePanel.gameState = GameStates.GAMEOVER;
 			}
 		}

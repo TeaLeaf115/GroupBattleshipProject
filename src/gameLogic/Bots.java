@@ -37,6 +37,15 @@ public class Bots {
 		}
 
 		this.shipLocations = new ShipLocations();
+		this.setShips();
+		
+	}
+
+	public ShipLocations getShipLocations() {
+		return this.shipLocations;
+	}
+
+	public void setShips() {
 		this.ships = new ArrayList<>();
 
 		List<Rotation> rotations = Arrays.asList(Rotation.values());
@@ -76,10 +85,6 @@ public class Bots {
 			this.shipLocations.addUnguessedShip(ship);
 			this.ships.add(ship);
 		}
-	}
-
-	public ShipLocations getShipLocations() {
-		return this.shipLocations;
 	}
 
 	public ArrayList<Ship> getShips() {
