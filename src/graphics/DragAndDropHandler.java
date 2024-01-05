@@ -234,6 +234,16 @@ public class DragAndDropHandler {
         return false;
     }
 
+    public void returnShip() {
+        ship.setPlaced(false);
+        shipLabel.setLocation(initialLabelPoint);
+
+        ship.rotateShip(ship.getPlacementRotation());
+        rotateShipImage(ship.getPlacementRotation());
+        shipLabel.setSize(ship.getRect().width, ship.getRect().height);
+        
+    }
+
     public void draw() {
         // this.shipLabel.repaint();
     }
@@ -276,15 +286,13 @@ public class DragAndDropHandler {
             // checks if the ship is out of bounds
             // if so, return it to its starting position
             if (checkWithinBoard(newLabelCoords, ship.getRect())) {
-                ship.setPlaced(false);
-                shipLabel.setLocation(initialLabelPoint);
+                returnShip();
             }
 
             // checks if the ship intersects other ship
             // if so, return it to its starting position
             if (checkShipCollision(ship)) {
-                ship.setPlaced(false);
-                shipLabel.setLocation(initialLabelPoint);
+                returnShip();
             }
         }
 
@@ -299,9 +307,9 @@ public class DragAndDropHandler {
             rotationAngle += Math.PI / 2;
             if (rotationAngle == 2 * Math.PI)
                 rotationAngle = 0;
-
-            rotateShipImage(rotationAngle);
+            
             ship.rotateShip(rotationAngle);
+            rotateShipImage(rotationAngle);
 
             // rotates ship label bounds
             Point labelCoords = shipLabel.getLocation();
@@ -310,15 +318,13 @@ public class DragAndDropHandler {
             // checks if the ship is out of bounds
             // if so, return it to its starting position
             if (checkWithinBoard(labelCoords, ship.getRect())) {
-                ship.setPlaced(false);
-                shipLabel.setLocation(initialLabelPoint);
+                returnShip();
             }
 
             // checks if the ship intersects other ship
             // if so, return it to its starting position
             if (checkShipCollision(ship)) {
-                ship.setPlaced(false);
-                shipLabel.setLocation(initialLabelPoint);
+                returnShip();
             }
         }
     }

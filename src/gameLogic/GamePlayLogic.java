@@ -21,12 +21,13 @@ public class GamePlayLogic {
 
 	public void computerTurn() {
 		ShipLocations playerShipLocations = this.player.getShipLocations();
-    
+
 		if (GamePanel.gameState == GameStates.GAMEPLAY) {
-			this.bot.shootOpponent(playerShipLocations);
-			turnOrder++;
-			
-			gameOver();
+			System.out.println("Shoot");
+			if (!this.gameOver()) {
+				this.bot.shootOpponent(playerShipLocations);
+			}
+
 		}
 	}
 

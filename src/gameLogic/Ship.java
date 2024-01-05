@@ -51,6 +51,7 @@ public class Ship {
 
     // Rotation of the ship sprite direction
     private Rotation rotation;
+    private Rotation placementRotation;
 
     /**
      * Enumeration representing the possible rotations of a ship.
@@ -95,6 +96,10 @@ public class Ship {
         this.coords = new Point();
         this.shipType = shipType;
         this.rotation = rotation;
+        this.placementRotation = switch (this.shipType) {
+            case CRUISER, CARRIER -> Rotation.DOWN;
+            default -> Rotation.UP;
+        };
 
         // determines ship length from the type of ship
         this.shipLength = switch (this.shipType) {
@@ -173,6 +178,10 @@ public class Ship {
 
     public Rotation getRotation() {
         return this.rotation;
+    }
+
+    public Rotation getPlacementRotation() {
+        return this.placementRotation;
     }
 
     /**
