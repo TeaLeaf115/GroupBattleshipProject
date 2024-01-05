@@ -73,11 +73,9 @@ public class Board extends JPanel {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// Makes sure the user is clicking with a left click.
-					if (e.getButton() == MouseEvent.BUTTON1 && !shipsVisible
-							&& gameLogic.GamePlayLogic.turnOrder % 2 == 0) {
+					if (e.getButton() == MouseEvent.BUTTON1 && !shipsVisible) {
 						GameplayScreen.gl.bot.getShipLocations().shootLocation(coord);
-						GamePlayLogic.turnOrder++;
-						GameplayScreen.gl.ComputerTurn();
+						GameplayScreen.gl.computerTurn();
 					}
 				}
 			});

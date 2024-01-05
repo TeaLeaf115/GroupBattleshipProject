@@ -2,6 +2,7 @@ package gameLogic;
 
 import java.util.ArrayList;
 
+import gameLogic.Ship.Rotation;
 import gameLogic.Ship.ShipType;
 
 public class Player {
@@ -12,7 +13,12 @@ public class Player {
 		this.shipLocations = new ShipLocations();
 		this.ships = new ArrayList<>();
 		for (ShipType shipType : ShipType.values()) {
-			this.ships.add(new Ship(shipType));
+			Rotation rotation = switch(shipType){
+				case CRUISER, CARRIER -> Rotation.DOWN;
+				default -> Rotation.UP;
+			};
+
+			this.ships.add(new Ship(shipType, rotation));
 		}
 	}
 

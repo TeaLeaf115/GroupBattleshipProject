@@ -9,23 +9,24 @@ public class GamePlayLogic {
 
 	public Player player;
 	public Bots bot;
-	public static int turnOrder = 0;
+
 	public static boolean compWon = false;
 	public static boolean playerWon = false;
 
 	public GamePlayLogic() {
 		player = new Player();
-		bot = new Bots(GamePanel.computerDifficulty);
+		bot = new Bots();
 		GamePanel.gameState = GameStates.GAMEPLAY;
 	}
 
-	public void ComputerTurn() {
+	public void computerTurn() {
 		ShipLocations playerShipLocations = this.player.getShipLocations();
+    
 		if (GamePanel.gameState == GameStates.GAMEPLAY) {
-			
-			this.bot.shootOpponent(playerShipLocations);
-			turnOrder++;
-			if (this.gameOver()) {
+			if (!this.gameOver()) {
+			  this.bot.shootOpponent(playerShipLocations);
+		  } 
+			else {
 				try {
 					Robot rob = new Robot();
 					GamePanel gp = GamePanel.getInstance();
