@@ -5,8 +5,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import gameLogic.Bots;
@@ -32,9 +30,7 @@ public class TitleScreen extends JPanel {
     private final int startHeight = (int)Math.ceil(16*5.5);
     private final int difficultyWidth = (int)Math.ceil(64*2.5);
     private final int difficultyHeight = (int)Math.ceil(16*2.5);
-    
-    private boolean webpageOpened = false;
-    
+
     public TitleScreen() {
         setBounds(0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height);
         try {
@@ -171,12 +167,12 @@ public class TitleScreen extends JPanel {
         g2.setFont(pixelFont);
         // Set font for license and credits
         g2.setFont(pixelFont);
-    
+
         // Draw text with black background
-        drawTextWithBackground(g2, "GPL-3.0 LICENSE", 10, getHeight() - 10, "https://www.gnu.org/licenses/gpl-3.0.en.html");
+        drawTextWithBackground(g2, "GPL-3.0 LICENSE", 10, getHeight() - 10);
         drawTextWithBackground(g2, "BY: KEVIN, OWEN & ANSH", getWidth() - g2.getFontMetrics().stringWidth("BY: KEVIN, OWEN & ANSH") - 10, getHeight() - 10);
     }
-    
+
     private void drawTextWithBackground(Graphics2D g2, String text, int x, int y) {
         // Draw black background
         g2.setColor(new Color(0x59717D));
@@ -186,57 +182,7 @@ public class TitleScreen extends JPanel {
         g2.setColor(Color.BLACK);
         g2.drawString(text, x, y);
     }
-    
-    private void drawTextWithBackground(Graphics2D g2, String text, int x, int y, String hyperlink) {
-        // Draw black background
-        g2.setColor(new Color(0x59717D));
-        g2.fillRect(x - 5, y - pixelFont.getSize() + 2, g2.getFontMetrics().stringWidth(text) + 5, pixelFont.getSize() + 6);
-        
-        // Draw white text
-        g2.setColor(new Color(0x000DB2)); // Set text color to blue for hyperlink
-        g2.drawString(text, x, y);
-        
-        // Create a rectangle around the text for click detection
-        Rectangle textBounds = new Rectangle(x, y - pixelFont.getSize() + 2, g2.getFontMetrics().stringWidth(text), pixelFont.getSize() + 6);
-        
-        // Add mouse listener to open the hyperlink on click
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!webpageOpened && textBounds.contains(e.getPoint())) {
-                    openWebpage(hyperlink);
-                    webpageOpened = true;
-                }
-            }
-        });
-        // Add mouse listener to reset the flag when the mouse exits the hyperlink area
-        this.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                if (!textBounds.contains(e.getPoint())) {
-                    webpageOpened = false;
-                }
-            }
-        });
-    }
-    
-    private void openWebpage(String url) {
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(new URI(url));
-                } else {
-                    System.err.println("Browsing not supported on this platform.");
-                }
-            } else {
-                System.err.println("Desktop not supported on this platform.");
-            }
-        } catch (IOException | URISyntaxException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
+
     public void update() {
         for (int i = 0; i < buttons.length; i++) {
             animateMouseHover(buttons[i], buttonIcons[i], buttonAnimations[i], buttonStates[i], enterAnimations[i], exitAnimations[i]);
