@@ -10,32 +10,40 @@ import graphics.screens.*;
 
 public class GamePanel extends JFrame implements Runnable {
     // -----------------
+    // DEFAULT SETTINGS
+    // -----------------
+    public static final Dimension defaultScreenSize = new Dimension(1274, 699);
+    // Each tile on the map has a default texture resolution of 16x16 pixels.
+    
+    public static final Bots.BotLevel defaultComputerDifficulty = Bots.BotLevel.NORMAL;
+    private static final int defaultTileSize = 16;
+    // The amount of columns and rows for the board.
+    public static final int maxBoardCol = 10;
+    public static final int maxBoardRow = 10;
+    
+    private int defaultFPS = 60;
+    
+    // -----------------
     // SCREEN SETTINGS
     // -----------------
-
-    // Each tile on the map has a default texture resolution of 16x16 pixels.
-    private static final int defaultTileSize = 16;
+    
     // How many times we scale the sprite to match modern screen graphics.
     private static final double spriteScaleMultiplier = 1.8;
 
     // The upscale multiplier of the sprite tiles.
     public static final int scaledTileSize = (int) Math.ceil(defaultTileSize * spriteScaleMultiplier);
 
-    // The amount of columns and rows for the board.
-    public static final int maxBoardCol = 10;
-    public static final int maxBoardRow = 10;
-
     // The pixel amount for the board size.
     public static final int boardWidth = scaledTileSize * maxBoardCol;
     public static final int boardHeight = scaledTileSize * maxBoardRow;
 
-    public static Dimension windowSize = new Dimension(1274, 699);
+    public static Dimension currentScreenSize = defaultScreenSize;
 
     // The thread that the game will be run on.
     private Thread gameThread;
 
     // How many Frames Per Second (FPS) the game screen will be updates.
-    private final int FPS = 60;
+    private int FPS = defaultFPS;
 
     public static SpriteManager sm = new SpriteManager();
 
@@ -58,10 +66,9 @@ public class GamePanel extends JFrame implements Runnable {
         this.setResizable(false);
         this.setLayout(new BorderLayout());
 
-        this.setPreferredSize(new Dimension(1274, 699));
+        this.setPreferredSize(defaultScreenSize);
         this.setIconImage(sm.windowIcon);
-        this.updateScreenSize(getSize());
-
+        
         // screens
         this.titleScreen = new TitleScreen();
         this.shipPlacementScreen = new ShipPlacementScreen();
@@ -84,7 +91,7 @@ public class GamePanel extends JFrame implements Runnable {
 
     public void setupGame() {
         gameState = GameStates.TITLE;
-        computerDifficulty = Bots.BotLevel.NORMAL;
+        computerDifficulty = defaultComputerDifficulty;
         System.out.println("Game successfully loaded and ready to play!");
     }
 
@@ -189,11 +196,11 @@ public class GamePanel extends JFrame implements Runnable {
     }
 
     public void updateScreenSize(Dimension d) {
-        windowSize = d;
+        currentScreenSize = d;
     }
 
     public static Dimension getScreenSize() {
-        return windowSize;
+        return currentScreenSize;
     }
 
     public static void main(String[] args) {

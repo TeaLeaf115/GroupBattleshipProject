@@ -58,8 +58,8 @@ public class GameplayScreen extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(TitleScreen.logo,
-				((int) GamePanel.windowSize.getWidth() / 2) - (int) (TitleScreen.logo.getWidth() * 2.5 / 2),
-				(int) GamePanel.windowSize.getHeight() / 16,
+				((int) GamePanel.currentScreenSize.getWidth() / 2) - (int) (TitleScreen.logo.getWidth() * 2.5 / 2),
+				(int) GamePanel.currentScreenSize.getHeight() / 16,
 				(int) (TitleScreen.logo.getWidth() * 2.5),
 				(int) (TitleScreen.logo.getHeight() * 2.5),
 				null);
@@ -101,7 +101,7 @@ class PlayerBoard extends JPanel {
 
 		g2.drawImage(titleHalf,
 				(getWidth() - (titleHalf.getWidth() * 2) / 2),
-				(int) GamePanel.windowSize.getHeight() / 32,
+				(int) GamePanel.currentScreenSize.getHeight() / 32,
 				titleHalf.getWidth() * 2,
 				titleHalf.getHeight() * 2,
 				null);
@@ -144,7 +144,7 @@ class ComputerBoard extends JPanel {
 
 		g2.drawImage(titleHalf,
 				(-((titleHalf.getWidth() * 2)) / 2),
-				(int) GamePanel.windowSize.getHeight() / 32,
+				(int) GamePanel.currentScreenSize.getHeight() / 32,
 				titleHalf.getWidth() * 2,
 				titleHalf.getHeight() * 2,
 				null);

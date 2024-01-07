@@ -125,7 +125,7 @@ public class ShipPlacementScreen extends JPanel {
 
         g2.drawImage(title,
                 getWidth() / 2 - title.getWidth(),
-                (int) GamePanel.windowSize.getHeight() / 32,
+                (int) GamePanel.currentScreenSize.getHeight() / 32,
                 title.getWidth() * 2,
                 title.getHeight() * 2,
                 null);

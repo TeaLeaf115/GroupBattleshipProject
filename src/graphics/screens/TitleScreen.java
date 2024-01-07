@@ -33,7 +33,7 @@ public class TitleScreen extends JPanel {
     private final int difficultyWidth = (int)Math.ceil(64*2.5);
     private final int difficultyHeight = (int)Math.ceil(16*2.5);
     
-    private boolean webpageOpened = false;
+    private JLabel hyperlinkLabel;
     
     public TitleScreen() {
         setBounds(0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height);
@@ -42,16 +42,12 @@ public class TitleScreen extends JPanel {
         } catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
         }
-        JLabel credits = new JLabel("BY: KEVIN, OWEN & ANSH");
-        JLabel license = new JLabel("GPL-3.0 LICENSE");
-        credits.setFont(pixelFont);
-        license.setFont(pixelFont);
         logo = GamePanel.sm.getLogo();
         setBackground(Color.red);
-        
+    
         // Set layout to BoxLayout with Y_AXIS alignment
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
+//        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    
         buttonAnimations = new AnimationHandler[]{
                 new AnimationHandler(GamePanel.sm.getStartButtonSprites(), 1),
                 new AnimationHandler(GamePanel.sm.getEasyButtonSprites(), 1),
@@ -59,14 +55,14 @@ public class TitleScreen extends JPanel {
                 new AnimationHandler(GamePanel.sm.getHardButtonSprites(), 1),
                 new AnimationHandler(GamePanel.sm.getImpossibleButtonSprites(), 1)
         };
-        
+    
         highlightedButtonAnimations = new AnimationHandler[]{
                 new AnimationHandler(GamePanel.sm.getEasyButtonSpritesHighlighted(), 1),
                 new AnimationHandler(GamePanel.sm.getNormalButtonSpritesHighlighted(), 1),
                 new AnimationHandler(GamePanel.sm.getHardButtonSpritesHighlighted(), 1),
                 new AnimationHandler(GamePanel.sm.getImpossibleButtonSpritesHighlighted(), 1)
         };
-        
+    
         buttonIcons = new ImageIcon[]{
                 new ImageIcon(buttonAnimations[0].getFrame(0).getScaledInstance(startWidth, startHeight, Image.SCALE_SMOOTH)),
                 new ImageIcon(buttonAnimations[1].getFrame(0).getScaledInstance(difficultyWidth, difficultyHeight, Image.SCALE_SMOOTH)),
@@ -74,45 +70,91 @@ public class TitleScreen extends JPanel {
                 new ImageIcon(buttonAnimations[3].getFrame(0).getScaledInstance(difficultyWidth, difficultyHeight, Image.SCALE_SMOOTH)),
                 new ImageIcon(buttonAnimations[4].getFrame(0).getScaledInstance(difficultyWidth, difficultyHeight, Image.SCALE_SMOOTH))
         };
-        
+    
         buttons = new JButton[5];
     
-        add(Box.createVerticalGlue());
+//        add(Box.createVerticalGlue());
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new JButton(buttonIcons[i]);
             buttons[i].setSize(buttonIcons[i].getIconWidth(), buttonIcons[i].getIconHeight());
             setUpButton(buttons[i]);
-            
+
             final int buttonIndex = i;
             buttons[i].addActionListener(e -> {
                 if (e.getSource() == buttons[buttonIndex]) {
                     handleButtonClick(buttonIndex);
                 }
             });
-            
+
             buttons[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     handleMouseEnter(buttonIndex);
                 }
-                
+
                 @Override
                 public void mouseExited(MouseEvent e) {
                     handleMouseExit(buttonIndex);
                 }
             });
-            
-            add(buttons[i]);
-            add(Box.createRigidArea(new Dimension(0, i == 0 ? 30 : 5)));
+//
+//            add(buttons[i]);
+//            add(Box.createRigidArea(new Dimension(0, i == 0 ? 30 : 5)));
         }
-        add(Box.createRigidArea(new Dimension(0, 20)));
-//        add(credits);
-//        add(license);
+//        add(Box.createRigidArea(new Dimension(0, 20)));
         
         // Initialize animation flags
         enterAnimations = new boolean[buttons.length];
         exitAnimations = new boolean[buttons.length];
         buttonStates = new boolean[buttons.length];
+    
+        // Set layout to GridBagLayout with center alignment
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+    
+        JPanel buttonsContainer = new JPanel();
+        buttonsContainer.setLayout(new BoxLayout(buttonsContainer, BoxLayout.Y_AXIS));
+    
+        buttonsContainer.setOpaque(false);
+    
+        for (int i = 0; i < buttons.length; i++) {
+            buttonsContainer.add(buttons[i]);
+            buttonsContainer.add(Box.createRigidArea(new Dimension(0, i == 0 ? 30 : 5)));
+        }
+        System.out.println("hi" + GamePanel.currentScreenSize);
+        gbc.insets = new Insets((int)Math.ceil(GamePanel.currentScreenSize.height / 2.796), 0, 0, 0);
+        System.out.println(GamePanel.defaultScreenSize);
+        buttonsContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(buttonsContainer, gbc);
+        gbc.gridy++; // Move to the next row
+        gbc.insets = new Insets(0, 0, 10, 0); // Add space between buttons and hyperlinkLabel
+    
+        hyperlinkLabel = new JLabel("GPL-3.0 LICENSE");
+        hyperlinkLabel.setFont(pixelFont);
+        hyperlinkLabel.setForeground(new Color(0x000DB2));
+        hyperlinkLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    
+        hyperlinkLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                openWebpage("https://www.gnu.org/licenses/gpl-3.0.en.html");
+            }
+        
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                hyperlinkLabel.setForeground(new Color(0xFF0000));
+            }
+        
+            @Override
+            public void mouseExited(MouseEvent e) {
+                hyperlinkLabel.setForeground(new Color(0x000DB2));
+            }
+        });
+    
+        add(hyperlinkLabel, gbc);
     }
     
     private void handleButtonClick(int buttonIndex) {
@@ -162,19 +204,27 @@ public class TitleScreen extends JPanel {
         
         // Draw logo
         g2.drawImage(logo,
-                ((int) GamePanel.windowSize.getWidth() / 2) - (int) (logo.getWidth() * 3.5 / 2),
-                (int) GamePanel.windowSize.getHeight() / 16,
+                ((int) GamePanel.currentScreenSize.getWidth() / 2) - (int) (logo.getWidth() * 3.5 / 2),
+                (int) GamePanel.currentScreenSize.getHeight() / 16,
                 (int) (logo.getWidth() * 3.5),
                 (int) (logo.getHeight() * 3.5),
                 null);
         
-        g2.setFont(pixelFont);
         // Set font for license and credits
         g2.setFont(pixelFont);
     
         // Draw text with black background
-        drawTextWithBackground(g2, "GPL-3.0 LICENSE", 10, getHeight() - 10, "https://www.gnu.org/licenses/gpl-3.0.en.html");
+        drawTextWithBackground(g2, "GPL-3.0 LICENSE", 10, getHeight() - 10);
         drawTextWithBackground(g2, "BY: KEVIN, OWEN & ANSH", getWidth() - g2.getFontMetrics().stringWidth("BY: KEVIN, OWEN & ANSH") - 10, getHeight() - 10);
+    
+        // Calculate the position based on the panel's size
+        int labelWidth = g2.getFontMetrics().stringWidth(hyperlinkLabel.getText()); // Adjust the width as needed
+        int labelHeight = 20; // Adjust the height as needed
+        int labelX = 10;
+        int labelY = getHeight() - labelHeight - 6; // Place the label 10 pixels above the bottom edge
+    
+        // Set bounds for hyperlinkLabel to place it at the bottom left corner
+        hyperlinkLabel.setBounds(labelX, labelY, labelWidth, labelHeight);
     }
     
     private void drawTextWithBackground(Graphics2D g2, String text, int x, int y) {
@@ -185,39 +235,6 @@ public class TitleScreen extends JPanel {
         // Draw white text
         g2.setColor(Color.BLACK);
         g2.drawString(text, x, y);
-    }
-    
-    private void drawTextWithBackground(Graphics2D g2, String text, int x, int y, String hyperlink) {
-        // Draw black background
-        g2.setColor(new Color(0x59717D));
-        g2.fillRect(x - 5, y - pixelFont.getSize() + 2, g2.getFontMetrics().stringWidth(text) + 5, pixelFont.getSize() + 6);
-        
-        // Draw white text
-        g2.setColor(new Color(0x000DB2)); // Set text color to blue for hyperlink
-        g2.drawString(text, x, y);
-        
-        // Create a rectangle around the text for click detection
-        Rectangle textBounds = new Rectangle(x, y - pixelFont.getSize() + 2, g2.getFontMetrics().stringWidth(text), pixelFont.getSize() + 6);
-        
-        // Add mouse listener to open the hyperlink on click
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!webpageOpened && textBounds.contains(e.getPoint())) {
-                    openWebpage(hyperlink);
-                    webpageOpened = true;
-                }
-            }
-        });
-        // Add mouse listener to reset the flag when the mouse exits the hyperlink area
-        this.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                if (!textBounds.contains(e.getPoint())) {
-                    webpageOpened = false;
-                }
-            }
-        });
     }
     
     private void openWebpage(String url) {
