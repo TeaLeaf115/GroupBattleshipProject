@@ -48,7 +48,6 @@ public class GameplayScreen extends JPanel {
 			
 			GamePanel.gameState = GameStates.GAMEOVER;
 			GamePanel.screenChange = true;
-			removeAll();
 		}
 		playerPanel.board.update();
 		computerPanel.compBoard.update();
@@ -73,6 +72,8 @@ class PlayerBoard extends JPanel {
 	int scaledComputerBoardOverlayWidth = (int) Math.ceil(computerBoardOverlay.getWidth() * getSpriteScaleMultiplier());
 	int scaledComputerBoardOverlayHeight = (int) Math
 			.ceil(computerBoardOverlay.getHeight() * getSpriteScaleMultiplier());
+	int scaledComputerBoardOverlayX = 16;
+	int scaledComputerBoardOverlayY = (GamePanel.getScreenSize().height / 2) - (scaledComputerBoardOverlayHeight / 2);
 
 	public PlayerBoard() {
 		setLayout(null); // Set layout to null for absolute positioning
@@ -81,8 +82,9 @@ class PlayerBoard extends JPanel {
 		board = new Board(GameplayScreen.gl.bot.getShipLocations());
 		board.shipsVisible(false);
 
-		board.setBounds((int) Math.ceil(6.5 * GamePanel.scaledTileSize) - 1,
-				((int) GamePanel.getScreenSize().getHeight() / 2 + 7 * GamePanel.scaledTileSize) + 4,
+		board.setBounds(
+				(int) Math.ceil(scaledComputerBoardOverlayX+(6 * GamePanel.scaledTileSize))-2,
+				(int) Math.ceil(scaledComputerBoardOverlayY + (2 * GamePanel.scaledTileSize))-1,
 				GamePanel.boardWidth,
 				GamePanel.boardHeight);
 
@@ -93,8 +95,8 @@ class PlayerBoard extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(computerBoardOverlay,
-				16,
-				(getHeight() / 2) - (scaledComputerBoardOverlayHeight / 2),
+				scaledComputerBoardOverlayX,
+				scaledComputerBoardOverlayY,
 				scaledComputerBoardOverlayWidth,
 				scaledComputerBoardOverlayHeight,
 				null);
@@ -114,7 +116,9 @@ class ComputerBoard extends JPanel {
 	BufferedImage playerBoardOverlay = GamePanel.sm.getPlacementOverlay();
 	int scaledPlayerBoardOverlayWidth = (int) Math.ceil(playerBoardOverlay.getWidth() * getSpriteScaleMultiplier());
 	int scaledPlayerBoardOverlayHeight = (int) Math.ceil(playerBoardOverlay.getHeight() * getSpriteScaleMultiplier());
-
+	int scaledPlayerBoardOverlayX = 8;
+	int scaledPlayerBoardOverlayY = (GamePanel.getScreenSize().height / 2) - (scaledPlayerBoardOverlayHeight / 2);
+	
 	public ComputerBoard() {
 		setLayout(null);
 		setBackground(new Color(0x848482));
@@ -123,8 +127,8 @@ class ComputerBoard extends JPanel {
 		compBoard = new Board(GameplayScreen.gl.player.shipLocations);
 		compBoard.shipsVisible(true);
 		compBoard.setBounds(
-				(6 * GamePanel.scaledTileSize) + 6,
-				((int) GamePanel.getScreenSize().getHeight() / 2 + 7 * GamePanel.scaledTileSize) + 12,
+				(int) Math.ceil(scaledPlayerBoardOverlayX+(6 * GamePanel.scaledTileSize))-2,
+				(int) Math.ceil(scaledPlayerBoardOverlayY + (3 * GamePanel.scaledTileSize))-1,
 				GamePanel.boardWidth,
 				GamePanel.boardHeight);
 
@@ -136,8 +140,8 @@ class ComputerBoard extends JPanel {
 		Graphics2D g2 = (Graphics2D) g;
 		// Code for drawing goes here
 		g2.drawImage(playerBoardOverlay,
-				8,
-				(getHeight() / 2) - (scaledPlayerBoardOverlayHeight / 2),
+				scaledPlayerBoardOverlayX,
+				scaledPlayerBoardOverlayY,
 				scaledPlayerBoardOverlayWidth,
 				scaledPlayerBoardOverlayHeight,
 				null);
