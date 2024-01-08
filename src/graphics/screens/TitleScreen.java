@@ -33,7 +33,7 @@ public class TitleScreen extends JPanel {
     private final int difficultyWidth = (int)Math.ceil(64*2.5);
     private final int difficultyHeight = (int)Math.ceil(16*2.5);
     
-    private JLabel hyperlinkLabel;
+    private final JLabel hyperlinkLabel;
     
     public TitleScreen() {
         setBounds(0, 0, GamePanel.getScreenSize().width, GamePanel.getScreenSize().height);
@@ -44,9 +44,6 @@ public class TitleScreen extends JPanel {
         }
         logo = GamePanel.sm.getLogo();
         setBackground(Color.red);
-    
-        // Set layout to BoxLayout with Y_AXIS alignment
-//        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     
         buttonAnimations = new AnimationHandler[]{
                 new AnimationHandler(GamePanel.sm.getStartButtonSprites(), 1),
@@ -97,11 +94,7 @@ public class TitleScreen extends JPanel {
                     handleMouseExit(buttonIndex);
                 }
             });
-//
-//            add(buttons[i]);
-//            add(Box.createRigidArea(new Dimension(0, i == 0 ? 30 : 5)));
         }
-//        add(Box.createRigidArea(new Dimension(0, 20)));
         
         // Initialize animation flags
         enterAnimations = new boolean[buttons.length];
@@ -140,7 +133,7 @@ public class TitleScreen extends JPanel {
         hyperlinkLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                openWebpage("https://www.gnu.org/licenses/gpl-3.0.en.html");
+                openWebpage();
             }
         
             @Override
@@ -237,12 +230,12 @@ public class TitleScreen extends JPanel {
         g2.drawString(text, x, y);
     }
     
-    private void openWebpage(String url) {
+    private void openWebpage() {
         try {
             if (Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
                 if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(new URI(url));
+                    desktop.browse(new URI("https://www.gnu.org/licenses/gpl-3.0.en.html"));
                 } else {
                     System.err.println("Browsing not supported on this platform.");
                 }
